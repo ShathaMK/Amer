@@ -44,6 +44,3 @@ extension UIImage {
 }
 
 
-#Preview {
-    SplashPage()
-}
