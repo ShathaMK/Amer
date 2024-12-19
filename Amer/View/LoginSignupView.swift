@@ -24,9 +24,9 @@ struct LoginSignupView: View {
 
                 // Content changes dynamically
                 if selectedTab == 0 {
-                    LoginView() // Show LoginView
+                    LogIn() // Show LoginView
                 } else {
-                    SignupView() // Show SignupView
+                    SignUp() // Show SignupView
                 }
 
                 Spacer()
