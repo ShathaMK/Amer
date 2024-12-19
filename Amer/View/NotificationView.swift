@@ -48,6 +48,7 @@ struct NotificationView: View {
                     ToolbarItem(placement: .navigationBarLeading){
                         NavigationLink(destination: ProfileView()){
                         Image("image2")
+                                .
                               
                     }
                 }
