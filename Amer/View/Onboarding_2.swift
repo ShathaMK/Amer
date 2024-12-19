@@ -55,6 +55,19 @@ struct Onboarding_2: View {
                 
                 HStack(){
                     
+                    HStack(){
+                        Circle()
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(width: 10, height: 10)
+                        Circle()
+                            .fill(Color("ColorGreen"))
+                            .frame(width: 10, height: 10)
+                        Circle()
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(width: 10, height: 10)
+                    }
+                    .padding(.leading, 170)
+                    
                     Spacer()
                     
                     NavigationLink(destination: Onboarding_3()) {
@@ -66,12 +79,13 @@ struct Onboarding_2: View {
                             .background(Color("ColorGreen"))
                             .cornerRadius(12)
                             .shadow(radius: 7, x: 0, y: 5)
-                            .padding(.top, 90)
+                            
                             
                     }
                     .padding(.trailing, 50)
                     
                 }
+                .padding(.top, 90)
                     
                 
                 Spacer()
