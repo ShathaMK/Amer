@@ -9,7 +9,6 @@ import SwiftUI
 
 struct Onboarding_1: View {
     
-    @State private var go = false
     
     var body: some View {
         
@@ -57,8 +56,6 @@ struct Onboarding_1: View {
                     
                 
                 HStack(){
-                    
-                    
                     
                     Spacer()
                     
