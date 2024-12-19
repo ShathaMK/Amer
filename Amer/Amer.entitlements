@@ -6,7 +6,6 @@
 	<string>development</string>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
-		<string>iCloud.com.AppleAcademy.Amer.Shaima</string>
 		<string>iCloud.com.AppleAcademy.Amer</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
