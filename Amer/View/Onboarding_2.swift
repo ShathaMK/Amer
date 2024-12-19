@@ -1,20 +1,18 @@
 //
-//  Onboarding_1.swift
+//  SwiftUIView.swift
 //  Amer
 //
-//  Created by Noori on 15/12/2024.
+//  Created by Noori on 19/12/2024.
 //
 
 import SwiftUI
 
-struct Onboarding_1: View {
-    
-    
+struct Onboarding_2: View {
     var body: some View {
         
         
         ZStack(){
-            Image("Mask1")
+            Image("Mask2")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
@@ -37,18 +35,18 @@ struct Onboarding_1: View {
                 Spacer()
                 
                 
-                Text("Customize Support")
+                Text("Stay Notified")
                     .font(Font.custom("Tajawal-Bold", size: 40))
 
                     
                 
                 // Adding the GIFImage in the center
-                GIFImage(name: "wheelchair")
+                GIFImage(name: "bell")
                     .frame(width: 269, height: 292)
                     .shadow(radius: 3, x: 13, y: 0)
                     .padding(.bottom, 20)
                 
-                Text("Empower their independence with tools that adapt to them.")
+                Text("Get real-time updates and notifications that matter.")
                     .font(Font.custom("Tajawal-Bold", size: 22))
                     .padding(.horizontal)
                     .multilineTextAlignment(.center) // Center alignment
@@ -59,7 +57,7 @@ struct Onboarding_1: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: Onboarding_2()) {
+                    NavigationLink(destination: Onboarding_3()) {
                         Text("Next")
                             .font(Font.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.white)
@@ -81,10 +79,9 @@ struct Onboarding_1: View {
         }
         
         
-        
     }
 }
 
 #Preview {
-    Onboarding_1()
+    Onboarding_2()
 }

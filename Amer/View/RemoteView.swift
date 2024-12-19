@@ -12,9 +12,11 @@ struct RemoteView: View {
         
         NavigationStack {
             VStack {
+
                 Text("Hello, Mama Munerah")
                     .font(Font.custom("Tajawal-Bold", size: 28)).foregroundStyle(Color("FontColor"))
                     .padding(.trailing,100)
+
                 Divider()
                     .frame(width: 330,height: 2)
                     .overlay(Color(hex:0xE8F6FF))
