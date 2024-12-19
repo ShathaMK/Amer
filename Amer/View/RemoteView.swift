@@ -12,7 +12,9 @@ struct RemoteView: View {
         
         NavigationStack {
             VStack {
-                Text("أهلا ماما منيره")   .font(Font.custom("Tajawal-Bold", size: 28))
+                Text("أهلا ماما منيره")
+                    .font(Font.custom("Tajawal-Bold", size: 28))
+                
                 Divider()
 
             }
