@@ -44,14 +44,11 @@ struct NotificationView: View {
                     
                 }
             }.toolbar{
-                ToolbarItem(placement: .navigationBarTrailing){
-                    NavigationLink(destination: ProfileView()){
-                        Image("image2")
-                    }
-                }
+
                     ToolbarItem(placement: .navigationBarLeading){
                         NavigationLink(destination: ProfileView()){
                         Image("image2")
+                              
                     }
                 }
              
