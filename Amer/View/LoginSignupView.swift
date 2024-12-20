@@ -11,7 +11,9 @@ struct LoginSignupView: View {
     @State private var selectedTab = 0 // State to track active tab
 
     var body: some View {
+        
         NavigationView {
+            
             VStack(spacing: 20) {
                 // Segmented Picker
                 Picker(selection: $selectedTab, label: Text("")) {
@@ -30,7 +32,7 @@ struct LoginSignupView: View {
                 }
 
                 Spacer()
-            }
+            } // vstack 
             .navigationTitle("")
             .navigationBarHidden(true)
             .background(Color(UIColor.systemGray6)) // Optional background color

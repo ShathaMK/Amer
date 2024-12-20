@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ButtonListView: View {
     var body: some View {
+        
        NavigationStack {
+           
            ScrollView{
                Text("Active").font(Font.custom("Tajawal-Bold", size: 22)).foregroundStyle(Color("DarkGreen")).padding(.trailing,300)
                ZStack{

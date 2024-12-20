@@ -72,7 +72,7 @@ struct Onboarding_1: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: Onboarding_3()) {
+                    NavigationLink(destination: Onboarding_2()) {
                         Text("Next")
                             .font(Font.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.white)
