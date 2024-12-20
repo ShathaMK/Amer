@@ -9,11 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabView {
-            Onboarding_1()
-        }
-        .tabViewStyle(.page)
-        .ignoresSafeArea()
+        
+        Onboarding_1()
+//        TabView {
+//            Onboarding_1()
+//        }
+//        .tabViewStyle(.page)
+//        .ignoresSafeArea()
     }
 }
 

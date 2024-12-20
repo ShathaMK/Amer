@@ -22,7 +22,7 @@ struct Onboarding_3: View {
                 // Top bar with Skip button
                 HStack {
                     Spacer()
-                    NavigationLink(destination: Onboarding_2()) {
+                    NavigationLink(destination: Getting_Started()) {
                         Text("Skip")
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.gray)
