@@ -31,29 +31,31 @@ struct Getting_Started: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: LogIn()) {
-                    Text("تسجيل دخول")
-                        .font(Font.custom("Tajawal-Bold", size: 20))
-                        .foregroundColor(.white)
-                        .frame(width: 337, height: 30)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .background(Color("DarkBlue"))
-                        .cornerRadius(12)
-                        .shadow(radius: 7, x: 0, y: 5)
-                }
                 
-                NavigationLink(destination: SignUp()) {
-                    Text("إنشاء حساب")
-                        .font(Font.custom("Tajawal-Bold", size: 20))
-                        .foregroundColor(Color("DarkBlue"))
-                        .frame(width: 337, height: 30)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .background(Color("LightBlue"))
-                        .cornerRadius(12)
-                        .shadow(radius: 7, x: 0, y: 5)
-                }
+                
+//                NavigationLink(destination: LogIn()) {
+//                    Text("تسجيل دخول")
+//                        .font(Font.custom("Tajawal-Bold", size: 20))
+//                        .foregroundColor(.white)
+//                        .frame(width: 337, height: 30)
+//                        .padding(.horizontal, 20)
+//                        .padding(.vertical, 10)
+//                        .background(Color("DarkBlue"))
+//                        .cornerRadius(12)
+//                        .shadow(radius: 7, x: 0, y: 5)
+//                }
+//                
+//                NavigationLink(destination: SignUp()) {
+//                    Text("إنشاء حساب")
+//                        .font(Font.custom("Tajawal-Bold", size: 20))
+//                        .foregroundColor(Color("DarkBlue"))
+//                        .frame(width: 337, height: 30)
+//                        .padding(.horizontal, 20)
+//                        .padding(.vertical, 10)
+//                        .background(Color("LightBlue"))
+//                        .cornerRadius(12)
+//                        .shadow(radius: 7, x: 0, y: 5)
+//                }
                 
                 Spacer()
                 
