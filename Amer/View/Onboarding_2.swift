@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Onboarding_2: View {
+    @State private var bool = false
+    
     var body: some View {
         
         
@@ -19,17 +21,20 @@ struct Onboarding_2: View {
             
             VStack(){
                 
-                // Top bar with Skip button
-                HStack {
-                    Spacer()
-                    NavigationLink(destination: Getting_Started()) {
-                        Text("Skip")
-                            .font(.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.trailing, 50)
+                
+                
+                Button("Skip") {
+                    bool = true
                 }
-                .padding(.top, 50)
+                .font(.custom("Tajawal-Bold", size: 20))
+                .foregroundColor(.gray)
+                .padding(.leading, 250)
+                .padding(.top, 60)
+                .fullScreenCover(isPresented: $bool) {
+                    Getting_Started()
+                }
+                                    
+                
                 
                 
                 Spacer()
@@ -51,41 +56,22 @@ struct Onboarding_2: View {
                     .padding(.horizontal)
                     .multilineTextAlignment(.center) // Center alignment
 
-                    
                 
-                HStack(){
-                    
-                    HStack(){
-                        Circle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                        Circle()
-                            .fill(Color("ColorGreen"))
-                            .frame(width: 10, height: 10)
-                        Circle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                    }
-                    .padding(.leading, 170)
-                    
-                    Spacer()
-                    
-                    NavigationLink(destination: Onboarding_3()) {
-                        Text("Next")
-                            .font(Font.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(Color("ColorGreen"))
-                            .cornerRadius(12)
-                            .shadow(radius: 7, x: 0, y: 5)
-                            
-                            
-                    }
-                    .padding(.trailing, 50)
-                    
+                Button("Next") {
+                    bool = true
                 }
+                .font(.custom("Tajawal-Bold", size: 20))
+                .foregroundColor(.white)
+                .frame(width: 80, height: 40)
+                .background( Color("ColorGreen") )
+                .cornerRadius(12)
+                .shadow(radius: 7, x: 0, y: 5)
+                .padding(.leading, 250)
                 .padding(.top, 90)
+                .fullScreenCover(isPresented: $bool) {
+                    Onboarding_3()
+                }
+                
                     
                 
                 Spacer()
@@ -97,10 +83,10 @@ struct Onboarding_2: View {
 }
 
 #Preview {
-//    Onboarding_2()
+    Onboarding_2()
     
-    NavigationStack {
-            Onboarding_2()
-    }
+//    NavigationStack {
+//            Onboarding_2()
+//    }
     
 }

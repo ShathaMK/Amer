@@ -42,14 +42,16 @@ struct Onboarding_3: View {
                     
                 
                 // Adding the GIFImage in the center
-                GIFImage(name: "hand")
-                    .frame(width: 269, height: 292)
+                GIFImage(name: "handshake")
+                    .frame(width: 340, height: 292)
                     .shadow(radius: 3, x: 13, y: 0)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 40)
+                    .padding(.top, -30)
+                    .padding(.leading, 70)
                 
                 Text("Just press the button, and help will rush to you !")
                     .font(Font.custom("Tajawal-Bold", size: 22))
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
                     .multilineTextAlignment(.center) // Center alignment
 
                     
@@ -86,7 +88,7 @@ struct Onboarding_3: View {
                     .padding(.trailing, 50)
                     
                 }
-                .padding(.top, 90)
+                .padding(.top, 70)
                     
                 
                 Spacer()

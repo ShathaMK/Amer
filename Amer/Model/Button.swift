@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct Button: Identifiable{
+struct Buttons: Identifiable{
     var id = UUID()
     var label: String
     var icon: String

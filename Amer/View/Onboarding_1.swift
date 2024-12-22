@@ -35,14 +35,14 @@ struct Onboarding_1: View {
 
                     
 //                    Button(action: {
-//                        print("Full-width button tapped!")
+//                        print("Skipping the onboarding")
+//                        Getting_Started()
+//                        
 //                    }) {
-//                        Text("Submit")
-//                            .frame(maxWidth: .infinity)
-//                            .padding()
-//                            .foregroundColor(.white)
-//                            .background(Color.green)
-//                            .cornerRadius(10)
+//                        Text("Skip")
+//                            .font(.custom("Tajawal-Bold", size: 20))
+//                            .foregroundColor(.gray)
+//                            .padding(.trailing, 50)
 //                    }
 
                 }
@@ -70,39 +70,39 @@ struct Onboarding_1: View {
 
                     
                 
-                HStack(){
-                    
-                    HStack(){
-                        Circle()
-                            .fill(Color("ColorGreen"))
-                            .frame(width: 10, height: 10)
-                        Circle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                        Circle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                    }
-                    .padding(.leading, 170)
-                    
-                    Spacer()
-                    
-                    NavigationLink(destination: Onboarding_2()) {
-                        Text("Next")
-                            .font(Font.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(Color("ColorGreen"))
-                            .cornerRadius(12)
-                            .shadow(radius: 7, x: 0, y: 5)
-                            
-                            
-                    }
-                    .padding(.trailing, 50)
-                    
-                }
-                .padding(.top, 90)
+//                HStack(){
+//                    
+//                    HStack(){
+//                        Circle()
+//                            .fill(Color("ColorGreen"))
+//                            .frame(width: 10, height: 10)
+//                        Circle()
+//                            .fill(Color.gray.opacity(0.5))
+//                            .frame(width: 10, height: 10)
+//                        Circle()
+//                            .fill(Color.gray.opacity(0.5))
+//                            .frame(width: 10, height: 10)
+//                    }
+//                    .padding(.leading, 170)
+//                    
+//                    Spacer()
+//                    
+//                    NavigationLink(destination: Onboarding_2()) {
+//                        Text("Next")
+//                            .font(Font.custom("Tajawal-Bold", size: 20))
+//                            .foregroundColor(.white)
+//                            .padding(.horizontal, 20)
+//                            .padding(.vertical, 10)
+//                            .background(Color("ColorGreen"))
+//                            .cornerRadius(12)
+//                            .shadow(radius: 7, x: 0, y: 5)
+//                            
+//                            
+//                    }
+//                    .padding(.trailing, 50)
+//                    
+//                }
+//                .padding(.top, 90)
                     
                 
                 Spacer()
