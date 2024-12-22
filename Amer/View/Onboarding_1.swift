@@ -24,14 +24,29 @@ struct Onboarding_1: View {
                 // Top bar with Skip button
                 HStack {
                     Spacer()
+                    
                     NavigationLink(destination: Getting_Started()) {
                         Text("Skip")
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.gray)
                     }
                     .padding(.trailing, 50)
+                    
+
+                    
+//                    Button(action: {
+//                        print("Full-width button tapped!")
+//                    }) {
+//                        Text("Submit")
+//                            .frame(maxWidth: .infinity)
+//                            .padding()
+//                            .foregroundColor(.white)
+//                            .background(Color.green)
+//                            .cornerRadius(10)
+//                    }
+
                 }
-                .padding(.top, 70)
+                .padding(.top, 50)
                 
                 
                 Spacer()
@@ -100,5 +115,9 @@ struct Onboarding_1: View {
 }
 
 #Preview {
-    Onboarding_1()
+//    Onboarding_1()
+    
+    NavigationStack {
+            Onboarding_1()
+        }
 }

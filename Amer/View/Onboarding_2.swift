@@ -29,7 +29,7 @@ struct Onboarding_2: View {
                     }
                     .padding(.trailing, 50)
                 }
-                .padding(.top, 70)
+                .padding(.top, 50)
                 
                 
                 Spacer()
@@ -97,5 +97,10 @@ struct Onboarding_2: View {
 }
 
 #Preview {
-    Onboarding_2()
+//    Onboarding_2()
+    
+    NavigationStack {
+            Onboarding_2()
+    }
+    
 }
