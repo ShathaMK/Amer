@@ -48,7 +48,7 @@ struct AddNewButtonView: View {
             }
             
            
-         
+    
             
         }
     }
