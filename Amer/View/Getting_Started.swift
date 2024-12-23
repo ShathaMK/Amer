@@ -32,6 +32,7 @@ struct Getting_Started: View {
                 Spacer()
                 
                 
+
                 
 //                NavigationLink(destination: LogIn()) {
 //                    Text("تسجيل دخول")

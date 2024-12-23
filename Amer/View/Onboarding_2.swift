@@ -57,20 +57,34 @@ struct Onboarding_2: View {
                     .multilineTextAlignment(.center) // Center alignment
 
                 
-                Button("Next") {
-                    bool = true
+                
+                
+                
+                HStack(){
+                    Spacer()
+                    
+                    Text("2/3")
+                        .padding(.trailing, 50)
+                        .font(.custom("Tajawal-Bold", size: 20))
+                        .foregroundColor(.gray)
+                    
+                    
+                    Button("Next") {
+                        bool = true
+                    }
+                    .font(.custom("Tajawal-Bold", size: 20))
+                    .foregroundColor(.white)
+                    .frame(width: 80, height: 40)
+                    .background( Color("ColorGreen") )
+                    .cornerRadius(12)
+                    .shadow(radius: 7, x: 0, y: 5)
+                    .fullScreenCover(isPresented: $bool) {
+                        Onboarding_3()
+                    }
+                    .padding(.trailing, 50)
+                    
                 }
-                .font(.custom("Tajawal-Bold", size: 20))
-                .foregroundColor(.white)
-                .frame(width: 80, height: 40)
-                .background( Color("ColorGreen") )
-                .cornerRadius(12)
-                .shadow(radius: 7, x: 0, y: 5)
-                .padding(.leading, 250)
-                .padding(.top, 90)
-                .fullScreenCover(isPresented: $bool) {
-                    Onboarding_3()
-                }
+                .padding(.top, 70)
                 
                     
                 
