@@ -12,6 +12,7 @@ struct AmerApp: App {
     var body: some Scene {
         WindowGroup {
             AddNewButtonView()
+              
         }
     }
 }

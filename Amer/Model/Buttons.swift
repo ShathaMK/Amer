@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import SwiftUICore
 struct Buttons: Identifiable{
     var id = UUID()
     var label: String
     var icon: String
-    var color: String
+    var color: Color
     
-    init(id: UUID = UUID(), label: String, icon: String, color: String) {
+    init(id: UUID = UUID(), label: String, icon: String, color: Color) {
         self.id = id
         self.label = label
         self.icon = icon
