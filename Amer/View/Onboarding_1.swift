@@ -22,19 +22,18 @@ struct Onboarding_1: View {
             
             VStack(){
                 
-                // Top bar with Skip button
-                HStack {
-                    Spacer()
-                    
-                    NavigationLink(destination: Getting_Started()) {
-                        Text("Skip")
-                            .font(.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.trailing, 50)
-
+                
+                
+                Button("Skip") {
+                    bool = true
                 }
-                .padding(.top, 50)
+                .font(.custom("Tajawal-Bold", size: 20))
+                .foregroundColor(.gray)
+                .padding(.leading, 250)
+                .padding(.top, 60)
+                .fullScreenCover(isPresented: $bool) {
+                    LoginSignupView()
+                }
                 
                 
                 Spacer()
@@ -94,9 +93,7 @@ struct Onboarding_1: View {
 }
 
 #Preview {
-//    Onboarding_1()
-    
-    NavigationStack {
-            Onboarding_1()
-        }
+
+    Onboarding_1()
+        
 }

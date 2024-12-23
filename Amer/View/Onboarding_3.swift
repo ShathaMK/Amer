@@ -23,25 +23,13 @@ struct Onboarding_3: View {
             
             VStack(){
                 
-                Button("Skip") {
-                    bool = true
-                }
-                .font(.custom("Tajawal-Bold", size: 20))
-                .foregroundColor(.gray)
-                .padding(.leading, 250)
-                .padding(.top, 60)
-                .fullScreenCover(isPresented: $bool) {
-                    Getting_Started()
-                }
-                
-                
                 Spacer()
                 
                 
                 Text("Your Wish is Our Command")
                     .font(Font.custom("Tajawal-Bold", size: 40))
                     .multilineTextAlignment(.center)
-
+                    .padding(.top, 60)
                     
                 
                 // Adding the GIFImage in the center
@@ -78,7 +66,7 @@ struct Onboarding_3: View {
                     .cornerRadius(12)
                     .shadow(radius: 7, x: 0, y: 5)
                     .fullScreenCover(isPresented: $bool) {
-                        Onboarding_3()
+                        LoginSignupView()
                     }
                     .padding(.trailing, 50)
                     

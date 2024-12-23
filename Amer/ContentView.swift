@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State public var bool = false
+    
     var body: some View {
         
         Onboarding_1()

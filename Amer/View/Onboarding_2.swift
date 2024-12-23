@@ -31,7 +31,7 @@ struct Onboarding_2: View {
                 .padding(.leading, 250)
                 .padding(.top, 60)
                 .fullScreenCover(isPresented: $bool) {
-                    Getting_Started()
+                    LoginSignupView()
                 }
                                     
                 
