@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Onboarding_1: View {
     
+    @State private var bool = false
     
     var body: some View {
         
@@ -21,32 +22,18 @@ struct Onboarding_1: View {
             
             VStack(){
                 
-                // Top bar with Skip button
-                HStack {
-                    Spacer()
-                    
-                    NavigationLink(destination: Getting_Started()) {
-                        Text("Skip")
-                            .font(.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.trailing, 50)
-                    
-
-                    
-//                    Button(action: {
-//                        print("Full-width button tapped!")
-//                    }) {
-//                        Text("Submit")
-//                            .frame(maxWidth: .infinity)
-//                            .padding()
-//                            .foregroundColor(.white)
-//                            .background(Color.green)
-//                            .cornerRadius(10)
-//                    }
-
+                
+                
+                Button("Skip") {
+                    bool = true
                 }
-                .padding(.top, 50)
+                .font(.custom("Tajawal-Bold", size: 20))
+                .foregroundColor(.gray)
+                .padding(.leading, 250)
+                .padding(.top, 60)
+                .fullScreenCover(isPresented: $bool) {
+                    LoginSignupView()
+                }
                 
                 
                 Spacer()
@@ -69,40 +56,31 @@ struct Onboarding_1: View {
                     .multilineTextAlignment(.center) // Center alignment
 
                     
-                
                 HStack(){
-                    
-                    HStack(){
-                        Circle()
-                            .fill(Color("ColorGreen"))
-                            .frame(width: 10, height: 10)
-                        Circle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                        Circle()
-                            .fill(Color.gray.opacity(0.5))
-                            .frame(width: 10, height: 10)
-                    }
-                    .padding(.leading, 170)
-                    
                     Spacer()
                     
-                    NavigationLink(destination: Onboarding_2()) {
-                        Text("Next")
-                            .font(Font.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(Color("ColorGreen"))
-                            .cornerRadius(12)
-                            .shadow(radius: 7, x: 0, y: 5)
-                            
-                            
+                    Text("1/3")
+                        .padding(.trailing, 50)
+                        .font(.custom("Tajawal-Bold", size: 20))
+                        .foregroundColor(.gray)
+                    
+                    
+                    Button("Next") {
+                        bool = true
+                    }
+                    .font(.custom("Tajawal-Bold", size: 20))
+                    .foregroundColor(.white)
+                    .frame(width: 80, height: 40)
+                    .background( Color("ColorGreen") )
+                    .cornerRadius(12)
+                    .shadow(radius: 7, x: 0, y: 5)
+                    .fullScreenCover(isPresented: $bool) {
+                        Onboarding_2()
                     }
                     .padding(.trailing, 50)
                     
                 }
-                .padding(.top, 90)
+                .padding(.top, 70)
                     
                 
                 Spacer()
@@ -115,9 +93,7 @@ struct Onboarding_1: View {
 }
 
 #Preview {
-//    Onboarding_1()
-    
-    NavigationStack {
-            Onboarding_1()
-        }
+
+    Onboarding_1()
+        
 }
