@@ -96,65 +96,102 @@ extension UITextField {
         // @FocusState private var ButtonLabelField: Bool = false
         
         var body: some View {
-            VStack {
-                Text("New Button").font(.custom("Tajawal-Bold", size: 40)).foregroundStyle(Color("FontColor"))
-                
-                VStack(spacing:16){
-                    ZStack{
-                        Rectangle().frame(width: 106,height: 106).cornerRadius(20).foregroundStyle(ColorSelected).shadow(radius: 4, y: 4)
-                        Text("\(emojiText)").font(.system(size: 54))
+            NavigationStack {
+                VStack {
+                    Text("New Button").font(.custom("Tajawal-Bold", size: 40)).foregroundStyle(Color("FontColor"))
+                    
+                    VStack(spacing:16){
+                        ZStack{
+                            Rectangle().frame(width: 106,height: 106).cornerRadius(20).foregroundStyle(ColorSelected).shadow(radius: 4, y: 4)
+                            Text("\(emojiText)").font(.system(size: 54))
+                        }
+                        Text("\(ButtonLabel)").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor"))
+                        
                     }
-                    Text("\(ButtonLabel)").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor"))
+                    .padding()
+                    VStack{
+                        Text("Button Label").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
+                        ZStack{
+                            TextField(" Enter Button Label", text: $ButtonLabel)
+                                .padding()
+                                .frame(width: 290, height: 45)
+                            
+                            //  .background(Color("Background"))
+                            // .border(.gray)
+                        }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
+                    }
                     
-                }
-                .padding()
-                VStack{
-                    Text("Button Label").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
-                    ZStack{
-                    TextField(" Enter Button Label", text: $ButtonLabel)
-                        .padding()
-                        .frame(width: 290, height: 45)
-                        
-                    //  .background(Color("Background"))
-                       // .border(.gray)
-                }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
-                }
-                
-              //  .padding()
-                VStack{
-                    Text("Icon").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,250)
-                    //EmojiTextField($text)
-                    ZStack{
-                        Image("Emoji").resizable().frame(width: 24,height: 24).padding(.leading,230)
-                        
-                        EmojiTextFieldWrapper(text: $emojiText)
-                            .padding()
-                            .frame(width: 290, height: 45)
-                            .cornerRadius(4)
-                            .onChange(of: emojiText) {
-                                // Limit the length of the text to maxLength
-                                if emojiText.count > maxLength {
-                                    emojiText = String(emojiText.prefix(maxLength))
+                    //  .padding()
+                    VStack{
+                        Text("Icon").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,250)
+                        //EmojiTextField($text)
+                        ZStack{
+                            Image("Emoji").resizable().frame(width: 24,height: 24).padding(.leading,230)
+                            
+                            EmojiTextFieldWrapper(text: $emojiText)
+                                .padding()
+                                .frame(width: 290, height: 45)
+                                .cornerRadius(4)
+                                .onChange(of: emojiText) {
+                                    // Limit the length of the text to maxLength
+                                    if emojiText.count > maxLength {
+                                        emojiText = String(emojiText.prefix(maxLength))
+                                    }
                                 }
-                            }
-                    }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
-                    //.font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,253)
-          
-                }
-                .padding()
-                HStack{
-                    //   Text("Button Color").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
-                    ColorPicker("Button Color",selection: $ColorSelected).font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,36).padding(.leading,41)
+                        }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
+                        //.font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,253)
+                        
+                    }
+                    .padding()
+                    HStack{
+                        //   Text("Button Color").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
+                        ColorPicker("Button Color",selection: $ColorSelected).font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,36).padding(.leading,41)
+                        
+                    }
+                    .padding()
+                    NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
+                     ){
+                      
+                        Button("Add") {
+                            //bool2 = true
+                        }
+                        .font(.custom("Tajawal-Bold", size: 20))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color("DarkBlue"))
+                        .cornerRadius(8)
+                        .padding(.horizontal, 20)
+                        
+                    }
+
+                    NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
+                    ){
+                        Button("Cancel") {
+                            //                    bool2 = true
+                        }
+                        .font(.custom("Tajawal-Bold", size: 20))
+                        .foregroundColor(Color("DarkBlue"))
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color("LightBlue"))
+                        .cornerRadius(8)
+                        .padding(.horizontal, 20)
+                    }
+                                 
+                    
                     
                 }
-                .padding()
-                
-                
-                
-                
             }
+              
+                    
+                
+                }
+                
+             
+            
         }
-    }
+    
 
 #Preview {
     AddNewButtonView()
