@@ -11,7 +11,7 @@ import SwiftUI
 struct AmerApp: App {
     var body: some Scene {
         WindowGroup {
-            AddNewButtonView()
+            Onboarding_1()
         }
     }
 }
