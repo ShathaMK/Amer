@@ -113,15 +113,15 @@ struct RemoteView: View {
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing){
                             NavigationLink(destination: Onboarding_1()){
-                              Text("AddButton")
-                               // Image("AddButton").resizable().frame(width: 43,height: 43).ignoresSafeArea()
+                            //  Text("AddButton")
+                            Image("AddButton").resizable().frame(width: 43,height: 43).ignoresSafeArea()
                             }
                         
                         }
                         ToolbarItem(placement: .topBarLeading){
                             NavigationLink(destination: Onboarding_1()){
-                              Text("ReciverIcon")
-                               // Image("ReciverIcon").resizable().frame(width: 43,height: 43)
+                                //  Text("ReciverIcon")
+                               Image("Reciver_user").resizable().frame(width: 43,height: 43)
                             }                            //
                         }
                     }
