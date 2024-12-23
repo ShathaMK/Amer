@@ -10,7 +10,7 @@ import SwiftUI
 struct Onboarding_3: View {
     
     @State private var bool = false
-    
+    @State private var bool2 = false
     
     var body: some View {
         
@@ -46,32 +46,31 @@ struct Onboarding_3: View {
                     .multilineTextAlignment(.center) // Center alignment
 
                     
+                Spacer()
                 
-                HStack(){
-                    Spacer()
-                    
-                    Text("3/3")
-                        .padding(.trailing, 50)
-                        .font(.custom("Tajawal-Bold", size: 20))
-                        .foregroundColor(.gray)
-                    
-                    
-                    Button("Next") {
-                        bool = true
-                    }
-                    .font(.custom("Tajawal-Bold", size: 20))
-                    .foregroundColor(.white)
-                    .frame(width: 80, height: 40)
-                    .background( Color("ColorGreen") )
-                    .cornerRadius(12)
-                    .shadow(radius: 7, x: 0, y: 5)
-                    .fullScreenCover(isPresented: $bool) {
-                        LoginSignupView()
-                    }
-                    .padding(.trailing, 50)
-                    
+                Button("Start Now") {
+                    bool2 = true
                 }
-                .padding(.top, 70)
+                .font(.custom("Tajawal-Bold", size: 20))
+                .foregroundColor(.white)
+                .frame(width: 110, height: 40)
+                .background( Color("ColorGreen") )
+                .cornerRadius(12)
+                .shadow(radius: 7, x: 0, y: 5)
+                .fullScreenCover(isPresented: $bool2) {
+                    LoginSignupView()
+                }
+
+                
+                Spacer()
+                
+                
+                Text("3/3")
+                    .font(.custom("Tajawal-Bold", size: 20))
+                    .foregroundColor(.gray)
+
+                
+
                     
                 
                 Spacer()
