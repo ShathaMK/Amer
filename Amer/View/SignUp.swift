@@ -76,13 +76,13 @@ struct SignUp: View {
 
                     // NavigationLink for "إرسال"
                     NavigationLink(destination: OTP_view()) {
-
-                            .font(.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color("DarkBlue"))
-                            .cornerRadius(10)
+//
+//                            .font(.custom("Tajawal-Bold", size: 20))
+//                            .foregroundColor(.white)
+//                            .frame(maxWidth: .infinity)
+//                            .padding()
+//                            .background(Color("DarkBlue"))
+//                            .cornerRadius(10)
                     }
                     .padding(.horizontal, 20)
                 }
