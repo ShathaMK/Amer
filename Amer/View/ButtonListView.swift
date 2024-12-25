@@ -9,156 +9,87 @@ import SwiftUI
 
 
 struct ButtonListView: View {
+    @EnvironmentObject var vm: ButtonsViewModel
     var body: some View {
         
        NavigationStack {
            
-           ScrollView{
+          
                Text("Active").font(Font.custom("Tajawal-Bold", size: 22)).foregroundStyle(Color("DarkGreen")).padding(.trailing,300)
-               ZStack{
-                   Rectangle().frame(width: 364,height: 248).foregroundStyle(Color("Background")).cornerRadius(20)
-                   VStack(spacing:16) {
-                       HStack(spacing: 32){
-                           Button(action:{
-                               
+           
+           ZStack{
+               
+               Rectangle().frame(width: 364,height: 270).foregroundStyle(Color("Background")).cornerRadius(20)
+               ScrollView{
+               LazyVGrid(columns: [
+                GridItem(.fixed(76),spacing: 32),
+                GridItem(.fixed(76),spacing: 32),
+                GridItem(.fixed(76),spacing: 32)
+               ], spacing: 32) {
+                   ForEach(vm.buttons) { button in
+                       Button(action: {
+                           // Define button action here
+                           print("Button \(button.label) tapped")
+                       }) {
+                           VStack(spacing: 8) {
+                               Text(button.icon)
+                                   .font(.system(size: 30))
+                                   .frame(width: 74,height: 74)
+                                   .background(Color(button.color))
+                                   .cornerRadius(20)
+                                   .shadow(radius: 4, y: 4)
+                               Text(button.label)
+                                   .font(Font.custom("Tajawal-Bold", size: 16))
+                                   .foregroundStyle(Color("FontColor"))
                            }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("💧").font(.system(size: 30)).foregroundStyle(Color("FontColor"))
-                                   }
-                                   Text("Water").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🛁").font(.system(size: 30))
-                                   }
-                                   Text("Shower").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🍽️").font(.system(size: 30))
-                                   }
-                                   Text("Food").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                       }
-                       
-                       HStack(spacing: 32){
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("💊").font(.system(size: 30))
-                                   }
-                                   Text("Medicean").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                            Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("👚").font(.system(size: 30))
-                                   }
-                                   Text("Clothes").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🕌").font(.system(size: 30))
-                                   }
-                                   Text("Pray").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
                        }
                    }
+               }.padding(.top,20)
+           }
                }
                .padding()
+           
                Text("Disabled").font(Font.custom("Tajawal-Bold", size: 22)).foregroundStyle(Color.red).padding(.trailing,280)
                
                ZStack{
-                   Rectangle().frame(width: 364,height: 248).foregroundStyle(Color("Background")).cornerRadius(20)
-                   VStack(spacing:16) {
-                       HStack(spacing: 32){
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🚗").font(.system(size: 30))
+                   Rectangle().frame(width: 364,height: 270).foregroundStyle(Color("Background")).cornerRadius(20)
+                   ScrollView{
+                       LazyVGrid(columns: [
+                        GridItem(.fixed(76),spacing: 32),
+                        GridItem(.fixed(76),spacing: 32),
+                        GridItem(.fixed(76),spacing: 32)
+                       ], spacing: 32) {
+                        
+                           ForEach(vm.buttons) { button in
+                               Button(action: {
+                                   // Define button action here
+                                   print("Button \(button.label) tapped")
+                               }) {
+                                   VStack(spacing: 8) {
+                                       Text(button.icon)
+                                           .font(.system(size: 30))
+                                           .frame(width: 74,height: 74)
+                                           .background(Color(button.color))
+                                           .cornerRadius(20)
+                                           .shadow(radius: 4, y: 4)
+                                       Text(button.label)
+                                           .font(Font.custom("Tajawal-Bold", size: 16))
+                                           .foregroundStyle(Color("FontColor"))
                                    }
-                                   Text("Go Out").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                                }
                            }
-                           
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color.red).shadow(radius: 4, y: 4)
-                                       Text("🚑").font(.system(size: 30))
-                                   }
-                                   Text("Emergency").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("👩‍🦼").font(.system(size: 30))
-                                   }
-                                   Text("Wheelchair").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                       }
-                       
-             
+                       }.padding(.top,20)
                    }
                }
-           }
+               .padding()
            
-//           .navigationBarTitle("Button List").font(.custom("Tajawal-Bold", size: 30))
+           
+
                .toolbar {
                    ToolbarItem(placement: .topBarTrailing){
                        NavigationLink(destination: AddNewButtonView().navigationBarBackButtonHidden(true)
                         ){
-                        // Text("AddButton")
+                        
                         Image("AddButton").resizable().frame(width: 43,height: 43).ignoresSafeArea()
                        }
                    
@@ -167,14 +98,14 @@ struct ButtonListView: View {
                    ToolbarItem(placement: .principal){
                       
                        Text("Button List").font(.custom("Tajawal-Bold", size: 30)).foregroundStyle(Color("FontColor"))
-                                                  //
+                                                
                    }
                    ToolbarItem(placement: .topBarLeading){
                        NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
                        ){
                          
                            Image(systemName: "chevron.backward").resizable().frame(width: 15,height: 25.5).foregroundStyle(Color("DarkBlue"))
-                       }                            //
+                       }                          
                    }
                }
            
@@ -184,5 +115,21 @@ struct ButtonListView: View {
 }
 
 #Preview {
-    ButtonListView()
+    ButtonListView().environmentObject(ButtonsViewModel())
+}
+class ButtonsViewMode: ObservableObject {
+    @Published var buttons: [Buttons] = []
+
+    init(sampleData: Bool = false) {
+        if sampleData {
+            buttons = [
+                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
+                Buttons(label: "Button 2", icon: "📞", color: Color.green),
+                Buttons(label: "Button 3", icon: "📷", color: Color.red),
+                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
+                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
+                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
+            ]
+        }
+    }
 }
