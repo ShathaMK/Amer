@@ -207,6 +207,7 @@ extension Color {
         )
     }
 }
+
 // to make the interfaces responsive to each device we use this extension
 // to use UIScreen.screenWidth for example
 extension UIScreen{

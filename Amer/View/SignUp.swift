@@ -11,24 +11,29 @@ struct SignUp: View {
     var body: some View {
         
         
-        VStack(spacing: 20) {
+        VStack() {
                     Group {
-                        Text("الاسم")
+                        Text("Name")
                             .font(.custom("Tajawal-Bold", size: 18))
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .foregroundColor(Color("FontColor"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
 
                         TextField("", text: .constant(""))
-                            .multilineTextAlignment(.trailing)
+                            .multilineTextAlignment(.leading)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                             .padding(.horizontal, 20)
+                        
                     }
-
+                    
+        Spacer().frame(height: 32)
+                
                     Group {
-                        Text("رقم الهاتف")
+                        Text("Phone Number")
                             .font(.custom("Tajawal-Bold", size: 18))
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .foregroundColor(Color("FontColor"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
 
                         HStack {
@@ -49,15 +54,19 @@ struct SignUp: View {
                         .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                         .padding(.horizontal, 20)
                     }
+            
+            
+            Spacer().frame(height: 32)
 
                     Group {
-                        Text("دور")
+                        Text("Role")
+                            .foregroundColor(Color("FontColor"))
                             .font(.custom("Tajawal-Bold", size: 18))
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal)
 
                         TextField("مستعين", text: .constant(""))
-                            .multilineTextAlignment(.trailing)
+                            .multilineTextAlignment(.leading)
                             .padding()
                             .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                             .padding(.horizontal, 20)
@@ -67,12 +76,12 @@ struct SignUp: View {
 
                     // NavigationLink for "إرسال"
                     NavigationLink(destination: OTP_view()) {
-                        Text("إرسال")
+
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color("DarkBlue"))
                             .cornerRadius(10)
                     }
                     .padding(.horizontal, 20)

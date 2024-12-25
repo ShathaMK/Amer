@@ -42,18 +42,19 @@ struct Onboarding_3: View {
                 
                 Text("Just press the button, and help will rush to you !")
                     .font(Font.custom("Tajawal-Bold", size: 22))
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, 30)
                     .multilineTextAlignment(.center) // Center alignment
 
                     
                 Spacer()
+                    .frame(height: 32)
                 
                 Button("Start Now") {
                     bool2 = true
                 }
                 .font(.custom("Tajawal-Bold", size: 20))
                 .foregroundColor(.white)
-                .frame(width: 110, height: 40)
+//                .frame(width: 110, height: 40)
                 .background( Color("ColorGreen") )
                 .cornerRadius(12)
                 .shadow(radius: 7, x: 0, y: 5)
@@ -63,6 +64,7 @@ struct Onboarding_3: View {
 
                 
                 Spacer()
+                    .frame(height: 24)
                 
                 
                 Text("3/3")
@@ -71,7 +73,6 @@ struct Onboarding_3: View {
 
                 
 
-                    
                 
                 Spacer()
             }
