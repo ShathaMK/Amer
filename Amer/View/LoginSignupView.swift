@@ -13,13 +13,13 @@ struct LoginSignupView: View {
     var body: some View {
         NavigationView {
             VStack {
+                
                 ZStack {
                     Rectangle()
-                        .shadow(color: Color.gray.opacity(0.3), radius: 10)
                         .frame(height: 50)
                         .foregroundColor(Color("ColorLightGray"))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 1) // Border
                         )
                         
@@ -31,13 +31,12 @@ struct LoginSignupView: View {
                         Button(action: {
                             selectedTab = 0
                         }) {
-                            Text("تسجيل دخول")
+                            Text("Sign Up")
                                 .font(.custom("Tajawal-Bold", size: 20))
                                 .frame(maxWidth: .infinity)
-                                .padding(.vertical, 14)
+                                .padding(.vertical, 15)
                                 .background(selectedTab == 0 ? Color("ColorGreen") : Color.white) // Selected background
-                                .foregroundColor(selectedTab == 0 ? .white : .black) // Text color
-    //                            .cornerRadius(10, corners: selectedTab == 0 ? [.topLeft, .bottomLeft] : [])
+                                .foregroundColor(selectedTab == 0 ? .white : Color("FontColor") ) // Text color
                                 .cornerRadius(8)
                                 
                         }
@@ -46,14 +45,12 @@ struct LoginSignupView: View {
                         Button(action: {
                             selectedTab = 1
                         }) {
-                            Text("حساب جديد")
+                            Text("Log In")
                                 .font(.custom("Tajawal-Bold", size: 20))
                                 .frame(maxWidth: .infinity)
-//                                .frame(width: 200)
-                                .padding(.vertical, 14)
+                                .padding(.vertical, 15)
                                 .background(selectedTab == 1 ? Color("ColorGreen") : Color.white) // Selected background
-                                .foregroundColor(selectedTab == 1 ? .white : .black) // Text color
-    //                            .cornerRadius(10, corners: selectedTab == 1 ? [.topRight, .bottomRight] : [])
+                                .foregroundColor(selectedTab == 1 ? .white : Color("FontColor") ) // Text color
                                 .cornerRadius(8)
                                 
                         }
@@ -62,15 +59,18 @@ struct LoginSignupView: View {
                 } // zstack
                 .padding(.horizontal, 20)
                 .padding(.top, 30)
-                .padding(.bottom, 64)
+                .padding(.bottom, 32)
                 
-                
-                
+                Text("Getting Started !")
+                    .font(.custom("Tajawal-Bold", size: 30))
+                    .padding(.bottom, 32)
+                    .foregroundColor(Color("DarkBlue"))
+
                 // Dynamic Content
                 if selectedTab == 0 {
-                    LogIn() // Login View
-                } else {
                     SignUp() // Signup View
+                } else {
+                    LogIn() //  Login View
                 }
 
                 Spacer()

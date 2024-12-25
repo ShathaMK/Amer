@@ -92,7 +92,12 @@ struct Onboarding_1: View {
         
         
     }
+    
 }
+
+
+
+
 
 #Preview {
 
