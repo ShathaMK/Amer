@@ -76,7 +76,7 @@ struct SignUp: View {
 
                     // NavigationLink for "إرسال"
                     NavigationLink(destination: OTP_view()) {
-                        Text("Send")
+
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)

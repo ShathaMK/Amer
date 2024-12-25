@@ -86,75 +86,149 @@ extension UITextField {
     
     
     struct AddNewButtonView: View {
+        @ObservedObject var vm = ButtonsViewModel()
         @State private var ButtonLabel: String = ""
         @State private var showPopUp = false
         @State var ColorSelected = Color("DarkBlue")
         @State private var emojiText: String = ""
         let maxLength=1
+        var buttonToEdit: Buttons?
+        @State private var keyboardHeight: CGFloat = 0
 
-        
         // @FocusState private var ButtonLabelField: Bool = false
         
         var body: some View {
-            VStack {
-                Text("New Button").font(.custom("Tajawal-Bold", size: 40)).foregroundStyle(Color("FontColor"))
-                
-                VStack(spacing:16){
-                    ZStack{
-                        Rectangle().frame(width: 106,height: 106).cornerRadius(20).foregroundStyle(ColorSelected).shadow(radius: 4, y: 4)
-                        Text("\(emojiText)").font(.system(size: 54))
-                    }
-                    Text("\(ButtonLabel)").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor"))
-                    
-                }
-                .padding()
-                VStack{
-                    Text("Button Label").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
-                    ZStack{
-                    TextField(" Enter Button Label", text: $ButtonLabel)
-                        .padding()
-                        .frame(width: 290, height: 45)
+            NavigationStack {
+                ZStack {
+                    Color("Background").ignoresSafeArea()
+                    VStack {
+                        Spacer()
+                        Text("New Button").font(.custom("Tajawal-Bold", size: 40)).foregroundStyle(Color("FontColor"))
                         
-                    //  .background(Color("Background"))
-                       // .border(.gray)
-                }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
-                }
-                
-              //  .padding()
-                VStack{
-                    Text("Icon").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,250)
-                    //EmojiTextField($text)
-                    ZStack{
-                        Image("Emoji").resizable().frame(width: 24,height: 24).padding(.leading,230)
-                        
-                        EmojiTextFieldWrapper(text: $emojiText)
-                            .padding()
-                            .frame(width: 290, height: 45)
-                            .cornerRadius(4)
-                            .onChange(of: emojiText) {
-                                // Limit the length of the text to maxLength
-                                if emojiText.count > maxLength {
-                                    emojiText = String(emojiText.prefix(maxLength))
-                                }
+                        VStack(spacing:16){
+                            ZStack{
+                                Rectangle().frame(width: 106,height: 106).cornerRadius(20).foregroundStyle(vm.selectedColor).shadow(radius: 4, y: 4)
+                                Text("\(vm.selectedIcon)").font(.system(size: 54))
                             }
-                    }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
-                    //.font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,253)
-          
+                            Text("\(vm.currentLabel)").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor"))
+                            
+                        }
+                        .padding()
+                        VStack{
+                            Text("Button Label").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
+                            ZStack{
+                                TextField(" Enter Button Label", text: $vm.currentLabel)
+                                    .padding()
+                                    .frame(width: 290, height: 45)
+                                
+                                //  .background(Color("Background"))
+                                // .border(.gray)
+                            }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
+                        }
+                        
+                        //  .padding()
+                        VStack{
+                            Text("Icon").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,250)
+                            //EmojiTextField($text)
+                            ZStack{
+                                Image("Emoji").resizable().frame(width: 24,height: 24).padding(.leading,230)
+                                
+                                EmojiTextFieldWrapper(text: $vm.selectedIcon)
+                                    .padding()
+                                    .frame(width: 290, height: 45)
+                                    .cornerRadius(4)
+                                    .onChange(of: emojiText) {
+                                        // Limit the length of the text to maxLength
+                                        if emojiText.count > maxLength {
+                                            emojiText = String(emojiText.prefix(maxLength))
+                                        }
+                                    }
+                            }.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
+                            //.font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,253)
+                            
+                        }
+                        .padding()
+                        HStack{
+                            //   Text("Button Color").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
+                            ColorPicker("Button Color",selection: $vm.selectedColor).font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,36).padding(.leading,41)
+                            
+                        }
+                        .padding()
+                        NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
+                        ){
+                            
+                            Button("Add") {
+                                // check if button details is empty or not before saving
+                                guard
+                                    !vm.currentLabel.isEmpty,
+                                    !vm.selectedIcon.isEmpty
+                                        
+                                else {
+                                    print("buttons details can't be empty")
+                                    return
+                                }
+                                let newButton = Buttons(
+                                    id: buttonToEdit?.id ?? UUID(),
+                                    label: vm.currentLabel,
+                                    icon: vm.selectedIcon,
+                                    color: vm.selectedColor)
+                                if let buttonToEdit = buttonToEdit {
+                                    vm.editButton(oldButton: buttonToEdit, with: newButton)
+                                }
+                                else {
+                                    
+                                    vm.addButton(newButton: newButton)
+                                }
+                                
+                                
+                            }
+                            .font(.custom("Tajawal-Bold", size: 20))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color("DarkBlue"))
+                            .cornerRadius(8)
+                            .padding(.horizontal, 20)
+                            
+                        }
+                        
+                        NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
+                        ){
+                            Button("Cancel") {
+                                //                    bool2 = true
+                            }
+                            .font(.custom("Tajawal-Bold", size: 20))
+                            .foregroundColor(Color("DarkBlue"))
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color("LightBlue"))
+                            .cornerRadius(8)
+                            .padding(.horizontal, 20)
+                        }
+                        
+                        Spacer()
+                        
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
+                }            }
+            //.ignoresSafeArea(.keyboard, edges: .bottom)  // Ensure the safe area is ignored for the keyboard
+        
+            .onAppear {
+                if buttonToEdit == nil {
+                // reset properties for a new button
+                    vm.resetCurrentButton()
                 }
-                .padding()
-                HStack{
-                    //   Text("Button Color").font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,180)
-                    ColorPicker("Button Color",selection: $ColorSelected).font(Font.custom("Tajawal-Bold", size: 20)).foregroundStyle(Color("FontColor")).padding(.trailing,36).padding(.leading,41)
-                    
-                }
-                .padding()
-                
-                
-                
-                
             }
+              
+                    
+                
+                }
+                
+             
+            
         }
-    }
+    
 
 #Preview {
     AddNewButtonView()
