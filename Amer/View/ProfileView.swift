@@ -10,6 +10,7 @@ struct ProfileView: View {
     @State private var isHapticsEnabled = true // State for Haptics toggle
 
     var body: some View {
+
         NavigationStack {
             ZStack {
                 Color.darkBlue
@@ -144,6 +145,9 @@ struct ProfileView: View {
             }
             
         }
+
+
+
     }
 }
 

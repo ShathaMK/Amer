@@ -11,39 +11,78 @@ struct LoginSignupView: View {
     @State private var selectedTab = 0 // State to track active tab
 
     var body: some View {
-        
         NavigationView {
-            
-            VStack(spacing: 20) {
-                // Segmented Picker
-                Picker(selection: $selectedTab, label: Text("")) {
-                    Text("تسجيل دخول").tag(0) // Login
-                    Text("حساب جديد").tag(1) // Signup
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
+            VStack {
+                
+                ZStack {
+                    Rectangle()
+                        .frame(height: 50)
+                        .foregroundColor(Color("ColorLightGray"))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1) // Border
+                        )
+                        
+                    
+                    // Custom Tab Switcher
+                    HStack() {
+                        
+                        // Login Tab
+                        Button(action: {
+                            selectedTab = 0
+                        }) {
+                            Text("Sign Up")
+                                .font(.custom("Tajawal-Bold", size: 20))
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 15)
+                                .background(selectedTab == 0 ? Color("ColorGreen") : Color.white) // Selected background
+                                .foregroundColor(selectedTab == 0 ? .white : Color("FontColor") ) // Text color
+                                .cornerRadius(8)
+                                
+                        }
 
-                // Content changes dynamically
+                        // Signup Tab
+                        Button(action: {
+                            selectedTab = 1
+                        }) {
+                            Text("Log In")
+                                .font(.custom("Tajawal-Bold", size: 20))
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 15)
+                                .background(selectedTab == 1 ? Color("ColorGreen") : Color.white) // Selected background
+                                .foregroundColor(selectedTab == 1 ? .white : Color("FontColor") ) // Text color
+                                .cornerRadius(8)
+                                
+                        }
+                    } // hstack
+
+                } // zstack
+                .padding(.horizontal, 20)
+                .padding(.top, 30)
+                .padding(.bottom, 32)
+                
+                Text("Getting Started !")
+                    .font(.custom("Tajawal-Bold", size: 30))
+                    .padding(.bottom, 32)
+                    .foregroundColor(Color("DarkBlue"))
+
+                // Dynamic Content
                 if selectedTab == 0 {
-                    LogIn() // Show LoginView
+                    SignUp() // Signup View
                 } else {
-                    SignUp() // Show SignupView
+                    LogIn() //  Login View
                 }
 
                 Spacer()
-            } // vstack 
+                
+                
+            }
             .navigationTitle("")
             .navigationBarHidden(true)
-            .background(Color(UIColor.systemGray6)) // Optional background color
+            .background(Color.white.ignoresSafeArea())
         }
     }
 }
-
-#Preview {
-    LoginSignupView()
-}
-
 
 #Preview {
     LoginSignupView()

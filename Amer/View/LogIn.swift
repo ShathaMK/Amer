@@ -12,23 +12,21 @@ struct LogIn: View {
         
         
         VStack {
-           Text("رقم الهاتف")
+           Text("Phone Number")
                .font(.custom("Tajawal-Bold", size: 18))
-               .frame(maxWidth: .infinity, alignment: .trailing)
+               .frame(maxWidth: .infinity, alignment: .leading)
                .padding(.horizontal)
 
            HStack {
-               Image("saudi_flag") // Replace with your flag asset
-                   .resizable()
+               Text("🇸🇦") // Replace with your flag asset
                    .frame(width: 30, height: 20)
-                   .clipShape(Rectangle())
 
                Text("+966")
                    .font(.custom("Tajawal-Regular", size: 16))
 
                TextField("501234567", text: .constant(""))
                    .keyboardType(.numberPad)
-                   .multilineTextAlignment(.trailing)
+                   .multilineTextAlignment(.leading)
                    .padding(.horizontal)
            }
            .padding()
@@ -39,13 +37,13 @@ struct LogIn: View {
 
            // NavigationLink for "إرسال"
            NavigationLink(destination: OTP_view()) {
-               Text("إرسال")
-                   .font(.custom("Tajawal-Bold", size: 18))
+               Text("Send")
+                   .font(.custom("Tajawal-Bold", size: 20))
                    .foregroundColor(.white)
                    .frame(maxWidth: .infinity)
                    .padding()
-                   .background(Color.blue)
-                   .cornerRadius(10)
+                   .background(Color("DarkBlue"))
+                   .cornerRadius(8)
            }
            .padding(.horizontal, 20)
        }

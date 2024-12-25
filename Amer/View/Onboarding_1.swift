@@ -10,6 +10,8 @@ import SwiftUI
 struct Onboarding_1: View {
     
     @State private var bool = false
+    @State private var bool2 = false
+
     
     var body: some View {
         
@@ -66,7 +68,7 @@ struct Onboarding_1: View {
                     
                     
                     Button("Next") {
-                        bool = true
+                        bool2 = true
                     }
                     .font(.custom("Tajawal-Bold", size: 20))
                     .foregroundColor(.white)
@@ -74,7 +76,7 @@ struct Onboarding_1: View {
                     .background( Color("ColorGreen") )
                     .cornerRadius(12)
                     .shadow(radius: 7, x: 0, y: 5)
-                    .fullScreenCover(isPresented: $bool) {
+                    .fullScreenCover(isPresented: $bool2) {
                         Onboarding_2()
                     }
                     .padding(.trailing, 50)
@@ -90,7 +92,12 @@ struct Onboarding_1: View {
         
         
     }
+    
 }
+
+
+
+
 
 #Preview {
 

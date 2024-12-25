@@ -24,106 +24,164 @@ struct RemoteView: View {
                 
                 VStack(spacing:32) {
                     HStack(spacing: 32){
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("💧").font(.system(size: 30)).foregroundStyle(Color("FontColor"))
+                      
+                            Button(action:{
+                                
                             }
-                            Text("Water").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                        }
+                            ){
+                                VStack(spacing:8){
+                                    ZStack{
+                                        Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                        Text("💧").font(.system(size: 30)).foregroundStyle(Color("FontColor"))
+                                    }
+                                    Text("Water").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                                }
+                            }
+                         
                         
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("🛁").font(.system(size: 30))
-                            }
-                            Text("Shower").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                        
+                        Button(action:{
+                            
                         }
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("🍽️").font(.system(size: 30))
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("🛁").font(.system(size: 30))
+                                }
+                                Text("Shower").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                             }
-                            Text("Food").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                        }
+                        Button(action:{
+                            
+                        }
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("🍽️").font(.system(size: 30))
+                                }
+                                Text("Food").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                            }
                         }
                         
                     }
                     
                     HStack(spacing: 32){
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("💊").font(.system(size: 30))
+                        Button(action:{
+                            
+                        }
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("💊").font(.system(size: 30))
+                                }
+                                Text("Medicean").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                             }
-                            Text("Medicean").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                         }
                         
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("👚").font(.system(size: 30))
-                            }
-                            Text("Clothes").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                        Button(action:{
+                            
                         }
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("🕌").font(.system(size: 30))
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("👚").font(.system(size: 30))
+                                }
+                                Text("Clothes").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                             }
-                            Text("Pray").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                        }
+                        Button(action:{
+                            
+                        }
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("🕌").font(.system(size: 30))
+                                }
+                                Text("Pray").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                            }
                         }
                         
                     }
                     HStack(spacing: 32){
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("🚗").font(.system(size: 30))
+                        Button(action:{
+                            
+                        }
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("🚗").font(.system(size: 30))
+                                }
+                                Text("Go Out").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                             }
-                            Text("Go Out").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                         }
                         
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color.red).shadow(radius: 4, y: 4)
-                                Text("🚑").font(.system(size: 30))
-                            }
-                            Text("Emergency").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                        Button(action:{
+                            
                         }
-                        VStack(spacing:8){
-                            ZStack{
-                                Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                Text("👩‍🦼").font(.system(size: 30))
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color.red).shadow(radius: 4, y: 4)
+                                    Text("🚑").font(.system(size: 30))
+                                }
+                                Text("Emergency").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                             }
-                            Text("Wheelchair").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                        }
+                        Button(action:{
+                            
+                        }
+                        ){
+                            VStack(spacing:8){
+                                ZStack{
+                                    Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                    Text("👩‍🦼").font(.system(size: 30))
+                                }
+                                Text("Wheelchair").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
+                            }
                         }
                         
                     }
-                    VStack(spacing:8){
-                        ZStack{
-                            Circle().frame(width: 114,height: 114).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                            Text("🔔").font(.system(size: 50))
-
+                    Button(action:{
+                        
+                    }
+                    ){
+                        VStack(spacing:8){
+                            ZStack{
+                                Circle().frame(width: 114,height: 114).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
+                                Text("🔔").font(.system(size: 50))
+                                
+                            }
+                            Text("Bell").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                         }
-                        Text("Bell").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
                     }
                 }
                 
             }.padding(.bottom,50)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing){
-                            NavigationLink(destination: Onboarding_1()){
+                            NavigationLink(destination: ButtonListView().navigationBarBackButtonHidden(true)
+){
                             //  Text("AddButton")
                             Image("AddButton").resizable().frame(width: 43,height: 43).ignoresSafeArea()
                             }
                         
                         }
+                        
+
                         ToolbarItem(placement: .topBarLeading){
-                            NavigationLink(destination: Onboarding_1()){
+                            NavigationLink(destination: ProfileView().navigationBarBackButtonHidden(true)
+){
                                 //  Text("ReciverIcon")
                                Image("Reciver_user").resizable().frame(width: 43,height: 43)
                             }                            //
                         }
+
                     }
         }
    
@@ -149,6 +207,7 @@ extension Color {
         )
     }
 }
+
 // to make the interfaces responsive to each device we use this extension
 // to use UIScreen.screenWidth for example
 extension UIScreen{
