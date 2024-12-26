@@ -86,7 +86,7 @@ extension UITextField {
     
     
     struct AddNewButtonView: View {
-        @ObservedObject var vm = ButtonsViewModel()
+        @EnvironmentObject var vm: ButtonsViewModel// Make sure this is injected into the view
         @State private var ButtonLabel: String = ""
         @State private var showPopUp = false
         @State var ColorSelected = Color("DarkBlue")
@@ -94,6 +94,8 @@ extension UITextField {
         let maxLength=1
         var buttonToEdit: Buttons?
         @State private var keyboardHeight: CGFloat = 0
+        @State private var isNavigating = false // State to control navigation
+
 
         // @FocusState private var ButtonLabelField: Bool = false
         
@@ -154,10 +156,9 @@ extension UITextField {
                             
                         }
                         .padding()
-                        NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
-                        ){
+                      
                             
-                            Button("Add") {
+                            Button(action:{
                                 // check if button details is empty or not before saving
                                 guard
                                     !vm.currentLabel.isEmpty,
@@ -179,9 +180,11 @@ extension UITextField {
                                     
                                     vm.addButton(newButton: newButton)
                                 }
+                                print("Saved buttons: \(newButton)")
+                                isNavigating = true
                                 
-                                
-                            }
+                            }) {
+                            Text("Add")
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -189,8 +192,10 @@ extension UITextField {
                             .background(Color("DarkBlue"))
                             .cornerRadius(8)
                             .padding(.horizontal, 20)
-                            
-                        }
+                            }.navigationDestination(isPresented: $isNavigating) {
+                                RemoteView(vm: _vm).navigationBarBackButtonHidden(true)
+                                             }
+                        
                         
                         NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
                         ){

@@ -9,10 +9,12 @@ import SwiftUI
 
 @main
 struct AmerApp: App {
+    @StateObject private var viewModel = ButtonsViewModel()
     var body: some Scene {
         WindowGroup {
+
             Onboarding_1()
-              
+
         }
     }
 }

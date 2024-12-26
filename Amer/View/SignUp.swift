@@ -156,6 +156,7 @@ struct SignUp: View {
                                 .padding(.horizontal, 20)
                         }
                     }
+
                 }
                 
                 
@@ -201,7 +202,11 @@ struct SignUp: View {
                             }
                         }
                         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                    }
+
+
+                    Spacer()
+
+                  
                 }
                 .searchable(text: $userVM.searchText, prompt: "Search countries")
                 .navigationTitle("Countries")

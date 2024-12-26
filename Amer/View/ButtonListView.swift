@@ -1,189 +1,175 @@
-//
-//  ButtonListView.swift
-//  Amer
-//
-//  Created by Shatha Almukhaild on 18/06/1446 AH.
-//
-
 import SwiftUI
 
-
 struct ButtonListView: View {
+    @EnvironmentObject var vm: ButtonsViewModel
+    @State var navigateToEdit = false
+    @State var selectedButton: Buttons? // Track selected button for editing
+    var buttonToDelete: Buttons?
+    //var button: Buttons
+    
     var body: some View {
-        
-       NavigationStack {
-           
-           ScrollView{
-               Text("Active").font(Font.custom("Tajawal-Bold", size: 22)).foregroundStyle(Color("DarkGreen")).padding(.trailing,300)
-               ZStack{
-                   Rectangle().frame(width: 364,height: 248).foregroundStyle(Color("Background")).cornerRadius(20)
-                   VStack(spacing:16) {
-                       HStack(spacing: 32){
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("💧").font(.system(size: 30)).foregroundStyle(Color("FontColor"))
-                                   }
-                                   Text("Water").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🛁").font(.system(size: 30))
-                                   }
-                                   Text("Shower").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🍽️").font(.system(size: 30))
-                                   }
-                                   Text("Food").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                       }
-                       
-                       HStack(spacing: 32){
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("💊").font(.system(size: 30))
-                                   }
-                                   Text("Medicean").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                            Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("👚").font(.system(size: 30))
-                                   }
-                                   Text("Clothes").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🕌").font(.system(size: 30))
-                                   }
-                                   Text("Pray").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                       }
-                   }
-               }
-               .padding()
-               Text("Disabled").font(Font.custom("Tajawal-Bold", size: 22)).foregroundStyle(Color.red).padding(.trailing,280)
-               
-               ZStack{
-                   Rectangle().frame(width: 364,height: 248).foregroundStyle(Color("Background")).cornerRadius(20)
-                   VStack(spacing:16) {
-                       HStack(spacing: 32){
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("🚗").font(.system(size: 30))
-                                   }
-                                   Text("Go Out").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color.red).shadow(radius: 4, y: 4)
-                                       Text("🚑").font(.system(size: 30))
-                                   }
-                                   Text("Emergency").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           Button(action:{
-                               
-                           }
-                           ){
-                               VStack(spacing:8){
-                                   ZStack{
-                                       Rectangle().frame(width: 74,height: 74).cornerRadius(20).foregroundStyle(Color("DarkBlue")).shadow(radius: 4, y: 4)
-                                       Text("👩‍🦼").font(.system(size: 30))
-                                   }
-                                   Text("Wheelchair").font(Font.custom("Tajawal-Bold", size: 16)).foregroundStyle(Color("FontColor"))
-                               }
-                           }
-                           
-                       }
-                       
-             
-                   }
-               }
-           }
-           
-//           .navigationBarTitle("Button List").font(.custom("Tajawal-Bold", size: 30))
-               .toolbar {
-                   ToolbarItem(placement: .topBarTrailing){
-                       NavigationLink(destination: AddNewButtonView().navigationBarBackButtonHidden(true)
-                        ){
-                        // Text("AddButton")
-                        Image("AddButton").resizable().frame(width: 43,height: 43).ignoresSafeArea()
-                       }
-                   
-                   }
-                   
-                   ToolbarItem(placement: .principal){
-                      
-                       Text("Button List").font(.custom("Tajawal-Bold", size: 30)).foregroundStyle(Color("FontColor"))
-                                                  //
-                   }
-                   ToolbarItem(placement: .topBarLeading){
-                       NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)
-                       ){
-                         
-                           Image(systemName: "chevron.backward").resizable().frame(width: 15,height: 25.5).foregroundStyle(Color("DarkBlue"))
-                       }                            //
-                   }
-               }
-           
-           
+        NavigationStack {
+            VStack(spacing: 20) {
+                SectionHeader(title: "Active", color: Color("DarkGreen"))
+                
+                ButtonGrid(buttons: vm.buttons) { button in
+                    handleButtonTap(button)
+                }
+                .padding()
+                
+                SectionHeader(title: "Disabled", color: .red)
+                
+                ButtonGrid(buttons: []) { button in
+                    handleButtonTap(button)
+                }
+                .padding()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)) {
+                        Image(systemName: "chevron.backward")
+                            .resizable()
+                            .frame(width: 15, height: 25.5)
+                            .foregroundStyle(Color("DarkBlue"))
+                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Button List")
+                        .font(.custom("Tajawal-Bold", size: 30))
+                        .foregroundStyle(Color("FontColor"))
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: AddNewButtonView().navigationBarBackButtonHidden(true)) {
+                        Image("AddButton")
+                            .resizable()
+                            .frame(width: 43, height: 43)
+                            .ignoresSafeArea()
+                    }
+                }
+            }
+            .navigationDestination(isPresented: $navigateToEdit) {
+                if let buttonToEdit = selectedButton {
+                    AddNewButtonView(vm: _vm, buttonToEdit: buttonToEdit)
+                }
+            }
+        }
+    }
+
+    private func handleButtonTap(_ button: Buttons) {
+        print("Button \(button.label) tapped")
+    }
+}
+
+
+// MARK: - Section Header View
+struct SectionHeader: View {
+    let title: String
+    let color: Color
+    
+    var body: some View {
+        Text(title)
+            .font(Font.custom("Tajawal-Bold", size: 22))
+            .foregroundStyle(color)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+    }
+}
+
+// MARK: - Button Grid View
+struct ButtonGrid: View {
+    let buttons: [Buttons]
+    let action: (Buttons) -> Void
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .foregroundStyle(Color("Background"))
+                .cornerRadius(20)
+                .frame(height: 270)
+
+            ScrollView {
+                LazyVGrid(columns: [
+                    GridItem(.fixed(76), spacing: 32),
+                    GridItem(.fixed(76), spacing: 32),
+                    GridItem(.fixed(76), spacing: 32)
+                ], spacing: 32) {
+                    ForEach(buttons) { button in
+                        ButtonView(button: button, action: action)
+                    }
+                }
+                .padding(.top, 20)
+                
+            }
         }
     }
 }
 
+// MARK: - Individual Button View
+struct ButtonView: View {
+    let button: Buttons
+    let action: (Buttons) -> Void
+
+    @EnvironmentObject var vm: ButtonsViewModel
+    @State private var navigateToEdit = false
+    @State private var showingAlert = false
+
+    var body: some View {
+        Button(action: {
+            action(button)
+        }) {
+            VStack(spacing: 8) {
+                Text(button.icon)
+                    .font(.system(size: 30))
+                    .frame(width: 74, height: 74)
+                    .background(Color(button.color))
+                    .cornerRadius(20)
+                    .shadow(radius: 4, y: 4)
+                Text(button.label)
+                    .font(Font.custom("Tajawal-Bold", size: 16))
+                    .foregroundStyle(Color("FontColor"))
+            }
+        }
+        .contextMenu {
+            Button {
+                print("Edit \(button.label)")
+                navigateToEdit = true
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            Button {
+                print("Disable \(button.label)")
+            } label: {
+                Label("Disable", systemImage: "doc.on.doc")
+            }
+            Button(role: .destructive) {
+                print("Delete \(button.label)")
+                showingAlert = true
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(
+                title: Text("Delete a Button"),
+                message: Text("Are you sure you want to delete this button?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    vm.deleteButton(button)
+                },
+                secondaryButton: .cancel()
+            )
+        }
+        .navigationDestination(isPresented: $navigateToEdit) {
+            AddNewButtonView(vm: _vm, buttonToEdit: button)
+        }
+    }
+}
+
+
+
+// MARK: - Preview
 #Preview {
     ButtonListView()
-        
+
 }
+
+
