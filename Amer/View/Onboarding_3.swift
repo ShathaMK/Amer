@@ -47,7 +47,7 @@ struct Onboarding_3: View {
 
                     
                 Spacer()
-                    .frame(height: 32)
+                    .frame(height: 50)
                 
                 Button("Start Now") {
                     bool2 = true
@@ -55,26 +55,20 @@ struct Onboarding_3: View {
                 .font(.custom("Tajawal-Bold", size: 20))
                 .foregroundColor(.white)
 //                .frame(width: 110, height: 40)
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
                 .background( Color("ColorGreen") )
-                .cornerRadius(12)
+                .cornerRadius(10)
                 .shadow(radius: 7, x: 0, y: 5)
+                .padding()
                 .fullScreenCover(isPresented: $bool2) {
                     LoginSignupView()
                 }
-
-                
-                Spacer()
-                    .frame(height: 24)
-                
-                
-                Text("3/3")
-                    .font(.custom("Tajawal-Bold", size: 20))
-                    .foregroundColor(.gray)
-
                 
 
                 
                 Spacer()
+                    .frame(height: 100)
             }
         }
         
