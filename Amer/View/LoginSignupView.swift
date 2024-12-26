@@ -17,7 +17,7 @@ struct LoginSignupView: View {
                 ZStack {
                     Rectangle()
                         .frame(height: 50)
-                        .foregroundColor(Color("ColorLightGray"))
+                        .foregroundColor(Color.clear)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 1) // Border

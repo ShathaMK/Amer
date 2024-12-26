@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct LogIn: View {
+    
+    @State private var bool = false
+    
     var body: some View {
         
         
         VStack {
            Text("Phone Number")
-               .font(.custom("Tajawal-Bold", size: 18))
+               .font(.custom("Tajawal-Bold", size: 20))
                .frame(maxWidth: .infinity, alignment: .leading)
                .padding(.horizontal)
 
@@ -22,7 +25,7 @@ struct LogIn: View {
                    .frame(width: 30, height: 20)
 
                Text("+966")
-                   .font(.custom("Tajawal-Regular", size: 16))
+                   .font(.custom("Tajawal-Regular", size: 20))
 
                TextField("501234567", text: .constant(""))
                    .keyboardType(.numberPad)
@@ -35,17 +38,14 @@ struct LogIn: View {
 
            Spacer()
 
-           // NavigationLink for "إرسال"
-           NavigationLink(destination: OTP_view()) {
-               Text("Send")
-                   .font(.custom("Tajawal-Bold", size: 20))
-                   .foregroundColor(.white)
-                   .frame(maxWidth: .infinity)
-                   .padding()
-                   .background(Color("DarkBlue"))
-                   .cornerRadius(8)
-           }
-           .padding(.horizontal, 20)
+            Button("Send"){
+                
+            }
+            .buttonStyle(GreenButton())
+            .padding(.horizontal, 20)
+            .fullScreenCover(isPresented: $bool) {
+                OTP_view()
+            }
        }
         
         

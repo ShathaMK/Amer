@@ -50,11 +50,6 @@ struct OTP_view: View {
             
             
             
-            
-            
-            
-            
-            
             Spacer()
             
             

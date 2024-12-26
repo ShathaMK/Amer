@@ -7,19 +7,41 @@
 
 import Foundation
 
-struct User : Identifiable {
-    
+//struct User : Identifiable {
+//    
+//    var id = UUID()
+//    var name: String
+//    var phoneNumber: String
+//    var role: String //Assistance or Seeker
+//    
+//    init(id: UUID = UUID(), name: String, phoneNumber: String, role: String) {
+//        self.id = id
+//        self.name = name
+//        self.phoneNumber = phoneNumber
+//        self.role = role
+//    }
+//    
+//    
+//}
+
+
+
+import Foundation
+
+struct Country: Codable, Identifiable, Equatable {
+    var id = UUID()
+    let name: String
+    let flag: String
+    let code: String  // e.g., "+1", "+966", etc.
+}
+
+//struct Country: Codable , Identifiable, Equatable{
+//    let name, flag, code: String
+//}
+
+struct User: Identifiable {
     var id = UUID()
     var name: String
     var phoneNumber: String
-    var role: String //Assistance or Seeker
-    
-    init(id: UUID = UUID(), name: String, phoneNumber: String, role: String) {
-        self.id = id
-        self.name = name
-        self.phoneNumber = phoneNumber
-        self.role = role
-    }
-    
-    
+    var role: String // Assistance or Seeker
 }
