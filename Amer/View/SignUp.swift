@@ -13,8 +13,8 @@ struct SignUp: View {
     @StateObject private var userVM = UserViewModel()
     
     // Bound text fields to these @State vars
-//    @State private var userName: String = ""
-//    @State private var phoneNumber: String = ""
+    //    @State private var userName: String = ""
+    //    @State private var phoneNumber: String = ""
     
     @State private var bool = false
     
@@ -27,26 +27,26 @@ struct SignUp: View {
     
     var body: some View {
         
-    
+        
         VStack() {
             
-           
+            
             Text("Name")
                 .font(.custom("Tajawal-Bold", size: 20))
                 .foregroundColor(Color("FontColor"))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
-                
             
-                // Allow the user to enter their name
+            
+            // Allow the user to enter their name
             TextField("Enter Your Name", text: $userVM.userName)
-                    .font(.custom("Tajawal-Medium", size: 20))
-                    .multilineTextAlignment(.leading)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                    .padding(.horizontal, 20)
-                    
-                
+                .font(.custom("Tajawal-Medium", size: 20))
+                .multilineTextAlignment(.leading)
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                .padding(.horizontal, 20)
+            
+            
             
             Spacer().frame(height: 32)
             
@@ -60,42 +60,42 @@ struct SignUp: View {
             
             HStack{
                 
-               VStack(alignment: .leading, spacing: 0) {
-                   
-                   // The button to toggle dropdown
-                   Button(action: {
-                       withAnimation {
-                           isExpanded2.toggle()
-                       }
-                   }) {
-                       HStack {
-                           // Show the selected country or a placeholder if nil
-                          if let selected = userVM.selectedCountry {
-                              Text("\(selected.flag) \(selected.code)")
-                                  .foregroundColor(.primary)
-                          } else {
-                              Text("country")
-                                  .foregroundColor(.gray)
-                          }
-
-                       }
-                       .font(.custom("Tajawal-Medium", size: 20))
-                       .frame(width: 70, alignment: .leading)
-                       .padding()
-                       .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                   } // end button
-                   
-                   
-               } // end vstack
-               
-               
+                VStack(alignment: .leading, spacing: 0) {
+                    
+                    // The button to toggle dropdown
+                    Button(action: {
+                        withAnimation {
+                            isExpanded2.toggle()
+                        }
+                    }) {
+                        HStack {
+                            // Show the selected country or a placeholder if nil
+                            if let selected = userVM.selectedCountry {
+                                Text("\(selected.flag) \(selected.code)")
+                                    .foregroundColor(.primary)
+                            } else {
+                                Text("country")
+                                    .foregroundColor(.gray)
+                            }
+                            
+                        }
+                        .font(.custom("Tajawal-Medium", size: 20))
+                        .frame(width: 70, alignment: .leading)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                    } // end button
+                    
+                    
+                } // end vstack
+                
+                
                 
                 TextField("Enter Phone Number", text: $userVM.phoneNumber)
                     .font(.custom("Tajawal-Medium", size: 20))
                     .multilineTextAlignment(.leading)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                    
+                
             } // end hstack
             .padding(.horizontal, 20)
             
@@ -106,61 +106,61 @@ struct SignUp: View {
             
             // MARK: - the drop down for the role
             
+            
+            VStack {
                 
-                VStack {
-                    
-                    Text("Role")
-                        .foregroundColor(Color("FontColor"))
-                        .font(.custom("Tajawal-Bold", size: 20))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                    
-                    
-                    // Button to show/hide the list
-                    Button(action: {
-                        withAnimation {
-                            isExpanded.toggle()
-                        }
-                    }) {
-                        HStack {
-                            Text(selectedRole.isEmpty ? "Select a role" : selectedRole) // Show placeholder if no role is selected
-                                .foregroundColor(selectedRole.isEmpty ? .gray : .primary) // Placeholder color
-                                .font(.custom("Tajawal-Medium", size: 20))
-                            Spacer()
-                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                                .foregroundStyle(Color("ColorBlue"))
-                        }
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                        .padding(.horizontal, 20)
+                Text("Role")
+                    .foregroundColor(Color("FontColor"))
+                    .font(.custom("Tajawal-Bold", size: 20))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                
+                
+                // Button to show/hide the list
+                Button(action: {
+                    withAnimation {
+                        isExpanded.toggle()
                     }
-                    
-                    // The dropdown list
-                    if isExpanded {
-                        ForEach(roles, id: \.self) { role in
-                            Button(action: {
-                                selectedRole = role
-                                withAnimation {
-                                    isExpanded = false
-                                }
-                            }) {
-                                Text(role)
-                                    .font(.custom("Tajawal-Medium", size: 20))
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .foregroundStyle(Color("FontColor"))
-                            }
-                            .padding(.horizontal, 20)
-                            Divider()
-                                .background(Color.gray.opacity(0.5))
-                                .padding(.horizontal, 20)
-                        }
+                }) {
+                    HStack {
+                        Text(selectedRole.isEmpty ? "Select a role" : selectedRole) // Show placeholder if no role is selected
+                            .foregroundColor(selectedRole.isEmpty ? .gray : .primary) // Placeholder color
+                            .font(.custom("Tajawal-Medium", size: 20))
+                        Spacer()
+                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                            .foregroundStyle(Color("ColorBlue"))
                     }
-
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                    .padding(.horizontal, 20)
                 }
                 
+                // The dropdown list
+                if isExpanded {
+                    ForEach(roles, id: \.self) { role in
+                        Button(action: {
+                            selectedRole = role
+                            withAnimation {
+                                isExpanded = false
+                            }
+                        }) {
+                            Text(role)
+                                .font(.custom("Tajawal-Medium", size: 20))
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundStyle(Color("FontColor"))
+                        }
+                        .padding(.horizontal, 20)
+                        Divider()
+                            .background(Color.gray.opacity(0.5))
+                            .padding(.horizontal, 20)
+                    }
+                }
                 
-                        
+            }
+            
+            
+            
             
             Spacer()
             
@@ -202,22 +202,23 @@ struct SignUp: View {
                             }
                         }
                         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-
-
-                    Spacer()
-
-                  
+                        
+                        
+                        Spacer()
+                        
+                        
+                    }
+                    .searchable(text: $userVM.searchText, prompt: "Search countries")
+                    .navigationTitle("Countries")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .presentationDetents([.fraction(0.3), .large])
+                    .presentationDragIndicator(.visible)
                 }
-                .searchable(text: $userVM.searchText, prompt: "Search countries")
-                .navigationTitle("Countries")
-                .navigationBarTitleDisplayMode(.inline)
-                .presentationDetents([.fraction(0.3), .large])
-                .presentationDragIndicator(.visible)
             }
+            
+            
+            
         }
-        
-        
-        
     }
 }
 
