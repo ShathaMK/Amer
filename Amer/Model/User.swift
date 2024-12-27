@@ -28,8 +28,8 @@ import Foundation
 
 import Foundation
 
-struct Country: Codable, Identifiable, Equatable {
-    var id = UUID()
+struct Country: Codable {
+    var id : Int
     let name: String
     let flag: String
     let code: String  // e.g., "+1", "+966", etc.

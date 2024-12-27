@@ -14,53 +14,51 @@ class UserViewModel: ObservableObject {
     @Published var userName: String = ""
     @Published var phoneNumber: String = ""
 
-    // All countries loaded from JSON
-    @Published var countries: [Country] = []
-    
-    // The currently selected country (optional)
-    @Published var selectedCountry: Country? = nil
-    
     @Published var searchText: String = ""
     
+    @Published var countries: [Country] = []
+    @Published var selectedCountry: Country? = nil
+    let defaultCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
+    
     init() {
-            countries = loadCountries()
+        selectedCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
+        loadCountries()
+    }
+    
+    private func loadCountries() {
+        guard let url = Bundle.main.url(forResource: "countries", withExtension: "json") else {
+            print("JSON file not found")
+            return
         }
-        
-        private func loadCountries() -> [Country] {
-            // Load from your "countries.json" file in the bundle
-            guard let url = Bundle.main.url(forResource: "countries", withExtension: "json"),
-                  let data = try? Data(contentsOf: url),
-                  let decoded = try? JSONDecoder().decode([Country].self, from: data)
-            else {
-                return []
+        do {
+            let data = try Data(contentsOf: url)
+            let loadedCountries = try JSONDecoder().decode([Country].self, from: data)
+            DispatchQueue.main.async {
+                self.countries = loadedCountries
             }
-            return decoded
+        } catch {
+            print("Error decoding JSON: \(error)")
         }
-        
-        // MARK: - Filtering Logic
-        
-        private func countryMatches(_ country: Country, tokens: [Substring]) -> Bool {
-            // You might combine name, flag, and code to match
-            let combinedString = (country.name + " " + country.flag + " " + country.code).lowercased()
-            
-            return tokens.allSatisfy { token in
-                combinedString.contains(token)
-            }
-        }
-        
-        var filteredCountries: [Country] {
-            if searchText.isEmpty {
-                return countries
-            } else {
-                let tokens = searchText
-                    .lowercased()
-                    .split(separator: " ")
-                
-                return countries.filter { country in
-                    countryMatches(country, tokens: tokens)
-                }
-            }
-        }
+    }
+    
+//    func loadCountries() -> [Country] {
+//        guard let url = Bundle.main.url(forResource: "countries", withExtension: "json") else {
+//            print("JSON file not found")
+//            return []
+//        }
+//        do {
+//            let data = try Data(contentsOf: url)
+//            let countries = try JSONDecoder().decode([Country].self, from: data)
+//            return countries
+//        } catch {
+//            print("Error decoding JSON: \(error)")
+//            return []
+//        }
+//    }
+    
+    
+    
+    
 }
 
 

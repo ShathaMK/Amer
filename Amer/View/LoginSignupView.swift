@@ -9,6 +9,8 @@ import SwiftUI
 
 struct LoginSignupView: View {
     @State private var selectedTab = 0 // State to track active tab
+    @State private var bool = false
+    @State private var bool2 = false
 
     var body: some View {
         NavigationView {
@@ -35,7 +37,7 @@ struct LoginSignupView: View {
                                 .font(.custom("Tajawal-Bold", size: 20))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 15)
-                                .background(selectedTab == 0 ? Color("ColorGreen") : Color.white) // Selected background
+                                .background(selectedTab == 0 ? Color("ColorGreen") : Color.clear) // Selected background
                                 .foregroundColor(selectedTab == 0 ? .white : Color("FontColor") ) // Text color
                                 .cornerRadius(8)
                                 
@@ -49,7 +51,7 @@ struct LoginSignupView: View {
                                 .font(.custom("Tajawal-Bold", size: 20))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 15)
-                                .background(selectedTab == 1 ? Color("ColorGreen") : Color.white) // Selected background
+                                .background(selectedTab == 1 ? Color("ColorGreen") : Color.clear) // Selected background
                                 .foregroundColor(selectedTab == 1 ? .white : Color("FontColor") ) // Text color
                                 .cornerRadius(8)
                                 
@@ -69,6 +71,7 @@ struct LoginSignupView: View {
                 // Dynamic Content
                 if selectedTab == 0 {
                     SignUp() // Signup View
+                    
                 } else {
                     LogIn() //  Login View
                 }
@@ -77,9 +80,10 @@ struct LoginSignupView: View {
                 
                 
             }
+            .scrollDismissesKeyboard(.automatic)
             .navigationTitle("")
             .navigationBarHidden(true)
-            .background(Color.white.ignoresSafeArea())
+
         }
     }
 }

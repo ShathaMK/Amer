@@ -36,16 +36,17 @@ struct LogIn: View {
            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
            .padding(.horizontal, 20)
 
-           Spacer()
+            Spacer()
 
-            Button("Send"){
-                
-            }
-            .buttonStyle(GreenButton())
-            .padding(.horizontal, 20)
-            .fullScreenCover(isPresented: $bool) {
-                OTP_view()
-            }
+             Button("Send"){
+                 
+             }
+             .buttonStyle(GreenButton())
+             .padding(.horizontal, 20)
+             .fullScreenCover(isPresented: $bool) {
+                 OTP_view()
+             }
+           
        }
         
         
