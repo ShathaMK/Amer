@@ -166,22 +166,22 @@ struct RemoteView: View {
         .environmentObject(ButtonsViewModel())
 }
 
-class ButtonsViewModl: ObservableObject {
-    @Published var buttons: [Buttons] = []
-
-    init(sampleData: Bool = false) {
-        if sampleData {
-            buttons = [
-                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
-                Buttons(label: "Button 2", icon: "📞", color: Color.green),
-                Buttons(label: "Button 3", icon: "📷", color: Color.red),
-                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
-                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
-                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
-            ]
-        }
-    }
-}
+//class ButtonsViewModl: ObservableObject {
+//    @Published var buttons: [Buttons] = []
+//
+//    init(sampleData: Bool = false) {
+//        if sampleData {
+//            buttons = [
+//                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
+//                Buttons(label: "Button 2", icon: "📞", color: Color.green),
+//                Buttons(label: "Button 3", icon: "📷", color: Color.red),
+//                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
+//                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
+//                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
+//            ]
+//        }
+//    }
+//}
 
 
 // to pick color in hex format Color(hex:0x000000) used like this

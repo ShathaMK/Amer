@@ -12,12 +12,13 @@ struct Buttons: Identifiable{
     var label: String
     var icon: String
     var color: Color
-    
-    init(id: UUID = UUID(), label: String, icon: String, color: Color) {
+    var isDisabled: Bool
+    init(id: UUID = UUID(), label: String, icon: String, color: Color, isDisabled: Bool) {
         self.id = id
         self.label = label
         self.icon = icon
         self.color = color
+        self.isDisabled = isDisabled
     }
     
 }
