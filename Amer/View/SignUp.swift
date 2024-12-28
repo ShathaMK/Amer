@@ -23,7 +23,7 @@ struct SignUp: View {
     @State private var selectedRole: String = ""
     @State private var isExpanded: Bool = false // dropdown bool
     @State private var isExpanded2: Bool = false // sheet bool
-    @State private var isExpanded3: Bool = false
+//    @State private var isExpanded3: Bool = false
     
     @Environment(\.dismiss) var dismiss
     
@@ -75,26 +75,27 @@ struct SignUp: View {
                         HStack {
                             Text(userVM.selectedCountry?.flag ?? userVM.defaultCountry.flag)
                                 .font(.custom("Tajawal-Bold", size: 20))
+                                .foregroundColor(Color("FontColor"))
                             Text(userVM.selectedCountry?.code ?? userVM.defaultCountry.code)
                                 .font(.custom("Tajawal-Bold", size: 20))
+                                .foregroundColor(Color("FontColor"))
                             
                         }
                         .font(.custom("Tajawal-Medium", size: 20))
-                        .frame(width: 74, alignment: .leading)
+                        .frame(width: 77, alignment: .leading)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                     } // end button
                     
                     
                 } // end vstack
-                .navigationTitle("Country Selector")
                 .sheet(isPresented:  $isExpanded2) {
                     countrySheet(
                         selectedCountry: $userVM.selectedCountry,
                         countries: userVM.countries
                     )
-                    .searchable(text: $userVM.searchText, prompt: "Search countries")
-                    .navigationBarTitleDisplayMode(.inline)
+                    .font(.custom("Tajawal-Bold", size: 20))
+                    .foregroundColor(Color("FontColor"))
                     .presentationDetents([.fraction(0.7), .large])
                     .presentationDragIndicator(.visible)
                     
@@ -179,12 +180,12 @@ struct SignUp: View {
             
             
             Button("Send"){
-                
+                bool.toggle()
             }
             .buttonStyle(GreenButton())
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $bool) {
-                OTP_view()
+                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
             }
             
             
@@ -192,45 +193,6 @@ struct SignUp: View {
         .onTapGesture {
             dismiss()
         }
-//        // MARK: - Country Picker Sheet
-//        .sheet(isPresented: $isExpanded2) {
-//            NavigationStack {
-//                VStack(spacing: 0) {
-//                    ScrollView {
-//                        VStack(spacing: 0) {
-//                            List(countries, id: \.id) { country in
-//                                Button(action: {
-//                                    selectedCountry = country
-//                                    dismiss()
-//                                }) {
-//                                    HStack {
-//                                        Text(country.flag)
-//                                            .font(.largeTitle)
-//                                        Text(country.name)
-//                                            .font(.headline)
-//                                    }
-//                                }
-//                                
-//                            }
-//                            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-//                            
-//                            
-//                            Spacer()
-//                            
-//                            
-//                        }
-//                        .searchable(text: $userVM.searchText, prompt: "Search countries")
-//                        .navigationTitle("Countries")
-//                        .navigationBarTitleDisplayMode(.inline)
-//                        .presentationDetents([.fraction(0.3), .large])
-//                        .presentationDragIndicator(.visible)
-//                    }
-//                }
-//                
-//            }
-//            
-//            
-//        }// end sheet
         
         
         
@@ -241,7 +203,5 @@ struct SignUp: View {
 
 
 #Preview {
-    
     SignUp()
-//        .environmentObject(UserViewModel())
 }

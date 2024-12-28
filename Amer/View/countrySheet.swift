@@ -15,43 +15,42 @@ struct countrySheet: View {
     var countries: [Country]
 
     var body: some View {
+        
         NavigationView {
-            List(countries, id: \.id) { country in
+            
+            List(userVM.filteredCountries, id: \.id) { country in
                 Button(action: {
                     selectedCountry = country
                     dismiss()
                 }) {
                     HStack {
+                        Text(country.code)
+                            .font(.custom("Tajawal-Medium", size: 20))
                         Text(country.flag)
-                            .font(.custom("Tajawal-Medium", size: 24))
+                            .font(.custom("Tajawal-Medium", size: 20))
                         Text(country.name)
-                            .font(.custom("Tajawal-Medium", size: 24))
+                            .font(.custom("Tajawal-Medium", size: 20))
                     }
                 }
             }
+            .navigationTitle("Select Country")
+            .navigationBarTitleDisplayMode( .inline)
             .searchable(text: $userVM.searchText, prompt: "Search countries")
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Select a Country")
-                        .font(.custom("Tajawal-Bold", size: 30))
-                        .foregroundColor(Color("FontColor"))
-                }
                 
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Close") {
                         dismiss()
                     }
-                    
+                    .font(.custom("Tajawal-Bold", size: 20))
                 }
+                
             } // tool bar end
+            
         }
     }
 }
 
-
-//#Preview {
-//    countrySheet()
-//}
 
 
 #Preview {

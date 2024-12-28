@@ -25,6 +25,20 @@ class UserViewModel: ObservableObject {
         loadCountries()
     }
     
+    // Filtered Countries Based on Search
+    var filteredCountries: [Country] {
+        if searchText.isEmpty {
+            return countries
+        } else {
+            return countries.filter { country in
+                country.name.lowercased().contains(searchText.lowercased()) ||
+                country.flag.contains(searchText) ||
+                country.code.contains(searchText)
+            }
+        }
+    }
+    
+    
     private func loadCountries() {
         guard let url = Bundle.main.url(forResource: "countries", withExtension: "json") else {
             print("JSON file not found")
@@ -41,22 +55,35 @@ class UserViewModel: ObservableObject {
         }
     }
     
-//    func loadCountries() -> [Country] {
-//        guard let url = Bundle.main.url(forResource: "countries", withExtension: "json") else {
-//            print("JSON file not found")
-//            return []
-//        }
-//        do {
-//            let data = try Data(contentsOf: url)
-//            let countries = try JSONDecoder().decode([Country].self, from: data)
-//            return countries
-//        } catch {
-//            print("Error decoding JSON: \(error)")
-//            return []
-//        }
-//    }
     
     
+    
+    
+    
+    
+    // MARK: - here i will do the OTP proprty
+    
+    @Published var otp: String = ""
+        
+        // Simulate sending OTP
+        func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
+            // Simulate an API call to send OTP
+            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+                DispatchQueue.main.async {
+                    completion(true) // Assume OTP sent successfully
+                }
+            }
+        }
+        
+        // Simulate verifying OTP
+        func verifyOTP(_ otp: String, completion: @escaping (Bool) -> Void) {
+            // Simulate an API call to verify OTP
+            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+                DispatchQueue.main.async {
+                    completion(otp == "123456") // Simulate valid OTP
+                }
+            }
+        }
     
     
 }
