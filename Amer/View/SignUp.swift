@@ -123,8 +123,9 @@ struct SignUp: View {
                     }
                 }) {
                     HStack {
-                        Text(selectedRole.isEmpty ? "Select a role" : selectedRole) // Show placeholder if no role is selected
-                            .foregroundColor(selectedRole.isEmpty ? .gray : .primary) // Placeholder color
+                        // Show placeholder if no role is selected, localized
+                        Text(selectedRole.isEmpty ? NSLocalizedString("Select a role", comment: "Placeholder text") : NSLocalizedString(selectedRole, comment: "Selected role"))
+                            .foregroundColor(selectedRole.isEmpty ? .gray : .primary)
                             .font(.custom("Tajawal-Medium", size: 20))
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -144,7 +145,7 @@ struct SignUp: View {
                                 isExpanded = false
                             }
                         }) {
-                            Text(role)
+                            Text(NSLocalizedString(role, comment: "Role option")) // Localized role
                                 .font(.custom("Tajawal-Medium", size: 20))
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -156,8 +157,8 @@ struct SignUp: View {
                             .padding(.horizontal, 20)
                     }
                 }
-                
             }
+            
             
             
             
