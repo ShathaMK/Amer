@@ -13,7 +13,8 @@ struct AmerApp: App {
     var body: some Scene {
         WindowGroup {
 
-            Onboarding_1()
+            AddNewButtonView().environmentObject(ButtonsViewModel()) // Inject EnvironmentObject here
+
 
         }
     }

@@ -92,6 +92,17 @@
     "501234567" : {
 
     },
+    "Active" : {
+      "comment" : "Active section title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نشطة"
+          }
+        }
+      }
+    },
     "Add" : {
       "localizations" : {
         "ar" : {
@@ -267,6 +278,17 @@
         }
       }
     },
+    "Disabled" : {
+      "comment" : "Disabled section title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غير نشطة"
+          }
+        }
+      }
+    },
     "Edit" : {
       "localizations" : {
         "ar" : {
@@ -293,6 +315,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لان راحتك ونفسك عزيزه عندنا اطلب اللي تحتاجه بدون ماتتعب"
+          }
+        }
+      }
+    },
+    "Enable" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تفعيل"
           }
         }
       }
@@ -395,7 +427,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "الأيقونة "
+            "value" : "أيقونة"
           }
         }
       }

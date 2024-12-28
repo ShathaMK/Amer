@@ -21,7 +21,8 @@ class ButtonsViewModel: ObservableObject{
         let newButton = Buttons(
             label: currentLabel,
             icon: selectedIcon,
-            color: selectedColor)
+            color: selectedColor,
+            isDisabled: false)
         buttons.append(newButton)
         objectWillChange.send()
     }
@@ -31,6 +32,12 @@ class ButtonsViewModel: ObservableObject{
             buttons.remove(at: index)
         }
     }
+    
+    func toggleDisableButton(_ button: Buttons) {
+         if let index = buttons.firstIndex(where: { $0.id == button.id }) {
+             buttons[index].isDisabled.toggle()
+         }
+     }
     
     func loadButton(_ button: Buttons) {
         guard let index = buttons.firstIndex(where: { $0.id == button.id }) else {

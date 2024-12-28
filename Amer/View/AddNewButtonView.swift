@@ -172,7 +172,8 @@ extension UITextField {
                                     id: buttonToEdit?.id ?? UUID(),
                                     label: vm.currentLabel,
                                     icon: vm.selectedIcon,
-                                    color: vm.selectedColor)
+                                    color: vm.selectedColor,
+                                    isDisabled: false)
                                 if let buttonToEdit = buttonToEdit {
                                     vm.editButton(oldButton: buttonToEdit, with: newButton)
                                 }

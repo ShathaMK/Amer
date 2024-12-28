@@ -6,22 +6,23 @@ struct ButtonListView: View {
     @State var selectedButton: Buttons? // Track selected button for editing
     var buttonToDelete: Buttons?
     //var button: Buttons
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                SectionHeader(title: "Active", color: Color("DarkGreen"))
+                SectionHeader(title: NSLocalizedString("Active", comment: "Active section title"), color: Color("DarkGreen"))
                 
-                ButtonGrid(buttons: vm.buttons) { button in
+                ButtonGrid(buttons: vm.buttons.filter { !$0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
                 .padding()
                 
-                SectionHeader(title: "Disabled", color: .red)
+                SectionHeader(title: NSLocalizedString("Disabled", comment: "Disabled section title"), color: .red)
                 
-                ButtonGrid(buttons: []) { button in
+                ButtonGrid(buttons: vm.buttons.filter { $0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
+
                 .padding()
             }
             .toolbar {
@@ -115,18 +116,20 @@ struct ButtonView: View {
 
     var body: some View {
         Button(action: {
-            action(button)
+            if !button.isDisabled { // Only allow action if button is not disabled
+                action(button)
+            }
         }) {
             VStack(spacing: 8) {
                 Text(button.icon)
                     .font(.system(size: 30))
                     .frame(width: 74, height: 74)
-                    .background(Color(button.color))
+                    .background(button.isDisabled ? Color.gray : Color(button.color)) // Gray out if disabled
                     .cornerRadius(20)
                     .shadow(radius: 4, y: 4)
                 Text(button.label)
                     .font(Font.custom("Tajawal-Bold", size: 16))
-                    .foregroundStyle(Color("FontColor"))
+                    .foregroundStyle(button.isDisabled ? .gray : Color("FontColor")) // Gray out text if disabled
             }
         }
         .contextMenu {
@@ -137,9 +140,10 @@ struct ButtonView: View {
                 Label("Edit", systemImage: "pencil")
             }
             Button {
+                vm.toggleDisableButton(button) // Toggle disable status
                 print("Disable \(button.label)")
             } label: {
-                Label("Disable", systemImage: "doc.on.doc")
+                Label(button.isDisabled ? "Enable" : "Disable", systemImage: button.isDisabled ? "lock.open" : "lock")
             }
             Button(role: .destructive) {
                 print("Delete \(button.label)")
