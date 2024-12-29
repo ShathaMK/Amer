@@ -15,10 +15,24 @@
       }
     },
     "%@" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "%@ %@" : {
+      "extractionState" : "stale",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -28,7 +42,14 @@
       }
     },
     "%@ %@ (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ (%3$@)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -38,13 +59,25 @@
       }
     },
     "+966" : {
-
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+966"
+          }
+        }
+      }
     },
     "+96650789644" : {
-
-    },
-    "🇸🇦" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+96650789644"
+          }
+        }
+      }
     },
     "🔔" : {
 
@@ -90,7 +123,15 @@
       }
     },
     "501234567" : {
-
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "501234567"
+          }
+        }
+      }
     },
     "Active" : {
       "comment" : "Active section title",
@@ -144,6 +185,9 @@
         }
       }
     },
+    "BlueButton" : {
+
+    },
     "Button Color" : {
       "localizations" : {
         "ar" : {
@@ -184,6 +228,9 @@
         }
       }
     },
+    "cancleGrayBlue" : {
+
+    },
     "CFBundleDisplayName" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -218,7 +265,14 @@
         }
       }
     },
+    "Close" : {
+
+    },
+    "cnacleGreen" : {
+
+    },
     "Countries" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -229,6 +283,7 @@
       }
     },
     "country" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -389,6 +444,9 @@
         }
       }
     },
+    "GreenButton" : {
+
+    },
     "Haptics" : {
       "localizations" : {
         "ar" : {
@@ -452,6 +510,9 @@
         }
       }
     },
+    "LightGreenButton" : {
+
+    },
     "Log In" : {
       "localizations" : {
         "ar" : {
@@ -471,6 +532,9 @@
           }
         }
       }
+    },
+    "Members" : {
+
     },
     "Mohammad Saleh" : {
       "localizations" : {
@@ -572,7 +636,11 @@
         }
       }
     },
+    "OTP will be sent to this number %@" : {
+
+    },
     "OTP will be sent to this number 501234567 " : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -644,6 +712,9 @@
         }
       }
     },
+    "Select Country" : {
+
+    },
     "Send" : {
       "localizations" : {
         "ar" : {
@@ -653,6 +724,9 @@
           }
         }
       }
+    },
+    "Send OTP" : {
+
     },
     "Sign Up" : {
       "localizations" : {
@@ -703,6 +777,9 @@
           }
         }
       }
+    },
+    "Verify" : {
+
     },
     "Your Wish is Our Command" : {
       "localizations" : {

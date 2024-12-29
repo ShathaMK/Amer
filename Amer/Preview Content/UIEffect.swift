@@ -67,7 +67,7 @@ struct LightGreenButton: ButtonStyle {
 
 
 
-struct cnacleGreen: ButtonStyle {
+struct cancelGreen: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
             Color.clear
@@ -76,15 +76,19 @@ struct cnacleGreen: ButtonStyle {
                 .foregroundColor(Color("DarkGreen"))
         }
         .frame(height: 52)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color("DarkGreen"), lineWidth: 2) // Added border with the same color as text
+        )
         .cornerRadius(8)
         .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
         .opacity(configuration.isPressed ? 0.8 : 1.0)
-        .animation(.easeInOut, value: configuration.isPressed)
+        .animation(.easeInOut(duration: 0.2), value: configuration.isPressed)
     }
 }
 
 
-struct cancleGrayBlue: ButtonStyle {
+struct cancelGrayBlue: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
             Color("LightBlue")
@@ -100,6 +104,35 @@ struct cancleGrayBlue: ButtonStyle {
     }
 }
 
-#Preview {
-    OTP_view()
+struct UIEffect: View {
+    var body: some View {
+        
+        Button("BlueButton") {
+            
+        }.buttonStyle(BlueButton()).padding()
+        
+        Button("GreenButton") {
+            
+        }.buttonStyle(GreenButton()).padding()
+        
+        Button("LightGreenButton") {
+            
+        }.buttonStyle(LightGreenButton()).padding()
+        
+        Button("cnacleGreen") {
+            
+        }.buttonStyle(cancelGreen()).padding()
+        
+        Button("cancleGrayBlue") {
+            
+        }.buttonStyle(cancelGrayBlue()).padding()
+        
+    }
+    
 }
+
+
+#Preview {
+    UIEffect()
+}
+

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginSignupView: View {
     @State private var selectedTab = 0 // State to track active tab
+    @StateObject private var userVM = UserViewModel()
 
     var body: some View {
         NavigationView {
@@ -35,7 +36,7 @@ struct LoginSignupView: View {
                                 .font(.custom("Tajawal-Bold", size: 20))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 15)
-                                .background(selectedTab == 0 ? Color("ColorGreen") : Color.white) // Selected background
+                                .background(selectedTab == 0 ? Color("ColorGreen") : Color.clear) // Selected background
                                 .foregroundColor(selectedTab == 0 ? .white : Color("FontColor") ) // Text color
                                 .cornerRadius(8)
                                 
@@ -49,7 +50,7 @@ struct LoginSignupView: View {
                                 .font(.custom("Tajawal-Bold", size: 20))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 15)
-                                .background(selectedTab == 1 ? Color("ColorGreen") : Color.white) // Selected background
+                                .background(selectedTab == 1 ? Color("ColorGreen") : Color.clear) // Selected background
                                 .foregroundColor(selectedTab == 1 ? .white : Color("FontColor") ) // Text color
                                 .cornerRadius(8)
                                 
@@ -79,7 +80,10 @@ struct LoginSignupView: View {
             }
             .navigationTitle("")
             .navigationBarHidden(true)
-            .background(Color.white.ignoresSafeArea())
+            .onTapGesture {
+                userVM.hideKeyboard()
+            }
+
         }
     }
 }
