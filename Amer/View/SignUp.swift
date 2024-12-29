@@ -19,14 +19,17 @@ struct SignUp: View {
     @State private var bool = false
     
     // Dropdown data
-    @State private var roles: [String] = ["Assistant", "Reciver"]
+    @State var roles: [String] = ["Assistant", "Reciver"]
     @State private var selectedRole: String = ""
     @State private var isExpanded: Bool = false // dropdown bool
     @State private var isExpanded2: Bool = false // sheet bool
+//    @State private var isExpanded3: Bool = false
     
+    @Environment(\.dismiss) var dismiss
     
+//    @State var selectedCountry: Country?
+//    var countries: [Country]
     var body: some View {
-        
         
         VStack() {
             
@@ -45,6 +48,7 @@ struct SignUp: View {
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 .padding(.horizontal, 20)
+            
             
             
             
@@ -69,32 +73,42 @@ struct SignUp: View {
                         }
                     }) {
                         HStack {
-                            // Show the selected country or a placeholder if nil
-                            if let selected = userVM.selectedCountry {
-                                Text("\(selected.flag) \(selected.code)")
-                                    .foregroundColor(.primary)
-                            } else {
-                                Text("country")
-                                    .foregroundColor(.gray)
-                            }
+                            Text(userVM.selectedCountry?.flag ?? userVM.defaultCountry.flag)
+                                .font(.custom("Tajawal-Bold", size: 20))
+                                .foregroundColor(Color("FontColor"))
+                            Text(userVM.selectedCountry?.code ?? userVM.defaultCountry.code)
+                                .font(.custom("Tajawal-Bold", size: 20))
+                                .foregroundColor(Color("FontColor"))
                             
                         }
                         .font(.custom("Tajawal-Medium", size: 20))
-                        .frame(width: 70, alignment: .leading)
+                        .frame(width: 77, alignment: .leading)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                     } // end button
                     
                     
                 } // end vstack
-                
+                .sheet(isPresented:  $isExpanded2) {
+                    countrySheet(
+                        selectedCountry: $userVM.selectedCountry,
+                        countries: userVM.countries
+                    )
+                    .font(.custom("Tajawal-Bold", size: 20))
+                    .foregroundColor(Color("FontColor"))
+                    .presentationDetents([.fraction(0.7), .large])
+                    .presentationDragIndicator(.visible)
+                    
+                }
                 
                 
                 TextField("Enter Phone Number", text: $userVM.phoneNumber)
                     .font(.custom("Tajawal-Medium", size: 20))
+                    .keyboardType( .numberPad)
                     .multilineTextAlignment(.leading)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                
                 
             } // end hstack
             .padding(.horizontal, 20)
@@ -123,9 +137,8 @@ struct SignUp: View {
                     }
                 }) {
                     HStack {
-                        // Show placeholder if no role is selected, localized
-                        Text(selectedRole.isEmpty ? NSLocalizedString("Select a role", comment: "Placeholder text") : NSLocalizedString(selectedRole, comment: "Selected role"))
-                            .foregroundColor(selectedRole.isEmpty ? .gray : .primary)
+                        Text(selectedRole.isEmpty ? "Select a role" : selectedRole) // Show placeholder if no role is selected
+                            .foregroundColor(selectedRole.isEmpty ? .gray : .primary) // Placeholder color
                             .font(.custom("Tajawal-Medium", size: 20))
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -145,7 +158,7 @@ struct SignUp: View {
                                 isExpanded = false
                             }
                         }) {
-                            Text(NSLocalizedString(role, comment: "Role option")) // Localized role
+                            Text(role)
                                 .font(.custom("Tajawal-Medium", size: 20))
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -157,8 +170,8 @@ struct SignUp: View {
                             .padding(.horizontal, 20)
                     }
                 }
+                
             }
-            
             
             
             
@@ -167,63 +180,28 @@ struct SignUp: View {
             
             
             Button("Send"){
-                
+                bool.toggle()
             }
             .buttonStyle(GreenButton())
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $bool) {
-                OTP_view()
+                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
             }
             
             
         } // end vstack
-        // MARK: - Country Picker Sheet
-        .sheet(isPresented: $isExpanded2) {
-            NavigationStack {
-                VStack(spacing: 0) {
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            // Use the *filteredCountries* to allow search
-                            ForEach(userVM.filteredCountries, id: \.id) { country in
-                                Button {
-                                    userVM.selectedCountry = country
-                                    withAnimation {
-                                        isExpanded2 = false
-                                    }
-                                } label: {
-                                    // Show name, flag, or code
-                                    Text("\(country.flag) \(country.name) (\(country.code))")
-                                        .font(.custom("Tajawal-Medium", size: 20))
-                                        .foregroundStyle(Color("FontColor"))
-                                        .padding(.vertical, 16)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                                Divider()
-                                    .background(Color.gray.opacity(0.5))
-                            }
-                        }
-                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                        
-                        
-                        Spacer()
-                        
-                        
-                    }
-                    .searchable(text: $userVM.searchText, prompt: "Search countries")
-                    .navigationTitle("Countries")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .presentationDetents([.fraction(0.3), .large])
-                    .presentationDragIndicator(.visible)
-                }
-            }
-            
-            
-            
+        .onTapGesture {
+            dismiss()
         }
+        
+        
+        
     }
+    
 }
+
+
 
 #Preview {
     SignUp()
-    
 }

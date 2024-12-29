@@ -15,10 +15,23 @@
       }
     },
     "%@" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "%@ %@" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -29,6 +42,12 @@
     },
     "%@ %@ (%@)" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ (%3$@)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -38,10 +57,24 @@
       }
     },
     "+966" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+966"
+          }
+        }
+      }
     },
     "+96650789644" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+96650789644"
+          }
+        }
+      }
     },
     "🇸🇦" : {
 
@@ -90,7 +123,14 @@
       }
     },
     "501234567" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "501234567"
+          }
+        }
+      }
     },
     "Active" : {
       "comment" : "Active section title",

@@ -29,7 +29,7 @@ import Foundation
 import Foundation
 
 struct Country: Codable, Identifiable, Equatable {
-    var id = UUID()
+    var id : Int
     let name: String
     let flag: String
     let code: String  // e.g., "+1", "+966", etc.
