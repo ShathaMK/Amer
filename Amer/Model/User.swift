@@ -28,7 +28,7 @@ import Foundation
 
 import Foundation
 
-struct Country: Codable {
+struct Country: Codable, Identifiable, Equatable {
     var id : Int
     let name: String
     let flag: String

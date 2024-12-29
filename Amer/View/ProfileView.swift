@@ -8,7 +8,7 @@ import UIKit
 struct ProfileView: View {
     @State private var selectedFontSize = "Medium" // Default font size selection
     @State private var isHapticsEnabled = true // State for Haptics toggle
-
+    @EnvironmentObject var fontSizeManager: FontSizeManager
     var body: some View {
 
         NavigationStack {
@@ -39,13 +39,18 @@ struct ProfileView: View {
                     .padding(.bottom, 270)
                     
                     VStack(spacing: -3) {
-                        HStack {
-                            Text("Edit Profile")
-                                .font(.headline)
-                                .font(.custom("Tajawal-Bold", size: 16))
-                                .foregroundStyle(Color("DarkBlue"))
-                                .padding(.trailing, 200)
-                            Image("EditSymbol")
+                       
+                            HStack {
+                                Text("Edit Profile")
+                                    .font(.headline)
+                                    .font(.custom("Tajawal-Bold", size: 16))
+                                    .foregroundStyle(Color("DarkBlue"))
+                                    .padding(.trailing, 200)
+                                Button {
+                                    
+                                } label: {
+                                Image("EditSymbol")
+                            }
                         }
                         .padding()
                         .frame(width: 377, height: 60)
@@ -113,14 +118,43 @@ struct ProfileView: View {
                                     .foregroundStyle(Color("DarkBlue"))
                                     .padding(.leading, 10)
                             }
+                            .onChange(of: isHapticsEnabled) {
+                                                      // Trigger haptic feedback when the toggle is changed
+                            HapticFeedback.shared.triggerHapticFeedback()
+                            }
                         }
+                        
+//                        HStack {
+//                            Toggle(isOn: $isHapticsEnabled) {
+//                                Text("Haptics")
+//                                    .font(.headline)
+//                                    .font(.custom("Tajawal-Bold", size: 16))
+//                                    .foregroundStyle(Color("DarkBlue"))
+//                                    .padding(.leading, 10)
+//                            }
+//                        }
                         .padding()
                         .frame(width: 377, height: 60)
                         .background(Color("VLightBlue"))
                         .cornerRadius(10)
                         
-                        Image("MembersButton")
-                            .padding(.top, 50)
+                        
+                        Button {
+                            
+                        } label: {
+                            HStack {
+                                Text("Members")
+                                    .padding()
+                                Spacer()
+                                Image(systemName: "person.2.fill")
+                                    .foregroundStyle(Color.white)
+                                    .padding()
+                            }
+                        }
+                        .buttonStyle(GreenButton())
+                        .padding()
+                        .padding(.top, 40)
+                        
                     }
                     .padding(.top, 220)
                 }
@@ -145,12 +179,11 @@ struct ProfileView: View {
             }
             
         }
-
-
-
     }
 }
 
 #Preview {
     ProfileView()
 }
+
+

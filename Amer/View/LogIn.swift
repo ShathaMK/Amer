@@ -64,6 +64,9 @@ struct LogIn: View {
                     .presentationDragIndicator(.visible)
                     
                 }
+                .onTapGesture {
+                    userVM.hideKeyboard()
+                }
                 
                 
                 TextField("Enter Phone Number", text: $userVM.phoneNumber)
@@ -76,8 +79,13 @@ struct LogIn: View {
                 
             } // end hstack
             .padding(.horizontal, 20)
-
+            .onTapGesture {
+                userVM.hideKeyboard()
+            }
+            
             Spacer()
+            
+            // MARK: - sending button
 
              Button("Send"){
                  bool.toggle()
@@ -88,7 +96,7 @@ struct LogIn: View {
                  OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
              }
            
-       }
+       } // end vstack
         
         
     }

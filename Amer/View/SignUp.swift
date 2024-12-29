@@ -23,16 +23,13 @@ struct SignUp: View {
     @State private var selectedRole: String = ""
     @State private var isExpanded: Bool = false // dropdown bool
     @State private var isExpanded2: Bool = false // sheet bool
-//    @State private var isExpanded3: Bool = false
-    
-    @Environment(\.dismiss) var dismiss
-    
-//    @State var selectedCountry: Country?
-//    var countries: [Country]
+
+
     var body: some View {
         
         VStack() {
             
+            // MARK: - Name entry
             
             Text("Name")
                 .font(.custom("Tajawal-Bold", size: 20))
@@ -48,13 +45,15 @@ struct SignUp: View {
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 .padding(.horizontal, 20)
-            
+                .onTapGesture {
+                    userVM.hideKeyboard()
+                }
             
             
             
             Spacer().frame(height: 32)
             
-            // MARK: - phone number
+            // MARK: - phone number entry
             
             Text("Phone Number")
                 .font(.custom("Tajawal-Bold", size: 20))
@@ -108,7 +107,9 @@ struct SignUp: View {
                     .multilineTextAlignment(.leading)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                
+                    .onTapGesture {
+                        userVM.hideKeyboard()
+                    }
                 
             } // end hstack
             .padding(.horizontal, 20)
@@ -118,7 +119,8 @@ struct SignUp: View {
             Spacer().frame(height: 32)
             
             
-            // MARK: - the drop down for the role
+            
+            // MARK: - Role drop down
             
             
             VStack {
@@ -191,12 +193,13 @@ struct SignUp: View {
             
         } // end vstack
         .onTapGesture {
-            dismiss()
+            userVM.hideKeyboard()
         }
         
         
         
     }
+    
     
 }
 

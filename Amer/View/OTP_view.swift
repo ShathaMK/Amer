@@ -94,18 +94,18 @@ struct OTP_view: View {
             
             // MARK: - OTP Input Fields
 //            HStack(spacing: 10) {
-//                
+//
 //                ForEach(0..<6, id: \.self) { index in
 //                    TextField("", text: Binding(
 //                        get: { otp[index] },
 //                        set: { value in
 //                            // Filter out non-numeric characters
 //                            let filtered = value.filter { $0.isNumber }
-//                            
+//
 //                            if filtered.count <= 1 {
 //                                otp[index] = filtered
 //                            }
-//                            
+//
 //                            // Move focus forward if a digit is entered
 //                            if filtered.count == 1 && index < 5 {
 //                                focusedIndex = index + 1
@@ -125,7 +125,7 @@ struct OTP_view: View {
 //                            .stroke(focusedIndex == index ? Color("ColorBlue") : Color.gray.opacity(0.5), lineWidth: 2)
 //                    )
 //                    .focused($focusedIndex, equals: index)
-//                    
+//
 //                }
 //            }
             

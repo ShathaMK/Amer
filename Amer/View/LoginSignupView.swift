@@ -9,8 +9,7 @@ import SwiftUI
 
 struct LoginSignupView: View {
     @State private var selectedTab = 0 // State to track active tab
-    @State private var bool = false
-    @State private var bool2 = false
+    @StateObject private var userVM = UserViewModel()
 
     var body: some View {
         NavigationView {
@@ -83,6 +82,9 @@ struct LoginSignupView: View {
             .scrollDismissesKeyboard(.automatic)
             .navigationTitle("")
             .navigationBarHidden(true)
+            .onTapGesture {
+                userVM.hideKeyboard()
+            }
 
         }
     }
