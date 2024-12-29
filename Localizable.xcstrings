@@ -25,6 +25,7 @@
       }
     },
     "%@ %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -41,6 +42,7 @@
       }
     },
     "%@ %@ (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -57,6 +59,7 @@
       }
     },
     "+966" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -75,9 +78,6 @@
           }
         }
       }
-    },
-    "🇸🇦" : {
-
     },
     "🔔" : {
 
@@ -123,6 +123,7 @@
       }
     },
     "501234567" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -184,6 +185,9 @@
         }
       }
     },
+    "BlueButton" : {
+
+    },
     "Button Color" : {
       "localizations" : {
         "ar" : {
@@ -224,6 +228,9 @@
         }
       }
     },
+    "cancleGrayBlue" : {
+
+    },
     "CFBundleDisplayName" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -258,7 +265,14 @@
         }
       }
     },
+    "Close" : {
+
+    },
+    "cnacleGreen" : {
+
+    },
     "Countries" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -269,6 +283,7 @@
       }
     },
     "country" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -429,6 +444,9 @@
         }
       }
     },
+    "GreenButton" : {
+
+    },
     "Haptics" : {
       "localizations" : {
         "ar" : {
@@ -492,6 +510,9 @@
         }
       }
     },
+    "LightGreenButton" : {
+
+    },
     "Log In" : {
       "localizations" : {
         "ar" : {
@@ -511,6 +532,9 @@
           }
         }
       }
+    },
+    "Members" : {
+
     },
     "Mohammad Saleh" : {
       "localizations" : {
@@ -612,7 +636,11 @@
         }
       }
     },
+    "OTP will be sent to this number %@" : {
+
+    },
     "OTP will be sent to this number 501234567 " : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -684,6 +712,9 @@
         }
       }
     },
+    "Select Country" : {
+
+    },
     "Send" : {
       "localizations" : {
         "ar" : {
@@ -693,6 +724,9 @@
           }
         }
       }
+    },
+    "Send OTP" : {
+
     },
     "Sign Up" : {
       "localizations" : {
@@ -743,6 +777,9 @@
           }
         }
       }
+    },
+    "Verify" : {
+
     },
     "Your Wish is Our Command" : {
       "localizations" : {
