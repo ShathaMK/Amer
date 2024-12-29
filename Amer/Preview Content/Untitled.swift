@@ -1,3 +1,4 @@
+
 //
 //  UIEffect.swift
 //  Amer
@@ -135,4 +136,3 @@ struct UIEffect: View {
 #Preview {
     UIEffect()
 }
-
