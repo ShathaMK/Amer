@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		583F28092D0EB7D600B21E64 /* Amer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		583F28002D0EB7D600B21E64 = {
 			isa = PBXGroup;
 			children = (
+				58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */,
 				583F280B2D0EB7D600B21E64 /* Amer */,
 				583F280A2D0EB7D600B21E64 /* Products */,
 			);
@@ -104,6 +110,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
 			);
 			mainGroup = 583F28002D0EB7D600B21E64;
 			minimizedProjectReferenceProxies = 1;
@@ -122,6 +129,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +205,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -253,6 +262,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -269,6 +279,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Amer/Preview Content\"";
 				DEVELOPMENT_TEAM = 39YZX5T634;
 				ENABLE_PREVIEWS = YES;
+				GCC_WARN_SHADOW = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Amer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Amer;
@@ -283,13 +294,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer.Noora;
+				MARKETING_VERSION = 0.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				nnn = "";
 			};
 			name = Debug;
 		};
@@ -305,6 +315,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Amer/Preview Content\"";
 				DEVELOPMENT_TEAM = 39YZX5T634;
 				ENABLE_PREVIEWS = YES;
+				GCC_WARN_SHADOW = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Amer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Amer;
@@ -319,13 +330,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer.Noora;
+				MARKETING_VERSION = 0.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				nnn = "";
 			};
 			name = Release;
 		};
