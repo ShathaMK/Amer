@@ -30,7 +30,11 @@ struct Buttons: Identifiable {
         self.id = record.recordID
         self.label = record["label"] as? String ?? "Default Label"
         self.icon = record["icon"] as? String ?? "Default Icon"
-        self.color = Color(hex: record["color"] as? String ?? "#2860B1") ?? Color("DarkBlue")
+        if let colorString = record["color"] as? String {
+                self.color = Color(hex: colorString) ?? Color("DarkBlue")
+            } else {
+                self.color = Color("DarkBlue") // Default fallback
+            }
         self.isDisabled = record["isDisabled"] as? Bool ?? false
     }
 }

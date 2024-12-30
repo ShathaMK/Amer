@@ -50,7 +50,7 @@ struct RemoteView: View {
                                             Text(button.icon)
                                                 .font(.system(size: 30))
                                                 .frame(width: 74,height: 74)
-                                                .background(Color(button.color))
+                                                .background(button.color)
                                                 .cornerRadius(20)
                                                 .shadow(radius: 4, y: 4)
                                             Text(button.label)

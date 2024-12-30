@@ -154,31 +154,30 @@ class ButtonsViewModel: ObservableObject{
 extension Color {
     /// Initialize a Color from a hex string.
     init?(hex: String) {
-        let r, g, b, a: Double
+           var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+           hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
 
-        let scanner = Scanner(string: hex)
-        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-        var hexNumber: UInt64 = 0
+           var rgb: UInt64 = 0
+           guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else { return nil }
 
-        guard scanner.scanHexInt64(&hexNumber) else { return nil }
+           switch hexSanitized.count {
+           case 6: // #RRGGBB
+               let red = Double((rgb & 0xFF0000) >> 16) / 255.0
+               let green = Double((rgb & 0x00FF00) >> 8) / 255.0
+               let blue = Double(rgb & 0x0000FF) / 255.0
+               self.init(red: red, green: green, blue: blue)
 
-        switch hex.count {
-        case 6: // RGB (no alpha)
-            r = Double((hexNumber & 0xFF0000) >> 16) / 255
-            g = Double((hexNumber & 0x00FF00) >> 8) / 255
-            b = Double(hexNumber & 0x0000FF) / 255
-            a = 1.0
-        case 8: // RGBA
-            r = Double((hexNumber & 0xFF000000) >> 24) / 255
-            g = Double((hexNumber & 0x00FF0000) >> 16) / 255
-            b = Double((hexNumber & 0x0000FF00) >> 8) / 255
-            a = Double(hexNumber & 0x000000FF) / 255
-        default:
-            return nil
-        }
+           case 8: // #RRGGBBAA
+               let red = Double((rgb & 0xFF000000) >> 24) / 255.0
+               let green = Double((rgb & 0x00FF0000) >> 16) / 255.0
+               let blue = Double((rgb & 0x0000FF00) >> 8) / 255.0
+               let alpha = Double(rgb & 0x000000FF) / 255.0
+               self.init(red: red, green: green, blue: blue, opacity: alpha)
 
-        self.init(.sRGB, red: r, green: g, blue: b, opacity: a)
-    }
+           default:
+               return nil // Invalid format
+           }
+       }
 
     /// Convert a Color to a hex string (RGBA).
     func toHexString() -> String? {
