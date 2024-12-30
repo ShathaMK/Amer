@@ -7,18 +7,30 @@
 
 import Foundation
 import SwiftUICore
-struct Buttons: Identifiable{
-    var id = UUID()
-    var label: String
-    var icon: String
-    var color: Color
+import CloudKit
+
+struct Buttons: Identifiable {
+    let id: CKRecord.ID
+    let label: String
+    let icon: String
+    let color: Color
     var isDisabled: Bool
-    init(id: UUID = UUID(), label: String, icon: String, color: Color, isDisabled: Bool) {
+
+    // Custom initializer
+    init(id: CKRecord.ID = CKRecord.ID(), label: String, icon: String, color: Color, isDisabled: Bool) {
         self.id = id
         self.label = label
         self.icon = icon
         self.color = color
         self.isDisabled = isDisabled
     }
-    
+
+    // If you're still fetching data from CKRecord
+    init(record: CKRecord) {
+        self.id = record.recordID
+        self.label = record["label"] as? String ?? "Default Label"
+        self.icon = record["icon"] as? String ?? "Default Icon"
+        self.color = Color(hex: record["color"] as? String ?? "#2860B1") ?? Color("DarkBlue")
+        self.isDisabled = record["isDisabled"] as? Bool ?? false
+    }
 }

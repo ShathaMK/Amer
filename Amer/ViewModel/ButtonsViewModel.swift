@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import CloudKit
+
 class ButtonsViewModel: ObservableObject{
     @Published var buttons: [Buttons] = [] // array to store multiple buttons
     @Published var currentLabel: String = ""
@@ -16,16 +18,43 @@ class ButtonsViewModel: ObservableObject{
     @Published var selectedButton: Buttons? // optional to track selected button
     
     
-    
-    func addButton(newButton:Buttons){
-        let newButton = Buttons(
-            label: currentLabel,
-            icon: selectedIcon,
-            color: selectedColor,
-            isDisabled: false)
-        buttons.append(newButton)
-        objectWillChange.send()
+    // Add Button to CloudKit
+    func addButton(newButton: Buttons) {
+        // Convert the button's properties to a CKRecord
+        let newRecord = CKRecord(recordType: "Buttons")
+        newRecord["label"] = newButton.label
+        newRecord["icon"] = newButton.icon
+        newRecord["color"] = newButton.color.toHexString() // Assuming `toHexString()` exists for Color
+        newRecord["isDisabled"] = newButton.isDisabled
+
+        // Save the new record to CloudKit
+        CKContainer.default().publicCloudDatabase.save(newRecord) { record, error in
+            if let error = error {
+                print("Error saving button: \(error.localizedDescription)")
+                return
+            }
+
+            // If saved successfully, create a Buttons object from the CKRecord
+            if let savedRecord = record {
+                let savedButton = Buttons(record: savedRecord)
+
+                // Assuming you have an array of buttons locally
+                self.buttons.append(savedButton) // Add to local data source
+                DispatchQueue.main.async {
+                    self.objectWillChange.send() // Notify view to update
+                }
+            }
+        }
     }
+//    func addButton(newButton:Buttons){
+//        let newButton = Buttons(
+//            label: currentLabel,
+//            icon: selectedIcon,
+//            color: selectedColor,
+//            isDisabled: false)
+//        buttons.append(newButton)
+//        objectWillChange.send()
+//    }
     
     func deleteButton(_ button: Buttons){
         if let index = buttons.firstIndex(where: { $0.id == button.id }){
@@ -51,18 +80,60 @@ class ButtonsViewModel: ObservableObject{
             
             
         }
-    
-    func editButton(oldButton: Buttons, with newButton:Buttons){
-        if let index = buttons.firstIndex(where: { $0.id == oldButton.id}){
-            buttons[index] = newButton
-            objectWillChange.send()
-            print("Updated Buttons: \(buttons)")
+    // Edit an existing button in CloudKit
+    func editButton(oldButton: Buttons, with newButton: Buttons) {
+        // Fetch the CKRecord corresponding to the oldButton
+        let recordID = oldButton.id
+        let database = CKContainer.default().publicCloudDatabase
+
+        database.fetch(withRecordID: recordID) { record, error in
+            if let error = error {
+                print("Error fetching button to edit: \(error.localizedDescription)")
+                return
+            }
+
+            guard let recordToUpdate = record else { return }
+
+            // Update the record fields
+            recordToUpdate["label"] = newButton.label
+            recordToUpdate["icon"] = newButton.icon
+            recordToUpdate["color"] = newButton.color.toHexString()
+            recordToUpdate["isDisabled"] = newButton.isDisabled
+
+            // Save the updated record to CloudKit
+            database.save(recordToUpdate) { savedRecord, saveError in
+                if let saveError = saveError {
+                    print("Error saving updated button: \(saveError.localizedDescription)")
+                    return
+                }
+
+                // If saved successfully, update your local data model
+                if let savedRecord = savedRecord {
+                    let updatedButton = Buttons(record: savedRecord)
+
+                    // Find the index of the old button and update it
+                    if let index = self.buttons.firstIndex(where: { $0.id == oldButton.id }) {
+                        self.buttons[index] = updatedButton
+                        DispatchQueue.main.async {
+                            self.objectWillChange.send() // Notify view to update
+                        }
+                    }
+                }
+            }
         }
-        else {
-            print("Button not found")
-        }
-        
     }
+    
+//    func editButton(oldButton: Buttons, with newButton:Buttons){
+//        if let index = buttons.firstIndex(where: { $0.id == oldButton.id}){
+//            buttons[index] = newButton
+//            objectWillChange.send()
+//            print("Updated Buttons: \(buttons)")
+//        }
+//        else {
+//            print("Button not found")
+//        }
+//        
+//    }
     
     func resetCurrentButton() {
         currentLabel = ""
@@ -79,7 +150,56 @@ class ButtonsViewModel: ObservableObject{
     
     
     
-    
+
+extension Color {
+    /// Initialize a Color from a hex string.
+    init?(hex: String) {
+        let r, g, b, a: Double
+
+        let scanner = Scanner(string: hex)
+        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
+        var hexNumber: UInt64 = 0
+
+        guard scanner.scanHexInt64(&hexNumber) else { return nil }
+
+        switch hex.count {
+        case 6: // RGB (no alpha)
+            r = Double((hexNumber & 0xFF0000) >> 16) / 255
+            g = Double((hexNumber & 0x00FF00) >> 8) / 255
+            b = Double(hexNumber & 0x0000FF) / 255
+            a = 1.0
+        case 8: // RGBA
+            r = Double((hexNumber & 0xFF000000) >> 24) / 255
+            g = Double((hexNumber & 0x00FF0000) >> 16) / 255
+            b = Double((hexNumber & 0x0000FF00) >> 8) / 255
+            a = Double(hexNumber & 0x000000FF) / 255
+        default:
+            return nil
+        }
+
+        self.init(.sRGB, red: r, green: g, blue: b, opacity: a)
+    }
+
+    /// Convert a Color to a hex string (RGBA).
+    func toHexString() -> String? {
+        let uiColor = UIColor(self)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+
+        guard uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
+
+        let r = Int(red * 255)
+        let g = Int(green * 255)
+        let b = Int(blue * 255)
+        let a = Int(alpha * 255)
+
+        return String(format: "#%02X%02X%02X%02X", r, g, b, a)
+    }
+}
+
+
     
     
 
