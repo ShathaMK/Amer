@@ -72,11 +72,16 @@ struct LogIn: View {
                     .multilineTextAlignment(.leading)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                
+                    .onTapGesture {
+                        userVM.hideKeyboard()
+                    }
                 
             } // end hstack
             .padding(.horizontal, 20)
-
+            .onTapGesture {
+                userVM.hideKeyboard()
+            }
+            
             Spacer()
 
              Button("Send"){

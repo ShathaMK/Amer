@@ -20,6 +20,9 @@ class UserViewModel: ObservableObject {
     @Published var selectedCountry: Country? = nil
     let defaultCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
     
+//    @Published private var isLoading: Bool = false // Tracks OTP submission
+//    @Published private var isLoading2: Bool = false // Tracks OTP resend
+    
     init() {
         selectedCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
         loadCountries()
@@ -84,6 +87,40 @@ class UserViewModel: ObservableObject {
                 }
             }
         }
+    
+    
+//    // MARK: - Send OTP
+//        private func sendOTP() {
+//            isLoading2 = true
+//            sendOTP(to: phoneNumber) { success in
+//                self.isLoading2 = false
+//                if success {
+//                    print("OTP sent to \(self.phoneNumber)")
+//                } else {
+//                    print("Failed to send OTP")
+//                }
+//            }
+//        }
+//        
+//        // MARK: - Verify OTP
+//        private func verifyOTP() {
+//            isLoading = true
+//            let otpString = otp.joined()
+//            verifyOTP(otpString) { success in
+//                isLoading = false
+//                if success {
+//                    print("OTP verified successfully")
+//                    // Proceed to next screen
+//                } else {
+//                    print("Invalid OTP")
+//                }
+//            }
+//        }
+    
+    
+    func hideKeyboard() {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
     
     
 }

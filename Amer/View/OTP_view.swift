@@ -15,7 +15,7 @@ struct OTP_view: View {
     var phoneNumber: String // Passed phone number from the previous screen
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
     @State private var isLoading: Bool = false // Tracks OTP submission
-    @State private var isLoading2: Bool = false // Tracks OTP submission
+    @State private var isLoading2: Bool = false 
     
     
     var body: some View {
@@ -87,9 +87,12 @@ struct OTP_view: View {
                             .stroke(focusedIndex == index ? Color("ColorBlue") : Color.gray.opacity(0.5), lineWidth: 2)
                     )
                     .focused($focusedIndex, equals: index)
+                    .onTapGesture {
+                        userVM.hideKeyboard()
+                    }
                     
-                }
-            }
+                }// end for each
+            } // hstack end
             
             
             // MARK: - OTP Input Fields
@@ -187,9 +190,6 @@ struct OTP_view: View {
                 sendOTP() // Automatically send OTP when screen appears
                 focusedIndex = 0 // Focus the first OTP field
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
             
             
         } // end vstack
@@ -226,11 +226,6 @@ struct OTP_view: View {
             }
         }
         
-        // Hide Keyboard Helper
-        private func hideKeyboard() {
-            focusedIndex = nil
-        }
-    
     
     
     

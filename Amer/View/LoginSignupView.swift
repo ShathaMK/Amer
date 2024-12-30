@@ -80,7 +80,6 @@ struct LoginSignupView: View {
                 
                 
             }
-            .scrollDismissesKeyboard(.automatic)
             .navigationTitle("")
             .navigationBarHidden(true)
 
