@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */; };
+		FCDFD9892D222C6A00FCBED0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FCDFD9882D222C6A00FCBED0 /* FirebaseAnalytics */; };
+		FCDFD98B2D222C6A00FCBED0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FCDFD98A2D222C6A00FCBED0 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCDFD9892D222C6A00FCBED0 /* FirebaseAnalytics in Frameworks */,
+				FCDFD98B2D222C6A00FCBED0 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +88,8 @@
 			);
 			name = Amer;
 			packageProductDependencies = (
+				FCDFD9882D222C6A00FCBED0 /* FirebaseAnalytics */,
+				FCDFD98A2D222C6A00FCBED0 /* FirebaseAuth */,
 			);
 			productName = Amer;
 			productReference = 583F28092D0EB7D600B21E64 /* Amer.app */;
@@ -114,6 +120,9 @@
 			);
 			mainGroup = 583F28002D0EB7D600B21E64;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FCDFD9872D222C6A00FCBED0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 583F280A2D0EB7D600B21E64 /* Products */;
 			projectDirPath = "";
@@ -286,6 +295,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -293,7 +303,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer.Noora;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -318,6 +328,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -325,7 +336,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer.Noora;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -355,6 +366,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FCDFD9872D222C6A00FCBED0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FCDFD9882D222C6A00FCBED0 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FCDFD9872D222C6A00FCBED0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		FCDFD98A2D222C6A00FCBED0 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FCDFD9872D222C6A00FCBED0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 583F28012D0EB7D600B21E64 /* Project object */;
 }

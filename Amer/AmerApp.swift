@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import Firebase
 
 @main
 struct AmerApp: App {
+    
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     @StateObject private var viewModel = ButtonsViewModel()
+    
     var body: some Scene {
         WindowGroup {
             Onboarding_1()
@@ -17,3 +23,17 @@ struct AmerApp: App {
         }
     }
 }
+
+
+
+// i could use smth else but lets keep on trac with the traditional
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        FirebaseApp.configure()
+        print("FireBase is here to Serve!!!")
+        return true
+    }
+}
+
