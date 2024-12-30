@@ -81,6 +81,7 @@ struct OTP_view: View {
                     .font(Font.custom("Tajawal-Bold", size: 24))
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
+                    .shadow(radius: 7, x: 0, y: 5)
                     .frame(width: 50, height: 50)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
@@ -182,6 +183,7 @@ struct OTP_view: View {
                 }
             }
             .buttonStyle(BlueButton())
+            .shadow(radius: 7, x: 0, y: 5)
             .padding()
             .disabled(isLoading)
             

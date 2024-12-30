@@ -52,13 +52,7 @@ struct Onboarding_3: View {
                 Button("Start Now") {
                     bool2 = true
                 }
-                .font(.custom("Tajawal-Bold", size: 20))
-                .foregroundColor(.white)
-//                .frame(width: 110, height: 40)
-                .frame(maxWidth: .infinity)
-                .frame(height: 40)
-                .background( Color("ColorGreen") )
-                .cornerRadius(10)
+                .buttonStyle(GreenButton())
                 .shadow(radius: 7, x: 0, y: 5)
                 .padding()
                 .fullScreenCover(isPresented: $bool2) {

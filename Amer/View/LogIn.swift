@@ -88,6 +88,7 @@ struct LogIn: View {
                  bool.toggle()
              }
              .buttonStyle(GreenButton())
+             .shadow(radius: 7, x: 0, y: 5)
              .padding(.horizontal, 20)
              .fullScreenCover(isPresented: $bool) {
                  OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
