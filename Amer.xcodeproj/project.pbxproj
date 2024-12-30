@@ -10,6 +10,7 @@
 		58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */; };
 		FCDFD9892D222C6A00FCBED0 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FCDFD9882D222C6A00FCBED0 /* FirebaseAnalytics */; };
 		FCDFD98B2D222C6A00FCBED0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FCDFD98A2D222C6A00FCBED0 /* FirebaseAuth */; };
+		FCDFD98D2D22385B00FCBED0 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FCDFD98C2D22385B00FCBED0 /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCDFD98D2D22385B00FCBED0 /* FirebaseMessaging in Frameworks */,
 				FCDFD9892D222C6A00FCBED0 /* FirebaseAnalytics in Frameworks */,
 				FCDFD98B2D222C6A00FCBED0 /* FirebaseAuth in Frameworks */,
 			);
@@ -90,6 +92,7 @@
 			packageProductDependencies = (
 				FCDFD9882D222C6A00FCBED0 /* FirebaseAnalytics */,
 				FCDFD98A2D222C6A00FCBED0 /* FirebaseAuth */,
+				FCDFD98C2D22385B00FCBED0 /* FirebaseMessaging */,
 			);
 			productName = Amer;
 			productReference = 583F28092D0EB7D600B21E64 /* Amer.app */;
@@ -388,6 +391,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FCDFD9872D222C6A00FCBED0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		FCDFD98C2D22385B00FCBED0 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FCDFD9872D222C6A00FCBED0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
