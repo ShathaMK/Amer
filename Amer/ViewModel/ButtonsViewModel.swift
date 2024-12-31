@@ -46,6 +46,7 @@ class ButtonsViewModel: ObservableObject{
             }
         }
     }
+    //MVVM
 //    func addButton(newButton:Buttons){
 //        let newButton = Buttons(
 //            label: currentLabel,
@@ -55,18 +56,75 @@ class ButtonsViewModel: ObservableObject{
 //        buttons.append(newButton)
 //        objectWillChange.send()
 //    }
-    
+//    
+//    func deleteButton(_ button: Buttons){
+//        if let index = buttons.firstIndex(where: { $0.id == button.id }){
+//            buttons.remove(at: index)
+//        }
+//    }
+    // delete the button in cloud DB
     func deleteButton(_ button: Buttons){
-        if let index = buttons.firstIndex(where: { $0.id == button.id }){
-            buttons.remove(at: index)
+        let recordID = button.id
+        CKContainer.default().publicCloudDatabase.delete(withRecordID: recordID){(recordID, error) in
+            if let error = error {
+                print("Failed to delete record: \(error.localizedDescription)")
+                return
+            }
+            DispatchQueue.main.async{
+                
+                // remove the button from the local array if the button is deleted from cloud DB
+                if let index = self.buttons.firstIndex(where: {$0.id == recordID}){
+                    self.buttons.remove(at: index)
+                    self.objectWillChange.send()// update the view 
+                    
+                }
+            }
         }
     }
-    
     func toggleDisableButton(_ button: Buttons) {
-         if let index = buttons.firstIndex(where: { $0.id == button.id }) {
-             buttons[index].isDisabled.toggle()
-         }
-     }
+        // Get the record ID of the button to be toggled
+        let recordID = button.id
+
+        // Fetch the record from CloudKit
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { (record, error) in
+            if let error = error {
+                print("Failed to fetch record: \(error.localizedDescription)")
+                return
+            }
+
+            guard let record = record else {
+                print("No record found with ID: \(recordID)")
+                return
+            }
+
+            // Toggle the isDisabled field
+            let currentValue = record["isDisabled"] as? Bool ?? false
+            record["isDisabled"] = !currentValue
+
+            // Save the updated record back to CloudKit
+            CKContainer.default().publicCloudDatabase.save(record) { (savedRecord, saveError) in
+                if let saveError = saveError {
+                    print("Failed to save updated record: \(saveError.localizedDescription)")
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    // Update the local array 
+                    if let index = self.buttons.firstIndex(where: { $0.id == button.id }) {
+                        self.buttons[index].isDisabled.toggle()
+                        self.objectWillChange.send()
+                        print("Successfully updated record and local model.")
+                    }
+                }
+            }
+        }
+    }
+
+//    func toggleDisableButton(_ button: Buttons) {
+//         if let index = buttons.firstIndex(where: { $0.id == button.id }) {
+//             buttons[index].isDisabled.toggle()
+//         }
+//     }
     
     func loadButton(_ button: Buttons) {
         guard let index = buttons.firstIndex(where: { $0.id == button.id }) else {
@@ -123,6 +181,7 @@ class ButtonsViewModel: ObservableObject{
         }
     }
     
+// mvvm
 //    func editButton(oldButton: Buttons, with newButton:Buttons){
 //        if let index = buttons.firstIndex(where: { $0.id == oldButton.id}){
 //            buttons[index] = newButton
