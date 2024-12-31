@@ -534,7 +534,14 @@
       }
     },
     "Members" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأعضاء"
+          }
+        }
+      }
     },
     "Mohammad Saleh" : {
       "localizations" : {

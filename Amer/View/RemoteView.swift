@@ -28,13 +28,15 @@ struct RemoteView: View {
                         Spacer()
                     }
                     VStack(spacing:32) {
-                        // Check if the button list is not empty
-                     //   Spacer()
-                        if (!vm.buttons.isEmpty) {
+                     
+                        // list only active buttons if they exist
+                        let activeButtons = vm.buttons.filter { !$0.isDisabled }
+
+                        if (!activeButtons.isEmpty) {
                             
                             
-                            
-                            let buttonsToDisplay = Array(vm.buttons.prefix(maxItems))
+                          
+                            let buttonsToDisplay = Array(activeButtons.prefix(maxItems))
                             // LazyVGrid for 3 columns
                             LazyVGrid(columns: [
                                 GridItem(.fixed(76),spacing: 40),
@@ -50,7 +52,7 @@ struct RemoteView: View {
                                             Text(button.icon)
                                                 .font(.system(size: 30))
                                                 .frame(width: 74,height: 74)
-                                                .background(Color(button.color))
+                                                .background(button.color)
                                                 .cornerRadius(20)
                                                 .shadow(radius: 4, y: 4)
                                             Text(button.label)
