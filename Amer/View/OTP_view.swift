@@ -12,22 +12,18 @@ struct OTP_view: View {
     
     
     @StateObject var userVM = UserViewModel()
-    @FocusState private var focusedIndex: Int? // Tracks which text field is focused
     
-//    var phoneNumber: String // Passed phone number from the previous screen
+    
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
-    @State private var isVerified: Bool = false // Tracks successful verification
-    @State private var bool: Bool = false // Tracks successful verification
+    @FocusState private var focusedIndex: Int? // Tracks which text field is focused
+    @State private var isAuthenticated: Bool = false
     
+    @State private var isVerified: Bool = false // Tracks successful verification
 
     @State private var isLoading: Bool = false // Tracks OTP submission
     @State private var isLoading2: Bool = false
-    
-    //this is for the  reCAPTCHA
-    @State private var showSafari = false
-    
 
-//    var verificationID: String // Pass verification ID from the previous screen
+
 
     
     var body: some View {
@@ -60,7 +56,7 @@ struct OTP_view: View {
             
             
             // Description
-//            Text("OTP will be sent to this number \(phoneNumber)")
+            //            Text("OTP will be sent to this number \(phoneNumber)")
             Text("OTP will be sent to this number \(userVM.phoneNumber)")
                 .font(Font.custom("Tajawal-Bold", size: 16))
                 .foregroundStyle(Color.gray)
@@ -117,48 +113,45 @@ struct OTP_view: View {
                 .frame(height: 24)
             
             
-            
+            //MARK: - Resend Button
             Button {
                 
-//                sendOTP()
+                if userVM.timeRemaining == 0 {
+                    userVM.startResendTimer()
+                    userVM.sendVerificationCode()
+               }
             } label: {
                 if isLoading2{
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 } else {
-                    Text("Send OTP")
-                        .font(Font.custom("Tajawal-Medium", size: 20))
-                        .foregroundColor(Color("DarkGreen"))
+                    Text(userVM.timeRemaining > 0
+                         ? "Resend OTP in \(userVM.timeRemaining)s"
+                         : "Resend OTP")
+                        .font(Font.custom("Tajawal-Bold", size: 20))
+                        .foregroundColor(userVM.timeRemaining > 0 ? .gray : Color("DarkGreen"))
                 }
-            }.disabled(isLoading2 || userVM.timeRemaining < 60)
-
-            
-            
-            //MARK: - Timer Text to show countdown
-            if userVM.timeRemaining < 60 {
-                Text("Resend OTP in \(userVM.timeRemaining) seconds")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .padding(.top, 5)
             }
-            
+            .disabled(userVM.timeRemaining > 0)
             
             Spacer()
             
             
-            //MARK: - this is for the  reCAPTCHA
             
-            Button("Open Web Page") {
-                showSafari = true
+            if let errorMessage = userVM.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
             }
-            .sheet(isPresented: $showSafari) {
-                UserViewModel.SafariView(url: URL(string: "https://www.example.com")!)
-            }
-
             
             //MARK: - Submit Button
             Button(action: {
-                verifyOTP()
+                userVM.verifyCode(otp: otp) { success in
+                    if success {
+                        isAuthenticated.toggle()
+                    }
+                }
+                
             }) {
                 if isLoading {
                     ProgressView()
@@ -175,120 +168,29 @@ struct OTP_view: View {
             .shadow(radius: 7, x: 0, y: 5)
             .padding()
             // Navigation after successful OTP verification
-            .fullScreenCover(isPresented: $isVerified) {
-//                NextScreen() // Replace with your actual destination view
-                ButtonListView()
+            .fullScreenCover(isPresented: $isAuthenticated) {
+                EditProfileView()
             }
-            .disabled(isLoading)
             .disabled(isLoading || otp.joined().count < 6)
             .disabled(otp.contains(where: { $0.isEmpty })) // Disable if any OTP field is empty
-                  
             
             
-            // Error Message
-            if let errorMessage = userVM.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding()
-            }
             
-
             
-        } // end vstack
-        .onAppear {
-            focusedIndex = 0 // Focus the first OTP field
-            userVM.startResendTimer() // Start the resend timer
         }
-        .onDisappear {
-            userVM.timer?.invalidate() // Invalidate the timer if the view disappears
+        .onAppear(){
+            focusedIndex = 0
+            userVM.startResendTimer()
         }
         
-    } // end body view
-    
-    
-    
-   
-
-    // MARK: - Verify OTP
-//    private func verifyOTP() {
-//        isLoading = true
-//        let otpString = otp.joined() // Combine all OTP digits
-//        
-//        userVM.verifyOTP(otp: otpString) { success in
-//            isLoading = false
-//            if success {
-//                print("User verified successfully.")
-//                // Navigate to next view or handle success
-//            } else {
-//                print("OTP verification failed.")
-//            }
-//        }
-//    }
         
-    // MARK: - Verify OTP
-//    private func verifyOTP() {
-//        isLoading = true
-//        let otpString = otp.joined() // Combine all OTP digits
-//        
-//        guard let verificationID = userVM.verificationID else {
-//            userVM.errorMessage = "No verification ID found."
-//            isLoading = false
-//            return
-//        }
-//        
-//        let credential = PhoneAuthProvider.provider().credential(
-//            withVerificationID: verificationID,
-//            verificationCode: otpString
-//        )
-//        
-//        Auth.auth().signIn(with: credential) { result, error in
-//            isLoading = false
-//            if let error = error {
-//                userVM.errorMessage = "OTP verification failed: \(error.localizedDescription)"
-//                print(userVM.errorMessage!)
-//                return
-//            }
-//            
-//            // Successfully signed in
-//            print("User signed in successfully!")
-//            isVerified = true // Navigate to the next view
-//        }
-//    }
+        
+    }// end body view
     
     
+
     // MARK: - Verify OTP
-    private func verifyOTP() {
-        isLoading = true
-        let otpString = otp.joined() // Combine all OTP digits
 
-        // Ensure the verification ID is available
-        guard let verificationID = userVM.verificationID else {
-            userVM.errorMessage = "Verification ID not found. Please try again."
-            isLoading = false
-            return
-        }
-
-        // Create credential using the verification code and ID
-        let credential = PhoneAuthProvider.provider().credential(
-            withVerificationID: verificationID,
-            verificationCode: otpString
-        )
-
-        // Authenticate with Firebase
-        Auth.auth().signIn(with: credential) { result, error in
-            isLoading = false
-            if let error = error {
-                userVM.errorMessage = "OTP verification failed: \(error.localizedDescription)"
-                print(userVM.errorMessage!)
-                return
-            }
-
-            // Successfully signed in
-            print("User signed in successfully!")
-            isVerified.toggle()
-        }
-    }
     
     
 }

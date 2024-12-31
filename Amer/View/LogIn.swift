@@ -86,22 +86,8 @@ struct LogIn: View {
             Spacer()
 
              Button("Send"){
-//                 let fullPhoneNumber = userVM.selectedCountry!.code + userVM.phoneNumber
-//                     userVM.sendOTP(to: fullPhoneNumber) { success in
-//                         if success {
-//                             isShowingOTPView.toggle()
-//                         }
-//                     }
-                 let phoneNumber = userVM.selectedCountry!.code + userVM.phoneNumber
-                 userVM.sendOTP(to: phoneNumber) { success in
-                     if success {
-                         isShowingOTPView.toggle()
-                         print("OTP sent successfully!")
-                     } else {
-                         print("Failed to send OTP.")
-                     }
-                 }
-                 
+                 userVM.sendVerificationCode()
+                 isShowingOTPView.toggle()
              }
              .buttonStyle(GreenButton())
              .shadow(radius: 7, x: 0, y: 5)

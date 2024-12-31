@@ -11,13 +11,14 @@ import SwiftUI
 import SafariServices
 import FirebaseAuth
 import UIKit
+import Combine
 
 class UserViewModel: ObservableObject {
     
     @Published var userName: String = ""
     @Published var phoneNumber: String = ""
-    @Published var roles: [String] = ["Assistant", "Reciver"]
     
+    @Published var roles: [String] = ["Assistant", "Reciver"]
     @Published var selectedRole: String = ""
 
     @Published var searchText: String = ""
@@ -75,198 +76,98 @@ class UserViewModel: ObservableObject {
     
     
 
-    // MARK: -  sending the reCAPTCHA
-    
-    struct SafariView: UIViewControllerRepresentable {
-        let url: URL
-
-        func makeUIViewController(context: Context) -> SFSafariViewController {
-            return SFSafariViewController(url: url)
-        }
-
-        func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
-    }
-    
-    
     
     // MARK: - Start Resend Timer
     
-    @Published var timeRemaining = 60 // Time remaining for resend button
-    @Published var timer: Timer? = nil // Timer for countdown
-    
+    @Published var timeRemaining: Int = 60
+    private var timer: AnyCancellable?
+
     func startResendTimer() {
         timeRemaining = 60
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            if self.timeRemaining > 0 {
-                self.timeRemaining -= 1
+        timer?.cancel() // Cancel any existing timer
+        timer = Timer
+            .publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.timeRemaining > 0 {
+                    self.timeRemaining -= 1
+                } else {
+                    self.timer?.cancel()
+                }
             }
-        }
     }
 
-    // MARK: - Reset Resend Timer
-     func resetResendTimer() {
-        timer?.invalidate() // Invalidate any existing timer
-        startResendTimer() // Start a new timer
+    func resetTimer() {
+        timer?.cancel()
+        timeRemaining = 60
     }
     
     
     
     
-    
-    // MARK: - Authentacation
-    
-    
-    @Published var verificationID: String? = nil
-    @Published var isVerified: Bool = false
-    @Published var isUserLoggedIn: Bool = Auth.auth().currentUser != nil
-    @Published var errorMessage: String? = nil
-    
-    @Published private var isVerificationSent: Bool = false
     
     // MARK: - Send OTP
     
     
-//    func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
-//            PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-//                if let error = error {
-//                    DispatchQueue.main.async {
-//                        self.errorMessage = "Error sending OTP: \(error.localizedDescription)"
-//                        print(self.errorMessage!)
-//                    }
-//                    
-//                    completion(false)
-//                    return
-//                }
-//                
-//
-//                DispatchQueue.main.async {
-//                    self.verificationID = verificationID
-//                    self.errorMessage = nil
-//                }
-//                completion(true)
-//            }
-//        }
+    @Published var verificationCode: String = ""
+    
+    @Published var verificationID: String?
+    @Published var isVerificationSent: Bool = false
+    @Published var isAuthenticated: Bool = false
+    @Published var errorMessage: String?
     
     
-//    func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
-//        print("Sending OTP to: \(phoneNumber)") // Debug the number
-//
-//        PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-//            if let error = error {
-//                DispatchQueue.main.async {
-//                    self.errorMessage = "Error sending OTP: \(error.localizedDescription)"
-//                    print(self.errorMessage!)
-//                }
-//                completion(false)
-//                return
-//            }
-//
-//            DispatchQueue.main.async {
-//                self.verificationID = verificationID
-//                self.errorMessage = nil
-//                print("OTP sent successfully. Verification ID: \(verificationID ?? "nil")")
-//            }
-//            completion(true)
-//        }
-//    }
-    
-    
-//    func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
-//        print("Sending OTP to: \(phoneNumber)") // Debugging
-//
-//
-//        PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-//            if let error = error {
-//                DispatchQueue.main.async {
-//                    self.errorMessage = "Error sending OTP: \(error.localizedDescription)"
-//                    print("Firebase error: \(error.localizedDescription)")
-//                }
-//                completion(false)
-//                return
-//            }
-//
-//            DispatchQueue.main.async {
-//                self.verificationID = verificationID
-//                self.errorMessage = nil
-//                print("OTP sent successfully. Verification ID: \(verificationID ?? "nil")")
-//            }
-//            completion(true)
-//        }
-//    }
-    
-    
-    func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
-            PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
+    //MARK: - Function to send the OTP
+    func sendVerificationCode() {
+        let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
+        PhoneAuthProvider.provider()
+            .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
                 if let error = error {
                     DispatchQueue.main.async {
-                        self.errorMessage = "Error sending OTP: \(error.localizedDescription)"
-                        print(self.errorMessage ?? "Unknown error")
+                        self?.errorMessage = "Error: \(error.localizedDescription)"
                     }
-                    completion(false)
                     return
                 }
                 DispatchQueue.main.async {
-                    self.verificationID = verificationID
-                    self.isVerificationSent = true
-                    self.errorMessage = nil
+                    self?.verificationID = verificationID
+                    self?.isVerificationSent = true
+                    self?.errorMessage = nil
                 }
-                completion(true)
             }
-        }
+    }
     
-        
-        // MARK: - Verify OTP
     
-        func verifyOTP(otp: String, completion: @escaping (Bool) -> Void) {
-            guard let verificationID = verificationID else {
-                DispatchQueue.main.async {
-                    self.errorMessage = "Invalid verification process."
-                }
+    
+    //MARK: -  Function to verify OTP
+        func verifyCode(otp: [String], completion: @escaping (Bool) -> Void) {
+            let otpString = otp.joined() // Combine the array into a single string
+            
+            guard let verificationID = self.verificationID else {
+                self.errorMessage = "Verification ID is missing."
                 completion(false)
                 return
             }
 
-            let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: otp)
-            Auth.auth().signIn(with: credential) { authResult, error in
+            let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: otpString)
+
+            Auth.auth().signIn(with: credential) { [weak self] _, error in
                 if let error = error {
                     DispatchQueue.main.async {
-                        self.errorMessage = "Verification failed: \(error.localizedDescription)"
+                        self?.errorMessage = "Error: \(error.localizedDescription)"
                     }
                     completion(false)
                     return
                 }
-
                 DispatchQueue.main.async {
-                    self.errorMessage = nil
+                    self?.isAuthenticated = true
+                    self?.errorMessage = nil
+                    completion(true)
                 }
-                completion(true)
-            }
-        }
-        
-        // MARK: - Sign Out
-    
-        func signOut() {
-            do {
-                try Auth.auth().signOut()
-                self.isUserLoggedIn = false
-            } catch {
-                self.errorMessage = "Error signing out: \(error.localizedDescription)"
             }
         }
     
     
-    
-    //MARK: - Handle Authentication State:
-    
-//    func monitorAuthState() {
-//        Auth.auth().addStateDidChangeListener { auth, user in
-//            if let user = user {
-//                print("User is signed in: \(user.uid)")
-//            } else {
-//                print("User is signed out.")
-//            }
-//        }
-//    }
     
     
 }

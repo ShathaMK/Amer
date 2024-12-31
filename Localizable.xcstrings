@@ -566,9 +566,6 @@
         }
       }
     },
-    "Open Web Page" : {
-
-    },
     "OTP will be sent to this number %@" : {
 
     },
@@ -614,7 +611,10 @@
         }
       }
     },
-    "Resend OTP in %lld seconds" : {
+    "Resend OTP" : {
+
+    },
+    "Resend OTP in %llds" : {
 
     },
     "Role" : {
@@ -660,9 +660,6 @@
           }
         }
       }
-    },
-    "Send OTP" : {
-
     },
     "Sign Up" : {
       "localizations" : {
@@ -713,9 +710,6 @@
           }
         }
       }
-    },
-    "Verification code sent!" : {
-
     },
     "Verify" : {
 

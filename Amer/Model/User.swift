@@ -35,9 +35,6 @@ struct Country: Codable {
     let code: String  // e.g., "+1", "+966", etc.
 }
 
-//struct Country: Codable , Identifiable, Equatable{
-//    let name, flag, code: String
-//}
 
 struct User: Identifiable {
     var id = UUID()

@@ -8,6 +8,7 @@
 import SwiftUI
 import CloudKit
 import FirebaseAuth
+import Combine
 
 struct SignUp: View {
     
@@ -171,36 +172,18 @@ struct SignUp: View {
                 
             
             
-            // Error Message
-            if let error = errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.custom("Tajawal-Medium", size: 14))
-                    .padding(.horizontal)
-            }
-            
-            
             Spacer()
             
+            if let errorMessage = userVM.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            }
             
+
             Button("Send"){
-//                let fullPhoneNumber = userVM.selectedCountry!.code + userVM.phoneNumber
-//                    userVM.sendOTP(to: fullPhoneNumber) { success in
-//                        if success {
-//                            isShowingOTPView.toggle()
-//                        }
-//                    }
-                
-                let phoneNumber = userVM.selectedCountry!.code + userVM.phoneNumber
-                userVM.sendOTP(to: phoneNumber) { success in
-                    if success {
-                        isShowingOTPView.toggle()
-                        print("OTP sent successfully!")
-                    } else {
-                        print("Failed to send OTP.")
-                    }
-                }
-                
+                userVM.sendVerificationCode()
+                isShowingOTPView.toggle()
             }
             .buttonStyle(GreenButton())
             .shadow(radius: 7, x: 0, y: 5)
@@ -213,15 +196,6 @@ struct SignUp: View {
             }
             
             
-            if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-            }
-
-            if isVerificationSent {
-                Text("Verification code sent!")
-                    .foregroundColor(.green)
-            }
             
             
         } // end vstack

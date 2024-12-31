@@ -223,7 +223,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        Auth.auth().setAPNSToken(deviceToken, type: .unknown)
+        Auth.auth().setAPNSToken(deviceToken, type: .sandbox) //.unknown
         print("Device token received: \(deviceToken.map { String(format: "%02x", $0) }.joined())")
     }
     
