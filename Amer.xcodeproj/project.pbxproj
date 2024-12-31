@@ -276,7 +276,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Amer/Preview Content\"";
+
 				DEVELOPMENT_TEAM = 5BDWVP493R;
+
 				ENABLE_PREVIEWS = YES;
 				GCC_WARN_SHADOW = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -291,7 +293,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
+
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -308,7 +312,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Amer/Preview Content\"";
+
 				DEVELOPMENT_TEAM = 5BDWVP493R;
+
 				ENABLE_PREVIEWS = YES;
 				GCC_WARN_SHADOW = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -323,7 +329,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
+
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

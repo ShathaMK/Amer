@@ -5,20 +5,24 @@
 //  Created by Noori on 22/06/1446 AH.
 //
 
-
 import Foundation
 import SwiftUI
+import CloudKit
 
 class UserViewModel: ObservableObject {
-    
-    @Published var userName: String = ""
-    @Published var phoneNumber: String = ""
+    @Published var name: String = ""
+    @State var role: [String] = ["Assistant", "Reciver"]
+    @Published var selectedRole: String = ""
 
+    @Published var phoneNumber: String = ""
     @Published var searchText: String = ""
-    
     @Published var countries: [Country] = []
     @Published var selectedCountry: Country? = nil
     let defaultCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
+    @Published var errorMessage: String? = nil
+    @Published var isDataSaved: Bool = false
+
+    private let database = CKContainer.default().publicCloudDatabase
     
     init() {
         selectedCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
@@ -38,7 +42,6 @@ class UserViewModel: ObservableObject {
         }
     }
     
-    
     private func loadCountries() {
         guard let url = Bundle.main.url(forResource: "countries", withExtension: "json") else {
             print("JSON file not found")
@@ -55,54 +58,64 @@ class UserViewModel: ObservableObject {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    // MARK: - here i will do the OTP proprty
-    
+    // MARK: - Save User to CloudKit
+    func saveUser(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard !name.isEmpty, !phoneNumber.isEmpty else {
+            completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Name and Phone Number are required."])))
+            return
+        }
+
+        let record = CKRecord(recordType: "User")
+        record["name"] = name as CKRecordValue
+        record["phoneNumber"] = (selectedCountry?.code ?? defaultCountry.code) + phoneNumber as CKRecordValue
+        record["role"] = selectedRole as CKRecordValue // Add the role
+
+        database.save(record) { [weak self] _, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self?.errorMessage = error.localizedDescription
+                    self?.isDataSaved = false
+                    completion(.failure(error))
+                } else {
+                    self?.isDataSaved = true
+                    self?.clearInputs()
+                    completion(.success(()))
+                }
+            }
+        }
+    }
+
+    // Clear Input Fields
+    private func clearInputs() {
+        name = ""
+        phoneNumber = ""
+        selectedCountry = defaultCountry
+    }
+
+    // MARK: - OTP Simulation
     @Published var otp: String = ""
-        
-        // Simulate sending OTP
-        func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
-            // Simulate an API call to send OTP
-            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-                DispatchQueue.main.async {
-                    completion(true) // Assume OTP sent successfully
-                }
+    
+    func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.async {
+                completion(true) // Simulate successful OTP sending
             }
         }
-        
-        // Simulate verifying OTP
-        func verifyOTP(_ otp: String, completion: @escaping (Bool) -> Void) {
-            // Simulate an API call to verify OTP
-            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-                DispatchQueue.main.async {
-                    completion(otp == "123456") // Simulate valid OTP
-                }
+    }
+    
+    func verifyOTP(_ otp: String, completion: @escaping (Bool) -> Void) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.async {
+                completion(otp == "123456") // Simulate valid OTP
             }
         }
+    }
     
-    
-    
-    
-    
-    // MARK: - to dissmiss the keyboard
-    
+    // MARK: - Dismiss Keyboard
     func hideKeyboard() {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        }
-    
-    
-    
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
-
-
-
-
-
 
 //// MARK: - here i will do the OTP proprty
 //@Published var otp: [String] = ["", "", "", ""] // For 6-digit OTP
@@ -112,12 +125,12 @@ class UserViewModel: ObservableObject {
 //func validateOTP() {
 //   let otpString = otp.joined()
 //   if otpString.count == 4 {
-//       
-//       
+//
+//
 //       // Example validation logic
 //       isValidOTP = otpString == "1234" // Replace with your actual validation logic
-//       
-//       
+//
+//
 //   } else {
 //       isValidOTP = false
 //   }

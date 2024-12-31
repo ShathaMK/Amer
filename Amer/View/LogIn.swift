@@ -1,4 +1,4 @@
-//
+
 //  LogIn.swift
 //  Amer
 //
@@ -11,7 +11,7 @@ struct LogIn: View {
     
     @StateObject private var userVM = UserViewModel()
     @State private var isExpanded2: Bool = false // sheet bool
-    
+
     @State private var bool = false
     
     var body: some View {
