@@ -1,5 +1,5 @@
 import SwiftUI
-
+import Combine
 
 
 struct RemoteView: View {
@@ -31,8 +31,6 @@ struct RemoteView: View {
                         // Check if the button list is not empty
                      //   Spacer()
                         if (!vm.buttons.isEmpty) {
-                            
-                            
                             
                             let buttonsToDisplay = Array(vm.buttons.prefix(maxItems))
                             // LazyVGrid for 3 columns

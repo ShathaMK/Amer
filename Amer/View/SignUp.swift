@@ -118,9 +118,6 @@ struct SignUp: View {
             
             
             // MARK: - the drop down for the role
-            
-            
-           
                 
             Text("Role")
                 .foregroundColor(Color("FontColor"))

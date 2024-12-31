@@ -168,7 +168,16 @@ class UserViewModel: ObservableObject {
         }
     
     
+    //MARK: - settings page
     
+    @AppStorage("fontSize") var fontSize: Double = 16.0
+    @AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
+    
+    // Save name and phone number persistently if needed
+    func saveProfile() {
+        // Add logic to persist the profile data (e.g., to a database or file)
+        print("Profile saved: Name: \(userName), Phone: \(phoneNumber)")
+    }
     
 }
 

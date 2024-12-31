@@ -12,6 +12,7 @@ struct OTP_view: View {
     
     
     @StateObject var userVM = UserViewModel()
+    @StateObject var buttonsVM = ButtonsViewModel()
     
     
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
@@ -169,7 +170,9 @@ struct OTP_view: View {
             .padding()
             // Navigation after successful OTP verification
             .fullScreenCover(isPresented: $isAuthenticated) {
-                EditProfileView()
+//                EditProfileView()
+                RemoteView()
+                    .environmentObject(buttonsVM)
             }
             .disabled(isLoading || otp.joined().count < 6)
             .disabled(otp.contains(where: { $0.isEmpty })) // Disable if any OTP field is empty
