@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LogIn: View {
     
     @StateObject private var userVM = UserViewModel()
     @State private var isExpanded2: Bool = false // sheet bool
+    @State private var isShowingOTPView = false
     
-    @State private var bool = false
     
     var body: some View {
         
@@ -85,16 +86,42 @@ struct LogIn: View {
             Spacer()
 
              Button("Send"){
-                 bool.toggle()
+//                 let fullPhoneNumber = userVM.selectedCountry!.code + userVM.phoneNumber
+//                     userVM.sendOTP(to: fullPhoneNumber) { success in
+//                         if success {
+//                             isShowingOTPView.toggle()
+//                         }
+//                     }
+                 let phoneNumber = userVM.selectedCountry!.code + userVM.phoneNumber
+                 userVM.sendOTP(to: phoneNumber) { success in
+                     if success {
+                         isShowingOTPView.toggle()
+                         print("OTP sent successfully!")
+                     } else {
+                         print("Failed to send OTP.")
+                     }
+                 }
+                 
              }
              .buttonStyle(GreenButton())
              .shadow(radius: 7, x: 0, y: 5)
              .padding(.horizontal, 20)
-             .fullScreenCover(isPresented: $bool) {
-                 OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
+             .fullScreenCover(isPresented: $isShowingOTPView) {
+                 OTP_view(userVM : userVM)
+//                 OTP_view(userVM : userVM, phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
+//                 OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
              }
+             .disabled(userVM.phoneNumber.isEmpty)
+                         
+            
+            
            
-       }
+       } // end big vstack
+        .onTapGesture {
+            userVM.hideKeyboard()
+        }
+        
+        
         
         
     }

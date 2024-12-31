@@ -6,19 +6,32 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct OTP_view: View {
+    
     
     @StateObject var userVM = UserViewModel()
     @FocusState private var focusedIndex: Int? // Tracks which text field is focused
     
-    var phoneNumber: String // Passed phone number from the previous screen
+//    var phoneNumber: String // Passed phone number from the previous screen
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
-    @State private var isLoading: Bool = false // Tracks OTP submission
-    @State private var isLoading2: Bool = false 
+    @State private var isVerified: Bool = false // Tracks successful verification
+    @State private var bool: Bool = false // Tracks successful verification
     
+
+    @State private var isLoading: Bool = false // Tracks OTP submission
+    @State private var isLoading2: Bool = false
+    
+    //this is for the  reCAPTCHA
+    @State private var showSafari = false
+    
+
+//    var verificationID: String // Pass verification ID from the previous screen
+
     
     var body: some View {
+        
         
         VStack {
             
@@ -47,7 +60,8 @@ struct OTP_view: View {
             
             
             // Description
-            Text("OTP will be sent to this number \(phoneNumber)")
+//            Text("OTP will be sent to this number \(phoneNumber)")
+            Text("OTP will be sent to this number \(userVM.phoneNumber)")
                 .font(Font.custom("Tajawal-Bold", size: 16))
                 .foregroundStyle(Color.gray)
                 .multilineTextAlignment(.center)
@@ -58,7 +72,8 @@ struct OTP_view: View {
             Spacer()
                 .frame(height: 32)
             
-            // OTP Input Fields
+            
+            //MARK: - OTP Input Fields
             HStack(spacing: 10) {
                 
                 ForEach(0..<6, id: \.self) { index in
@@ -96,52 +111,16 @@ struct OTP_view: View {
             } // hstack end
             
             
-            // MARK: - OTP Input Fields
-//            HStack(spacing: 10) {
-//                
-//                ForEach(0..<6, id: \.self) { index in
-//                    TextField("", text: Binding(
-//                        get: { otp[index] },
-//                        set: { value in
-//                            // Filter out non-numeric characters
-//                            let filtered = value.filter { $0.isNumber }
-//                            
-//                            if filtered.count <= 1 {
-//                                otp[index] = filtered
-//                            }
-//                            
-//                            // Move focus forward if a digit is entered
-//                            if filtered.count == 1 && index < 5 {
-//                                focusedIndex = index + 1
-//                            }
-//                            // Move focus back if the field is empty and it's not the first field
-//                            else if filtered.isEmpty && index > 0 {
-//                                focusedIndex = index - 1
-//                            }
-//                        }
-//                    ))
-//                    .font(Font.custom("Tajawal-Bold", size: 24))
-//                    .multilineTextAlignment(.center)
-//                    .keyboardType(.numberPad)
-//                    .frame(width: 50, height: 50)
-//                    .background(
-//                        RoundedRectangle(cornerRadius: 8)
-//                            .stroke(focusedIndex == index ? Color("ColorBlue") : Color.gray.opacity(0.5), lineWidth: 2)
-//                    )
-//                    .focused($focusedIndex, equals: index)
-//                    
-//                }
-//            }
-            
-            
             
             
             Spacer()
                 .frame(height: 24)
             
             
+            
             Button {
-                sendOTP()
+                
+//                sendOTP()
             } label: {
                 if isLoading2{
                     ProgressView()
@@ -151,23 +130,33 @@ struct OTP_view: View {
                         .font(Font.custom("Tajawal-Medium", size: 20))
                         .foregroundColor(Color("DarkGreen"))
                 }
-            }.disabled(isLoading2)
+            }.disabled(isLoading2 || userVM.timeRemaining < 60)
 
             
             
-//            // Resend OTP Button
-//            Button("Resend OTP") {
-//                sendOTP()
-//            }
-//            .font(Font.custom("Tajawal-Medium", size: 20))
-//            .foregroundColor(Color("DarkGreen"))
-//            .padding(.bottom, 16)
-            
+            //MARK: - Timer Text to show countdown
+            if userVM.timeRemaining < 60 {
+                Text("Resend OTP in \(userVM.timeRemaining) seconds")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .padding(.top, 5)
+            }
             
             
             Spacer()
             
-            // Submit Button
+            
+            //MARK: - this is for the  reCAPTCHA
+            
+            Button("Open Web Page") {
+                showSafari = true
+            }
+            .sheet(isPresented: $showSafari) {
+                UserViewModel.SafariView(url: URL(string: "https://www.example.com")!)
+            }
+
+            
+            //MARK: - Submit Button
             Button(action: {
                 verifyOTP()
             }) {
@@ -185,50 +174,121 @@ struct OTP_view: View {
             .buttonStyle(BlueButton())
             .shadow(radius: 7, x: 0, y: 5)
             .padding()
+            // Navigation after successful OTP verification
+            .fullScreenCover(isPresented: $isVerified) {
+//                NextScreen() // Replace with your actual destination view
+                ButtonListView()
+            }
             .disabled(isLoading)
+            .disabled(isLoading || otp.joined().count < 6)
+            .disabled(otp.contains(where: { $0.isEmpty })) // Disable if any OTP field is empty
+                  
             
             
-            .onAppear {
-                sendOTP() // Automatically send OTP when screen appears
-                focusedIndex = 0 // Focus the first OTP field
+            // Error Message
+            if let errorMessage = userVM.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding()
             }
             
+
             
         } // end vstack
+        .onAppear {
+            focusedIndex = 0 // Focus the first OTP field
+            userVM.startResendTimer() // Start the resend timer
+        }
+        .onDisappear {
+            userVM.timer?.invalidate() // Invalidate the timer if the view disappears
+        }
         
     } // end body view
     
     
     
-    // MARK: - Send OTP
-        private func sendOTP() {
-            isLoading2 = true
-            userVM.sendOTP(to: phoneNumber) { success in
-                isLoading2 = false
-                if success {
-                    print("OTP sent to \(phoneNumber)")
-                } else {
-                    print("Failed to send OTP")
-                }
-            }
-        }
+   
+
+    // MARK: - Verify OTP
+//    private func verifyOTP() {
+//        isLoading = true
+//        let otpString = otp.joined() // Combine all OTP digits
+//        
+//        userVM.verifyOTP(otp: otpString) { success in
+//            isLoading = false
+//            if success {
+//                print("User verified successfully.")
+//                // Navigate to next view or handle success
+//            } else {
+//                print("OTP verification failed.")
+//            }
+//        }
+//    }
         
-        // MARK: - Verify OTP
-        private func verifyOTP() {
-            isLoading = true
-            let otpString = otp.joined()
-            userVM.verifyOTP(otpString) { success in
-                isLoading = false
-                if success {
-                    print("OTP verified successfully")
-                    // Proceed to next screen
-                } else {
-                    print("Invalid OTP")
-                }
-            }
-        }
-        
+    // MARK: - Verify OTP
+//    private func verifyOTP() {
+//        isLoading = true
+//        let otpString = otp.joined() // Combine all OTP digits
+//        
+//        guard let verificationID = userVM.verificationID else {
+//            userVM.errorMessage = "No verification ID found."
+//            isLoading = false
+//            return
+//        }
+//        
+//        let credential = PhoneAuthProvider.provider().credential(
+//            withVerificationID: verificationID,
+//            verificationCode: otpString
+//        )
+//        
+//        Auth.auth().signIn(with: credential) { result, error in
+//            isLoading = false
+//            if let error = error {
+//                userVM.errorMessage = "OTP verification failed: \(error.localizedDescription)"
+//                print(userVM.errorMessage!)
+//                return
+//            }
+//            
+//            // Successfully signed in
+//            print("User signed in successfully!")
+//            isVerified = true // Navigate to the next view
+//        }
+//    }
     
+    
+    // MARK: - Verify OTP
+    private func verifyOTP() {
+        isLoading = true
+        let otpString = otp.joined() // Combine all OTP digits
+
+        // Ensure the verification ID is available
+        guard let verificationID = userVM.verificationID else {
+            userVM.errorMessage = "Verification ID not found. Please try again."
+            isLoading = false
+            return
+        }
+
+        // Create credential using the verification code and ID
+        let credential = PhoneAuthProvider.provider().credential(
+            withVerificationID: verificationID,
+            verificationCode: otpString
+        )
+
+        // Authenticate with Firebase
+        Auth.auth().signIn(with: credential) { result, error in
+            isLoading = false
+            if let error = error {
+                userVM.errorMessage = "OTP verification failed: \(error.localizedDescription)"
+                print(userVM.errorMessage!)
+                return
+            }
+
+            // Successfully signed in
+            print("User signed in successfully!")
+            isVerified.toggle()
+        }
+    }
     
     
 }
@@ -236,7 +296,7 @@ struct OTP_view: View {
 
 struct OTPView_Previews: PreviewProvider {
     static var previews: some View {
-        OTP_view(phoneNumber: "+966541013040")
+        OTP_view()
     }
 }
 
