@@ -27,6 +27,29 @@ import Foundation
 
 
 import Foundation
+import CloudKit
+import SwiftUICore
+struct User: Identifiable {
+    var id : CKRecord.ID
+    var name: String
+    var phoneNumber: String
+    var role: String // Assistance or Seeker
+    
+    init(id: CKRecord.ID, name: String, phoneNumber: String, role: String) {
+        self.id = id
+        self.name = name
+        self.phoneNumber = phoneNumber
+        self.role = role
+    }
+    
+    // Initializer to create User from CKRecord
+       init(record: CKRecord) {
+           self.id = record.recordID
+           self.name = record["name"] as? String ?? ""
+           self.phoneNumber = record["phoneNumber"] as? String ?? ""
+           self.role = record["role"] as? String ?? ""
+       }
+}
 
 struct Country: Codable, Identifiable, Equatable {
     var id : Int
@@ -39,9 +62,3 @@ struct Country: Codable, Identifiable, Equatable {
 //    let name, flag, code: String
 //}
 
-struct User: Identifiable {
-    var id = UUID()
-    var name: String
-    var phoneNumber: String
-    var role: String // Assistance or Seeker
-}
