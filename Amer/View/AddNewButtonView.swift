@@ -8,6 +8,7 @@
 import SwiftUI
 
 import Combine
+import CloudKit
 
 // Custom UITextField subclass to force emoji keyboard
 class EmojiTextField: UITextField {
@@ -158,42 +159,50 @@ extension UITextField {
                         .padding()
                       
                             
-                            Button(action:{
-                                // check if button details is empty or not before saving
-                                guard
-                                    !vm.currentLabel.isEmpty,
-                                    !vm.selectedIcon.isEmpty
-                                        
-                                else {
-                                    print("buttons details can't be empty")
-                                    return
-                                }
-                                let newButton = Buttons(
-                                    id: buttonToEdit?.id ?? UUID(),
-                                    label: vm.currentLabel,
-                                    icon: vm.selectedIcon,
-                                    color: vm.selectedColor,
-                                    isDisabled: false)
-                                if let buttonToEdit = buttonToEdit {
-                                    vm.editButton(oldButton: buttonToEdit, with: newButton)
-                                }
-                                else {
-                                    
-                                    vm.addButton(newButton: newButton)
-                                }
-                                print("Saved buttons: \(newButton)")
-                                isNavigating = true
-                                
-                            }) {
+                        Button(action: {
+                            // Check if button details are not empty before saving
+                            guard
+                                !vm.currentLabel.isEmpty,
+                                !vm.selectedIcon.isEmpty
+                            else {
+                                print("Button details can't be empty")
+                                return
+                            }
+                            
+                            // Create a new button instance with the details
+                            let newButton = Buttons(
+                                id: buttonToEdit?.id ?? CKRecord.ID(), // Use CKRecord.ID for CloudKit compatibility
+                                label: vm.currentLabel,
+                                icon: vm.selectedIcon,
+                                color: vm.selectedColor,
+                                isDisabled: false
+                            )
+                            
+                            // Check if editing an existing button or adding a new one
+                            if let buttonToEdit = buttonToEdit {
+                                // Edit existing button
+                                vm.editButton(oldButton: buttonToEdit, with: newButton)
+                            } else {
+                                // Add new button to CloudKit
+                                vm.addButton(newButton: newButton)
+                            }
+                            
+                            // Print saved button info for debugging
+                            print("Saved button: \(newButton)")
+                            
+                            // Navigate to the next screen
+                            isNavigating = true
+                            
+                        }) {
                             Text("Add")
-                            .font(.custom("Tajawal-Bold", size: 20))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color("DarkBlue"))
-                            .cornerRadius(8)
-                            .padding(.horizontal, 20)
-                            }.navigationDestination(isPresented: $isNavigating) {
+                                .font(.custom("Tajawal-Bold", size: 20))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color("DarkBlue"))
+                                .cornerRadius(8)
+                                .padding(.horizontal, 20)
+                        }.navigationDestination(isPresented: $isNavigating) {
                                 RemoteView(vm: _vm).navigationBarBackButtonHidden(true)
                                              }
                         
