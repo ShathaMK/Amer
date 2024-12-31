@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CloudKit
 
 struct SignUp: View {
     
@@ -20,7 +19,7 @@ struct SignUp: View {
     
     // Dropdown data
     @State var roles: [String] = ["Assistant", "Reciver"]
-    @State private var selectedRole: String = ""
+//    @State private var selectedRole: String = ""
     @State private var isExpanded: Bool = false // dropdown bool
     @State private var isExpanded2: Bool = false // sheet bool
 
@@ -39,7 +38,7 @@ struct SignUp: View {
             
             
             // Allow the user to enter their name
-            TextField("Enter Your Name", text: $userVM.userName)
+            TextField("Enter Your Name", text: $userVM.name)
                 .font(.custom("Tajawal-Medium", size: 20))
                 .multilineTextAlignment(.leading)
                 .padding()
@@ -139,8 +138,8 @@ struct SignUp: View {
                     }
                 }) {
                     HStack {
-                        Text(selectedRole.isEmpty ? "Select a role" : selectedRole) // Show placeholder if no role is selected
-                            .foregroundColor(selectedRole.isEmpty ? .gray : .primary) // Placeholder color
+                        Text(userVM.selectedRole.isEmpty ? "Select a role" : userVM.selectedRole) // Show placeholder if no role is selected
+                            .foregroundColor(userVM.selectedRole.isEmpty ? .gray : .primary) // Placeholder color
                             .font(.custom("Tajawal-Medium", size: 20))
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -155,7 +154,7 @@ struct SignUp: View {
                 if isExpanded {
                     ForEach(roles, id: \.self) { role in
                         Button(action: {
-                            selectedRole = role
+                            userVM.selectedRole = role
                             withAnimation {
                                 isExpanded = false
                             }
@@ -180,17 +179,25 @@ struct SignUp: View {
             
             Spacer()
             
-            
-            Button("Send"){
-                bool.toggle()
-            }
-            .buttonStyle(GreenButton())
-            .padding(.horizontal, 20)
-            .fullScreenCover(isPresented: $bool) {
-                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
-            }
-            
-            
+            // Send Button
+                        Button("Send") {
+                            userVM.saveUser { result in
+                                switch result {
+                                case .success:
+                                    print("User saved successfully to CloudKit")
+                                    bool.toggle()
+                                case .failure(let error):
+                                    print("Failed to save user: \(error.localizedDescription)")
+                                    userVM.errorMessage = error.localizedDescription
+                                }
+                            }
+                        }
+                        .buttonStyle(GreenButton())
+                        .padding(.horizontal, 20)
+                        .fullScreenCover(isPresented: $bool) {
+                            OTP_view(phoneNumber: (userVM.selectedCountry?.code ?? userVM.defaultCountry.code) + userVM.phoneNumber)
+                        }
+
         } // end vstack
         .onTapGesture {
             userVM.hideKeyboard()
