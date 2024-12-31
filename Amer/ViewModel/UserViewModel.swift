@@ -125,12 +125,12 @@ class UserViewModel: ObservableObject {
 //func validateOTP() {
 //   let otpString = otp.joined()
 //   if otpString.count == 4 {
-//       
-//       
+//
+//
 //       // Example validation logic
 //       isValidOTP = otpString == "1234" // Replace with your actual validation logic
-//       
-//       
+//
+//
 //   } else {
 //       isValidOTP = false
 //   }
