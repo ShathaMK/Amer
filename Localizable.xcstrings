@@ -202,7 +202,7 @@
 
     },
     "Countries" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -213,7 +213,7 @@
       }
     },
     "country" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -570,7 +570,7 @@
 
     },
     "OTP will be sent to this number 501234567 " : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
