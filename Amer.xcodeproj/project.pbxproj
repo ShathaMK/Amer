@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */; };
 		FC908E8E2D24BAB000908E44 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FC908E8D2D24BAB000908E44 /* FirebaseAnalytics */; };
 		FC908E902D24BAB000908E44 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FC908E8F2D24BAB000908E44 /* FirebaseAuth */; };
 		FC908E922D24BAB000908E44 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FC908E912D24BAB000908E44 /* FirebaseMessaging */; };
@@ -14,6 +15,7 @@
 
 /* Begin PBXFileReference section */
 		583F28092D0EB7D600B21E64 /* Amer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -54,6 +56,7 @@
 		583F28002D0EB7D600B21E64 = {
 			isa = PBXGroup;
 			children = (
+				58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */,
 				583F280B2D0EB7D600B21E64 /* Amer */,
 				583F280A2D0EB7D600B21E64 /* Products */,
 			);
@@ -138,6 +141,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
