@@ -45,3 +45,18 @@ struct User: Identifiable {
     var phoneNumber: String
     var role: String // Assistance or Seeker
 }
+
+
+
+// MARK: - Member Model
+struct Member: Identifiable {
+    let id = UUID()
+    let name: String
+    let phone: String
+}
+
+// Contact Model
+struct Contact: Identifiable {
+    var id = UUID()
+    var name: String
+    var phoneNumber: String
