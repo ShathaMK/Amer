@@ -263,8 +263,7 @@ struct MembersView: View {
 struct MembersView_Previews: PreviewProvider {
     static var previews: some View {
         MembersView()
-            .previewLayout(.sizeThatFits)
-            .padding()
+        
     }
 }
 

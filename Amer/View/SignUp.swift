@@ -182,18 +182,60 @@ struct SignUp: View {
                     .padding()
             }
             
-
-            Button("Send"){
-                userVM.sendVerificationCode()
-                isShowingOTPView.toggle()
+            
+            
+            Button(action: {
+                guard !userVM.name.isEmpty, !userVM.phoneNumber.isEmpty, !userVM.selectedRole.isEmpty else {
+                        userVM.errorMessage = "Please fill in all fields before proceeding."
+                        return
+                    }
+                    
+                    userVM.checkUserExists { exists, error in
+                        if let error = error {
+                            userVM.errorMessage = "Error checking user: \(error.localizedDescription)"
+                        } else if exists {
+                            // User already exists, redirect to login
+                            userVM.errorMessage = "User already exists. Redirecting to login..."
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                // Transition to login view
+                                isShowingOTPView.toggle()
+                            }
+                        } else {
+                            // Proceed with sending verification code
+                            userVM.sendVerificationCode { success in
+                                if success {
+                                    userVM.saveUserToCloud { result in
+                                        switch result {
+                                        case .success:
+                                            print("User saved successfully to CloudKit")
+                                            isShowingOTPView.toggle()
+                                        case .failure(let error):
+                                            userVM.errorMessage = "Failed to save user: \(error.localizedDescription)"
+                                        }
+                                    }
+                                } else {
+                                    userVM.errorMessage = "Failed to send OTP. Please try again."
+                                }
+                            }
+                        }
+                    }
+                
+            }) {
+                Text("Send")
+                    .font(.custom("Tajawal-Medium", size: 20))
+                    .foregroundStyle(Color.white)
             }
             .buttonStyle(GreenButton())
             .shadow(radius: 7, x: 0, y: 5)
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $isShowingOTPView) {
-                OTP_view(userVM: userVM)
-                
+                if userVM.errorMessage == "User already exists. Redirecting to login..." {
+                    LogIn()
+                } else {
+                    OTP_view(userVM: userVM)
+                }
             }
+                
             
             
             

@@ -418,6 +418,9 @@
         }
       }
     },
+    "Error" : {
+
+    },
     "Font Size" : {
       "localizations" : {
         "ar" : {
@@ -653,6 +656,9 @@
           }
         }
       }
+    },
+    "OK" : {
+
     },
     "OTP will be sent to this number %@" : {
 

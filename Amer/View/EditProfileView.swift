@@ -206,7 +206,7 @@ struct EditProfileView: View {
                 } // end scroll view
                 .frame(maxWidth: .infinity)
                 .frame(height: 670)
-                .background(Color.white)
+                .background(Color("VLightBlue"))
                 .cornerRadius(52)
                 .padding(.top, 80)
                 .onTapGesture {
