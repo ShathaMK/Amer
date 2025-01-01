@@ -126,12 +126,6 @@ class ButtonsViewModel: ObservableObject{
 //         }
 //     }
     
-    func toggleDisableButton(_ button: Buttons) {
-         if let index = buttons.firstIndex(where: { $0.id == button.id }) {
-             buttons[index].isDisabled.toggle()
-         }
-     }
-    
     func loadButton(_ button: Buttons) {
         guard let index = buttons.firstIndex(where: { $0.id == button.id }) else {
             print("No matching button found with ID: \(button.id)")
@@ -266,4 +260,3 @@ extension Color {
 
     
     
-
