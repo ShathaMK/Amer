@@ -4,38 +4,42 @@ import SwiftUI
 
 struct RemoteView: View {
     @EnvironmentObject var vm: ButtonsViewModel
+    @StateObject private var userVM = UserViewModel()
+    
     // @enviromentobject for userviewmodel to take the user name
     let maxItems = 9
-   // @State var buttonslist:[Buttons]
+    // @State var buttonslist:[Buttons]
     var body: some View {
         NavigationStack {
             ZStack {
-                Color("Background").ignoresSafeArea()
+                Color("Background")
+                    .ignoresSafeArea()
+                
                 VStack {
                     VStack {
                         HStack {
-                            Text("Hello Mama Munerah")
+                            Text("Hello \(userVM.name)")
                                 .font(Font.custom("Tajawal-Bold", size: 28))
-                                .foregroundColor(Color("FontColor")).padding(.trailing,90)
+                                .foregroundColor(Color("FontColor"))
+                                .padding(.trailing, 200)
                             
                         }
                         .padding(.top, 30)
                         
                         Divider()
-                            .frame(width: UIScreen.screenWidth - 40, height: 2)
-                            .overlay(Color(hex: 0xE8F6FF))
+                            .background(Color.gray.opacity(0.5))
                             .padding(.top, 8)
+                            .padding(.horizontal)
+                        
                         Spacer()
                     }
                     VStack(spacing:32) {
-                     
+                        
                         // list only active buttons if they exist
                         let activeButtons = vm.buttons.filter { !$0.isDisabled }
-
+                        
                         if (!activeButtons.isEmpty) {
                             
-                            
-                          
                             let buttonsToDisplay = Array(activeButtons.prefix(maxItems))
                             // LazyVGrid for 3 columns
                             LazyVGrid(columns: [
@@ -79,7 +83,7 @@ struct RemoteView: View {
                                         .foregroundStyle(Color("FontColor"))
                                 }
                             }
-                           // Spacer()
+                            // Spacer()
                             
                         } else {
                             
@@ -115,52 +119,53 @@ struct RemoteView: View {
                 }
                 .padding(.bottom, 50)
                 
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
                 
-             
-                
-                  //  .padding(.top, 40)
-                
-                .toolbar {
-                    
-                    ToolbarItem(placement: .topBarTrailing) {
-                        NavigationLink(destination: ButtonListView().navigationBarBackButtonHidden(true)) {
-                            Image("AddButton")
-                                .resizable()
-                                .frame(width: 43, height: 43)
-                                .ignoresSafeArea().padding(.trailing,10)
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: ButtonListView().navigationBarBackButtonHidden(true)) {
+                        Image("AddButton")
+                            .resizable()
+                            .frame(width: 43, height: 43)
+                            .ignoresSafeArea().padding(.trailing,10)
                     }
-                    
-                    ToolbarItem(placement: .topBarLeading) {
-                        
-                        NavigationLink(destination: ProfileView().navigationBarBackButtonHidden(true)) {
-                            
-                            Image("Reciver_user")
-                                .resizable()
-                                .frame(width: 43, height: 43)
-                            
-                            
-                        }
-                        VStack {
-                            Text("Hello Mama Munerah")
-                                .font(Font.custom("Tajawal-Bold", size: 28))
-                                .foregroundColor(Color("FontColor"))
-                            Divider()
-                                .frame(width: UIScreen.screenWidth - 40, height: 2)
-                                .overlay(Color(hex: 0xE8F6FF))
-                                .padding(.top, 8)
-                        }
-                        
-                        
-                        
-                    }
-                    
-                    
                 }
-            }
-            }
+                
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    
+                    NavigationLink(destination: ProfileView()) {
+                            
+                            if userVM.selectedRole == "Assistant" {
+                                Image("User_Assistant")
+                                    .resizable()
+                                    .frame(width: 43, height: 43)
+                                    
+                            } else if userVM.selectedRole == "Reciver" {
+                                Image("User_Reciver")
+                                    .resizable()
+                                    .frame(width: 43, height: 43)
+                                    
+                            } else {
+                                Image(systemName: "person.crop.circle")
+                                    .resizable()
+                                    .foregroundStyle(Color.gray)
+                                    .frame(width: 43, height: 43)
+                                    
+                            }
+                            
+                            
+                        }
+                }
+                
+                
+                
+            }// end toolbar
+            
         }
     }
+}
 
 
 #Preview {
@@ -202,9 +207,9 @@ extension Color {
 // to make the interfaces responsive to each device we use this extension
 // to use UIScreen.screenWidth for example
 extension UIScreen{
-   static let screenWidth = UIScreen.main.bounds.size.width
-   static let screenHeight = UIScreen.main.bounds.size.height
-   static let screenSize = UIScreen.main.bounds.size
+    static let screenWidth = UIScreen.main.bounds.size.width
+    static let screenHeight = UIScreen.main.bounds.size.height
+    static let screenSize = UIScreen.main.bounds.size
 }
 extension Array {
     func chunked(into size: Int) -> [[Element]] {

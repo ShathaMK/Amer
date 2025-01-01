@@ -15,6 +15,7 @@ import Combine
 class UserViewModel: ObservableObject {
     
     @Published var name: String = ""
+    @Published var codePhone: String = ""
     @Published var phoneNumber: String = ""
     
     @State var roles: [String] = ["Assistant", "Reciver"]
@@ -40,6 +41,7 @@ class UserViewModel: ObservableObject {
     }
     
     //MARK: - Filtered Countries Based on Search
+    
     var filteredCountries: [Country] {
         if searchText.isEmpty {
             return countries
@@ -69,44 +71,117 @@ class UserViewModel: ObservableObject {
     }
     
     
+    private func updatePhoneNumber() {
+        phoneNumber = (selectedCountry?.code ?? "") + codePhone
+    }
+    
+    //MARK: - settings page
+    @Published var fontSize: Double = 20.0 // Default font size
+    @Published var isHapticsEnabled: Bool = true // Haptic feedback toggle
+
+    
+    // Function to update profile information
+    func updateProfile(name: String, phone: String) {
+        self.name = name
+        self.phoneNumber = phone
+    }
+    
+    
+    
     
     //MARK: - saveProfile
+    
+//    func saveProfile(name: String, phoneNumber: String, role: String) {
+//        self.name = name
+//        self.phoneNumber = phoneNumber
+//        self.selectedRole = role
+//        // Save to database or perform other actions
+//    }
     
     func saveProfile(name: String, phoneNumber: String, role: String) {
         self.name = name
         self.phoneNumber = phoneNumber
         self.selectedRole = role
-        // Save to database or perform other actions
-    }
-    
-    
-    
-    // MARK: - Save User to CloudKit
-    func saveUser(completion: @escaping (Result<Void, Error>) -> Void) {
-        guard !name.isEmpty, !phoneNumber.isEmpty else {
-            completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Name and Phone Number are required."])))
-            return
-        }
 
         let record = CKRecord(recordType: "User")
         record["name"] = name as CKRecordValue
-        record["phoneNumber"] = (selectedCountry?.code ?? defaultCountry.code) + phoneNumber as CKRecordValue
-        record["role"] = selectedRole as CKRecordValue // Add the role
+        record["phoneNumber"] = phoneNumber as CKRecordValue
+        record["role"] = role as CKRecordValue
 
         database.save(record) { [weak self] _, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self?.errorMessage = error.localizedDescription
                     self?.isDataSaved = false
-                    completion(.failure(error))
                 } else {
                     self?.isDataSaved = true
-                    self?.clearInputs()
-                    completion(.success(()))
                 }
             }
         }
     }
+    
+    
+    // MARK: - fetch User Data
+    
+    
+    func fetchUserData(completion: @escaping (Bool) -> Void) {
+        let predicate = NSPredicate(value: true) // Adjust predicate as needed
+        let query = CKQuery(recordType: "User", predicate: predicate)
+
+        database.perform(query, inZoneWith: nil) { [weak self] records, error in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+
+            guard let records = records, let firstRecord = records.first else {
+                print("No user data found")
+                completion(false)
+                return
+            }
+
+            DispatchQueue.main.async {
+                self?.name = firstRecord["name"] as? String ?? ""
+                self?.phoneNumber = firstRecord["phoneNumber"] as? String ?? ""
+                self?.selectedRole = firstRecord["role"] as? String ?? "Reciver"
+                completion(true)
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Save User to CloudKit
+//    func saveUser(completion: @escaping (Result<Void, Error>) -> Void) {
+//        guard !name.isEmpty, !phoneNumber.isEmpty else {
+//            completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Name and Phone Number are required."])))
+//            return
+//        }
+//
+//        let record = CKRecord(recordType: "User")
+//        record["name"] = name as CKRecordValue
+//        record["phoneNumber"] = (selectedCountry?.code ?? defaultCountry.code) + phoneNumber as CKRecordValue
+//        record["role"] = selectedRole as CKRecordValue // Add the role
+//
+//        database.save(record) { [weak self] _, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    self?.errorMessage = error.localizedDescription
+//                    self?.isDataSaved = false
+//                    completion(.failure(error))
+//                } else {
+//                    self?.isDataSaved = true
+//                    self?.clearInputs()
+//                    completion(.success(()))
+//                }
+//            }
+//        }
+//    }
 //
 //    func loadButton(_ button: Buttons) {
 //        guard let index = buttons.firstIndex(where: { $0.id == button.id }) else {
@@ -295,19 +370,8 @@ class UserViewModel: ObservableObject {
         }
     
     
-    //MARK: - settings page
-    
-    @AppStorage("fontSize") var fontSize: Double = 16.0
-    @AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
-    
-    // Save name and phone number persistently if needed
-    func saveProfile() {
-        // Add logic to persist the profile data (e.g., to a database or file)
-        print("Profile saved: Name: \(name), Phone: \(phoneNumber)")
-    }
-    
-    
-    
+ 
+   
     
     
     
