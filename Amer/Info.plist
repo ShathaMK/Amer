@@ -12,6 +12,14 @@
 				<string>app-1-343895194232-ios-8992b0681e77e6b6adcb8d</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-343895194232-ios-1570afe8b4fabe75adcb8d</string>
+			</array>
+		</dict>
 	</array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
