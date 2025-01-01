@@ -477,9 +477,6 @@
         }
       }
     },
-    "Hello, World!" : {
-
-    },
     "Icon" : {
       "localizations" : {
         "ar" : {
@@ -688,6 +685,12 @@
         }
       }
     },
+    "Resend OTP" : {
+
+    },
+    "Resend OTP in %llds" : {
+
+    },
     "Role" : {
       "localizations" : {
         "ar" : {
@@ -697,6 +700,9 @@
           }
         }
       }
+    },
+    "Save" : {
+
     },
     "Search countries" : {
       "localizations" : {
@@ -731,9 +737,6 @@
           }
         }
       }
-    },
-    "Send OTP" : {
-
     },
     "Sign Up" : {
       "localizations" : {

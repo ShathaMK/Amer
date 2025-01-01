@@ -29,7 +29,9 @@ import Foundation
 import Foundation
 import CloudKit
 import SwiftUICore
+
 struct User: Identifiable {
+    
     var id : CKRecord.ID
     var name: String
     var phoneNumber: String
@@ -51,14 +53,11 @@ struct User: Identifiable {
        }
 }
 
-struct Country: Codable, Identifiable, Equatable {
+struct Country: Codable {
     var id : Int
     let name: String
     let flag: String
-    let code: String  // e.g., "+1", "+966", etc.
+    let code: String
 }
 
-//struct Country: Codable , Identifiable, Equatable{
-//    let name, flag, code: String
-//}
 

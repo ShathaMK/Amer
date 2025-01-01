@@ -8,18 +8,27 @@
 import Foundation
 import SwiftUI
 import CloudKit
+import FirebaseAuth
+import UIKit
+import Combine
 
 class UserViewModel: ObservableObject {
+    
     @Published var name: String = ""
-    @State var role: [String] = ["Assistant", "Reciver"]
+    @Published var phoneNumber: String = ""
+    
+    @State var roles: [String] = ["Assistant", "Reciver"]
     @Published var selectedRole: String = ""
 
-    @Published var phoneNumber: String = ""
+    
+    
     @Published var searchText: String = ""
     @Published var countries: [Country] = []
     @Published var selectedCountry: Country? = nil
+    
     let defaultCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
-    @Published var errorMessage: String? = nil
+    
+    @Published var errorMessage: String?
     @Published var isDataSaved: Bool = false
     @Published var users: [User] = []
 
@@ -30,7 +39,7 @@ class UserViewModel: ObservableObject {
         loadCountries()
     }
     
-    // Filtered Countries Based on Search
+    //MARK: - Filtered Countries Based on Search
     var filteredCountries: [Country] {
         if searchText.isEmpty {
             return countries
@@ -59,12 +68,17 @@ class UserViewModel: ObservableObject {
         }
     }
     
+    
+    
+    //MARK: - saveProfile
+    
     func saveProfile(name: String, phoneNumber: String, role: String) {
         self.name = name
         self.phoneNumber = phoneNumber
         self.selectedRole = role
         // Save to database or perform other actions
     }
+    
     
     
     // MARK: - Save User to CloudKit
@@ -108,6 +122,7 @@ class UserViewModel: ObservableObject {
 //        }
 //
     
+    // MARK: -
     func loadUserInfo(_ user:User){
         
         guard let index = users.firstIndex(where: {$0.id == user.id}) else {
@@ -120,6 +135,8 @@ class UserViewModel: ObservableObject {
         selectedRole = user.role
     }
     
+    
+    // MARK: -
     
     func editUser(oldUserInfo: User , with newUserInfo: User){
         // fetch the CKrecord corresponding to the oldUserInfo
@@ -175,51 +192,128 @@ class UserViewModel: ObservableObject {
         selectedCountry = defaultCountry
     }
 
-    // MARK: - OTP Simulation
-    @Published var otp: String = ""
-    
-    func sendOTP(to phoneNumber: String, completion: @escaping (Bool) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            DispatchQueue.main.async {
-                completion(true) // Simulate successful OTP sending
-            }
-        }
-    }
-    
-    func verifyOTP(_ otp: String, completion: @escaping (Bool) -> Void) {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            DispatchQueue.main.async {
-                completion(otp == "123456") // Simulate valid OTP
-            }
-        }
-    }
     
     // MARK: - Dismiss Keyboard
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
-}
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Start Resend Timer
+    
+    @Published var timeRemaining: Int = 60
+    private var timer: AnyCancellable?
 
-//// MARK: - here i will do the OTP proprty
-//@Published var otp: [String] = ["", "", "", ""] // For 6-digit OTP
-//@Published var isValidOTP: Bool = false
-//
-//// Validate the OTP
-//func validateOTP() {
-//   let otpString = otp.joined()
-//   if otpString.count == 4 {
-//
-//
-//       // Example validation logic
-//       isValidOTP = otpString == "1234" // Replace with your actual validation logic
-//
-//
-//   } else {
-//       isValidOTP = false
-//   }
-//}
-//
-//// Clear the OTP
-//func clearOTP() {
-//   otp = ["", "", "", ""]
-//}
+    func startResendTimer() {
+        timeRemaining = 60
+        timer?.cancel() // Cancel any existing timer
+        timer = Timer
+            .publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                if self.timeRemaining > 0 {
+                    self.timeRemaining -= 1
+                } else {
+                    self.timer?.cancel()
+                }
+            }
+    }
+
+    func resetTimer() {
+        timer?.cancel()
+        timeRemaining = 60
+    }
+    
+    
+    
+    
+    
+    // MARK: - Send OTP
+    
+    
+    @Published var verificationCode: String = ""
+    
+    @Published var verificationID: String?
+    @Published var isVerificationSent: Bool = false
+    @Published var isAuthenticated: Bool = false
+    
+    
+    
+    //MARK: - Function to send the OTP
+    func sendVerificationCode() {
+        let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
+        PhoneAuthProvider.provider()
+            .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        self?.errorMessage = "Error: \(error.localizedDescription)"
+                    }
+                    return
+                }
+                DispatchQueue.main.async {
+                    self?.verificationID = verificationID
+                    self?.isVerificationSent = true
+                    self?.errorMessage = nil
+                }
+            }
+    }
+    
+    
+    
+    //MARK: -  Function to verify OTP
+        func verifyCode(otp: [String], completion: @escaping (Bool) -> Void) {
+            let otpString = otp.joined() // Combine the array into a single string
+            
+            guard let verificationID = self.verificationID else {
+                self.errorMessage = "Verification ID is missing."
+                completion(false)
+                return
+            }
+
+            let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: otpString)
+
+            Auth.auth().signIn(with: credential) { [weak self] _, error in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        self?.errorMessage = "Error: \(error.localizedDescription)"
+                    }
+                    completion(false)
+                    return
+                }
+                DispatchQueue.main.async {
+                    self?.isAuthenticated = true
+                    self?.errorMessage = nil
+                    completion(true)
+                }
+            }
+        }
+    
+    
+    //MARK: - settings page
+    
+    @AppStorage("fontSize") var fontSize: Double = 16.0
+    @AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
+    
+    // Save name and phone number persistently if needed
+    func saveProfile() {
+        // Add logic to persist the profile data (e.g., to a database or file)
+        print("Profile saved: Name: \(name), Phone: \(phoneNumber)")
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
