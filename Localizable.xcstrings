@@ -314,6 +314,9 @@
         }
       }
     },
+    "Enter Name" : {
+
+    },
     "Enter OTP" : {
       "localizations" : {
         "ar" : {
@@ -354,6 +357,9 @@
         }
       }
     },
+    "Font Size: %lld" : {
+
+    },
     "Get real-time updates and notifications that matter." : {
       "localizations" : {
         "ar" : {
@@ -378,6 +384,7 @@
 
     },
     "Haptics" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -407,9 +414,6 @@
         }
       }
     },
-    "Hello, World!" : {
-
-    },
     "Icon" : {
       "localizations" : {
         "ar" : {
@@ -431,6 +435,7 @@
       }
     },
     "Large" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -454,6 +459,7 @@
       }
     },
     "Medium" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -462,9 +468,6 @@
           }
         }
       }
-    },
-    "Members" : {
-
     },
     "Mohammad Saleh" : {
       "localizations" : {
@@ -627,6 +630,9 @@
         }
       }
     },
+    "Save" : {
+
+    },
     "Search countries" : {
       "localizations" : {
         "ar" : {
@@ -682,6 +688,7 @@
       }
     },
     "Small" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
