@@ -126,49 +126,54 @@ struct SignUp: View {
                 .padding(.horizontal)
             
             
-            // Button to show/hide the list
+            // Button to show/hide the dropdown
             Button(action: {
                 withAnimation {
                     isExpanded.toggle()
                 }
             }) {
                 HStack {
-                    Text(userVM.selectedRole.isEmpty ? "Select a role" : userVM.selectedRole) // Show placeholder if no role is selected
-                        .foregroundColor(userVM.selectedRole.isEmpty ? .gray : .primary) // Placeholder color
+                    Text(userVM.selectedRole.isEmpty ? "Select a role" : userVM.selectedRole) // Placeholder or selected role
+                        .foregroundColor(userVM.selectedRole.isEmpty ? .gray : .primary) // Gray for placeholder
                         .font(.custom("Tajawal-Medium", size: 20))
                     Spacer()
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down") // Chevron toggle
                         .foregroundStyle(Color("ColorBlue"))
                 }
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 .padding(.horizontal, 20)
             }
-            
-            // The dropdown list
+
+            // Dropdown list
             if isExpanded {
-                ForEach(userVM.roles, id: \.self) { role in
-                    Button(action: {
-                        userVM.selectedRole = role
-                        withAnimation {
-                            isExpanded = false
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(userVM.roles, id: \.self) { role in
+                        Button(action: {
+                            userVM.selectedRole = role // Update the selected role
+                            withAnimation {
+                                isExpanded = false // Close dropdown
+                            }
+                        }) {
+                            Text(role)
+                                .font(.custom("Tajawal-Medium", size: 20))
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundStyle(Color("FontColor"))
                         }
-                    }) {
-                        Text(role)
-                            .font(.custom("Tajawal-Medium", size: 20))
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .foregroundStyle(Color("FontColor"))
+                        if role != userVM.roles.last { // Add a divider only between items
+                            Divider()
+                                .background(Color.gray.opacity(0.5))
+                                .padding(.horizontal, 20)
+                        }
                     }
-                    .padding(.horizontal, 20)
-                    Divider()
-                        .background(Color.gray.opacity(0.5))
-                        .padding(.horizontal, 20)
                 }
+                .padding(.horizontal, 20)
+                .transition(.opacity.combined(with: .move(edge: .top))) 
             }
                 
             
-            
+            //MARK: - 
             Spacer()
             
             if let errorMessage = userVM.errorMessage {
@@ -186,8 +191,6 @@ struct SignUp: View {
             .shadow(radius: 7, x: 0, y: 5)
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $isShowingOTPView) {
-//                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
-//                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber, verificationID: "666")
                 OTP_view(userVM: userVM)
                 
             }

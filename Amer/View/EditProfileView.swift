@@ -6,24 +6,27 @@ struct EditProfileView: View {
     @StateObject private var userVM = UserViewModel()
     @Environment(\.presentationMode) var presentationMode // To dismiss the view
     @State private var bool = false
-    
-    // Dropdown data
-    @State var roles: [String] = ["Assistant", "Receiver"]
-    @State private var selectedRole: String = ""
+ 
     @State private var isExpanded: Bool = false // dropdown bool
     @State private var isExpanded2: Bool = false // sheet bool
+    
     var EditUserInfo : User?
     
     var body: some View {
+        
         NavigationStack {
             ZStack {
-                Color("GrayBlue")
+                Color("LightBlue")
                     .edgesIgnoringSafeArea(.all)
                 
                 ScrollView {
+                    
                     VStack {
+                        
                         Spacer()
                             .frame(height: 96)
+                        
+                        //MARK: -  Name
                         
                         // Name input
                         Text("Name")
@@ -44,7 +47,10 @@ struct EditProfileView: View {
                         
                         Spacer().frame(height: 32)
                         
-                        // Phone number entry
+                        
+                        //MARK: -  Phone number entry
+                        
+                        
                         Text("Phone Number")
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundColor(Color("FontColor"))
@@ -88,42 +94,47 @@ struct EditProfileView: View {
                                     userVM.hideKeyboard()
                                 }
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal)
+                        
                         
                         Spacer().frame(height: 32)
                         
-                        // Role dropdown
-                        VStack {
-                            Text("Role")
-                                .foregroundColor(Color("FontColor"))
-                                .font(.custom("Tajawal-Bold", size: 20))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal)
-                            
-                            Button(action: {
-                                withAnimation {
-                                    isExpanded.toggle()
-                                }
-                            }) {
-                                HStack {
-                                    Text(selectedRole.isEmpty ? "Select a role" : selectedRole)
-                                        .foregroundColor(selectedRole.isEmpty ? .gray : .primary)
-                                        .font(.custom("Tajawal-Medium", size: 20))
-                                    Spacer()
-                                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                                        .foregroundStyle(Color("ColorBlue"))
-                                }
-                                .padding()
-                                .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                                .padding(.horizontal, 20)
+                        
+                        //MARK: -  Button to role
+                        Text("Role")
+                            .foregroundColor(Color("FontColor"))
+                            .font(.custom("Tajawal-Bold", size: 20))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                        
+                        
+                        // Button to show/hide the dropdown
+                        Button(action: {
+                            withAnimation {
+                                isExpanded.toggle()
                             }
-                            
-                            if isExpanded {
-                                ForEach(roles, id: \.self) { role in
+                        }) {
+                            HStack {
+                                Text(userVM.selectedRole.isEmpty ? "Select a role" : userVM.selectedRole) // Placeholder or selected role
+                                    .foregroundColor(userVM.selectedRole.isEmpty ? .gray : .primary) // Gray for placeholder
+                                    .font(.custom("Tajawal-Medium", size: 20))
+                                Spacer()
+                                Image(systemName: isExpanded ? "chevron.up" : "chevron.down") // Chevron toggle
+                                    .foregroundStyle(Color("ColorBlue"))
+                            }
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                            .padding(.horizontal, 20)
+                        }
+
+                        // Dropdown list
+                        if isExpanded {
+                            VStack(alignment: .leading, spacing: 0) {
+                                ForEach(userVM.roles, id: \.self) { role in
                                     Button(action: {
-                                        selectedRole = role
+                                        userVM.selectedRole = role // Update the selected role
                                         withAnimation {
-                                            isExpanded = false
+                                            isExpanded = false // Close dropdown
                                         }
                                     }) {
                                         Text(role)
@@ -132,16 +143,20 @@ struct EditProfileView: View {
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .foregroundStyle(Color("FontColor"))
                                     }
-                                    .padding(.horizontal, 20)
-                                    Divider()
-                                        .background(Color.gray.opacity(0.5))
-                                        .padding(.horizontal, 20)
+                                    if role != userVM.roles.last { // Add a divider only between items
+                                        Divider()
+                                            .background(Color.gray.opacity(0.5))
+                                            .padding(.horizontal, 20)
+                                    }
                                 }
                             }
+                            .padding(.horizontal)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
                         }
+                            
                         
                         Spacer()
-                            .frame(height: 22)
+                            .frame(height: 100)
                         
                         // Save button
                         Button("Save") {
@@ -174,15 +189,21 @@ struct EditProfileView: View {
                         .buttonStyle(GreenButton())
                         .padding()
                         
+                        
+                        
+                        
                         // Cancel button
                         Button("Cancel") {
                             presentationMode.wrappedValue.dismiss()
                         }
-                        .buttonStyle(cancelGreen())
-                        .padding(.bottom, 30)
                         .padding()
-                    }
-                }
+                        .buttonStyle(cancelGreen())
+                        .padding(.vertical, -30)
+                        
+                    } // end vstack
+                    
+                    
+                } // end scroll view
                 .frame(maxWidth: .infinity)
                 .frame(height: 670)
                 .background(Color.white)
@@ -191,9 +212,30 @@ struct EditProfileView: View {
                 .onTapGesture {
                     userVM.hideKeyboard()
                 }
-                Image("profile_logo")
-                    .padding(.bottom,600)
+                
+                
+                
+                if userVM.selectedRole == "Assistant" {
+                    Image("User_Assistant")
+                        .resizable()
+                        .frame(width: 110, height: 110)
+                        .padding(.bottom, 600)
+                } else if userVM.selectedRole == "Reciver" {
+                    Image("User_Reciver")
+                        .resizable()
+                        .frame(width: 110, height: 110)
+                        .padding(.bottom, 600)
+                } else {
+                    Image(systemName: "person.crop.circle") // Default image for unknown role
+                        .resizable()
+                        .foregroundStyle(Color.gray)
+                        .frame(width: 110, height: 110)
+                        .padding(.bottom, 600)
+                }
+                
+                
             }
+            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -202,7 +244,7 @@ struct EditProfileView: View {
                         Image(systemName: "chevron.backward")
                             .resizable()
                             .frame(width: 15, height: 25.5)
-                            .foregroundStyle(Color("DarkBlue"))
+                            .foregroundStyle(Color("FontColor"))
                     }
                 }
                 
@@ -212,24 +254,9 @@ struct EditProfileView: View {
                         .font(.custom("Tajawal-Bold", size: 30))
                 }
             }
-        }
+        } // end Navigation view
     }
-    
-//    // Function to save the profile
-//    private func saveProfile() {
-//        // Validate inputs
-//        guard !userVM.name.isEmpty, !userVM.phoneNumber.isEmpty, !selectedRole.isEmpty else {
-//            print("Please fill all fields.")
-//            return
-//        }
-//        
-//        // Save to ViewModel or send to backend
-//        $userVM.saveProfile(name: userVM.name, phoneNumber: userVM.phoneNumber, role: userVM.selectedRole)
-//        print("Profile saved successfully!")
-//        
-//        // Dismiss the view
-//        presentationMode.wrappedValue.dismiss()
-//    }
+
 }
 
 #Preview {
