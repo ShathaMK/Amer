@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		58E8139C2D1D5AAC0031742A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 58E8139B2D1D5AAC0031742A /* Localizable.xcstrings */; };
+		FC908E8E2D24BAB000908E44 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FC908E8D2D24BAB000908E44 /* FirebaseAnalytics */; };
+		FC908E902D24BAB000908E44 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FC908E8F2D24BAB000908E44 /* FirebaseAuth */; };
+		FC908E922D24BAB000908E44 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FC908E912D24BAB000908E44 /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +44,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC908E922D24BAB000908E44 /* FirebaseMessaging in Frameworks */,
+				FC908E8E2D24BAB000908E44 /* FirebaseAnalytics in Frameworks */,
+				FC908E902D24BAB000908E44 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +90,9 @@
 			);
 			name = Amer;
 			packageProductDependencies = (
+				FC908E8D2D24BAB000908E44 /* FirebaseAnalytics */,
+				FC908E8F2D24BAB000908E44 /* FirebaseAuth */,
+				FC908E912D24BAB000908E44 /* FirebaseMessaging */,
 			);
 			productName = Amer;
 			productReference = 583F28092D0EB7D600B21E64 /* Amer.app */;
@@ -114,6 +123,9 @@
 			);
 			mainGroup = 583F28002D0EB7D600B21E64;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FC908E8C2D24BAB000908E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 583F280A2D0EB7D600B21E64 /* Products */;
 			projectDirPath = "";
@@ -276,9 +288,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Amer/Preview Content\"";
-
-				DEVELOPMENT_TEAM = 5BDWVP493R;
-
+				DEVELOPMENT_TEAM = 39YZX5T634;
 				ENABLE_PREVIEWS = YES;
 				GCC_WARN_SHADOW = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -286,6 +296,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -293,9 +304,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.0;
-
-				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
-
+				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer.Noora;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -312,9 +321,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Amer/Preview Content\"";
-
-				DEVELOPMENT_TEAM = 5BDWVP493R;
-
+				DEVELOPMENT_TEAM = 39YZX5T634;
 				ENABLE_PREVIEWS = YES;
 				GCC_WARN_SHADOW = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -322,6 +329,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -329,9 +337,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.0;
-
-				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer;
-
+				PRODUCT_BUNDLE_IDENTIFIER = com.AppleAcademy.Amer.Noora;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -361,6 +367,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC908E8C2D24BAB000908E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC908E8D2D24BAB000908E44 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC908E8C2D24BAB000908E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		FC908E8F2D24BAB000908E44 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC908E8C2D24BAB000908E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		FC908E912D24BAB000908E44 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC908E8C2D24BAB000908E44 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 583F28012D0EB7D600B21E64 /* Project object */;
 }

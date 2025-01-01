@@ -1,4 +1,4 @@
-
+//
 //  LogIn.swift
 //  Amer
 //
@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LogIn: View {
     
     @StateObject private var userVM = UserViewModel()
     @State private var isExpanded2: Bool = false // sheet bool
-
-    @State private var bool = false
+    @State private var isShowingOTPView = false
+    
     
     var body: some View {
         
@@ -64,9 +65,6 @@ struct LogIn: View {
                     .presentationDragIndicator(.visible)
                     
                 }
-                .onTapGesture {
-                    userVM.hideKeyboard()
-                }
                 
                 
                 TextField("Enter Phone Number", text: $userVM.phoneNumber)
@@ -75,7 +73,9 @@ struct LogIn: View {
                     .multilineTextAlignment(.leading)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                
+                    .onTapGesture {
+                        userVM.hideKeyboard()
+                    }
                 
             } // end hstack
             .padding(.horizontal, 20)
@@ -84,19 +84,30 @@ struct LogIn: View {
             }
             
             Spacer()
-            
-            // MARK: - sending button
 
              Button("Send"){
-                 bool.toggle()
+                 userVM.sendVerificationCode()
+                 isShowingOTPView.toggle()
              }
              .buttonStyle(GreenButton())
+             .shadow(radius: 7, x: 0, y: 5)
              .padding(.horizontal, 20)
-             .fullScreenCover(isPresented: $bool) {
-                 OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
+             .fullScreenCover(isPresented: $isShowingOTPView) {
+                 OTP_view(userVM : userVM)
+//                 OTP_view(userVM : userVM, phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
+//                 OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
              }
+             .disabled(userVM.phoneNumber.isEmpty)
+                         
+            
+            
            
-       } // end vstack
+       } // end big vstack
+        .onTapGesture {
+            userVM.hideKeyboard()
+        }
+        
+        
         
         
     }

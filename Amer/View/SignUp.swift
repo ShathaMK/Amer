@@ -6,29 +6,26 @@
 //
 
 import SwiftUI
+import CloudKit
+import FirebaseAuth
+import Combine
 
 struct SignUp: View {
     
     @StateObject private var userVM = UserViewModel()
     
-    // Bound text fields to these @State vars
-    //    @State private var userName: String = ""
-    //    @State private var phoneNumber: String = ""
     
-    @State private var bool = false
-    
-    // Dropdown data
-    @State var roles: [String] = ["Assistant", "Reciver"]
-//    @State private var selectedRole: String = ""
     @State private var isExpanded: Bool = false // dropdown bool
     @State private var isExpanded2: Bool = false // sheet bool
-
+    
+    @State private var isShowingOTPView = false
+    @State private var errorMessage: String? // Error messages to display
+    @State private var isVerificationSent: Bool = false
 
     var body: some View {
         
         VStack() {
             
-            // MARK: - Name entry
             
             Text("Name")
                 .font(.custom("Tajawal-Bold", size: 20))
@@ -52,7 +49,7 @@ struct SignUp: View {
             
             Spacer().frame(height: 32)
             
-            // MARK: - phone number entry
+            // MARK: - phone number
             
             Text("Phone Number")
                 .font(.custom("Tajawal-Bold", size: 20))
@@ -102,7 +99,7 @@ struct SignUp: View {
                 
                 TextField("Enter Phone Number", text: $userVM.phoneNumber)
                     .font(.custom("Tajawal-Medium", size: 20))
-                    .keyboardType( .numberPad)
+                    .keyboardType( .phonePad)
                     .multilineTextAlignment(.leading)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
@@ -112,92 +109,92 @@ struct SignUp: View {
                 
             } // end hstack
             .padding(.horizontal, 20)
-            
+            .onTapGesture {
+                userVM.hideKeyboard()
+            }
             
             
             Spacer().frame(height: 32)
             
             
-            
-            // MARK: - Role drop down
-            
-            
-            VStack {
+            // MARK: - the drop down for the role
                 
-                Text("Role")
-                    .foregroundColor(Color("FontColor"))
-                    .font(.custom("Tajawal-Bold", size: 20))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                
-                
-                // Button to show/hide the list
-                Button(action: {
-                    withAnimation {
-                        isExpanded.toggle()
-                    }
-                }) {
-                    HStack {
-                        Text(userVM.selectedRole.isEmpty ? "Select a role" : userVM.selectedRole) // Show placeholder if no role is selected
-                            .foregroundColor(userVM.selectedRole.isEmpty ? .gray : .primary) // Placeholder color
-                            .font(.custom("Tajawal-Medium", size: 20))
-                        Spacer()
-                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                            .foregroundStyle(Color("ColorBlue"))
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                    .padding(.horizontal, 20)
+            Text("Role")
+                .foregroundColor(Color("FontColor"))
+                .font(.custom("Tajawal-Bold", size: 20))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+            
+            
+            // Button to show/hide the list
+            Button(action: {
+                withAnimation {
+                    isExpanded.toggle()
                 }
-                
-                // The dropdown list
-                if isExpanded {
-                    ForEach(roles, id: \.self) { role in
-                        Button(action: {
-                            userVM.selectedRole = role
-                            withAnimation {
-                                isExpanded = false
-                            }
-                        }) {
-                            Text(role)
-                                .font(.custom("Tajawal-Medium", size: 20))
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .foregroundStyle(Color("FontColor"))
+            }) {
+                HStack {
+                    Text(userVM.selectedRole.isEmpty ? "Select a role" : userVM.selectedRole) // Show placeholder if no role is selected
+                        .foregroundColor(userVM.selectedRole.isEmpty ? .gray : .primary) // Placeholder color
+                        .font(.custom("Tajawal-Medium", size: 20))
+                    Spacer()
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(Color("ColorBlue"))
+                }
+                .padding()
+                .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                .padding(.horizontal, 20)
+            }
+            
+            // The dropdown list
+            if isExpanded {
+                ForEach(userVM.roles, id: \.self) { role in
+                    Button(action: {
+                        userVM.selectedRole = role
+                        withAnimation {
+                            isExpanded = false
                         }
-                        .padding(.horizontal, 20)
-                        Divider()
-                            .background(Color.gray.opacity(0.5))
-                            .padding(.horizontal, 20)
+                    }) {
+                        Text(role)
+                            .font(.custom("Tajawal-Medium", size: 20))
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(Color("FontColor"))
                     }
+                    .padding(.horizontal, 20)
+                    Divider()
+                        .background(Color.gray.opacity(0.5))
+                        .padding(.horizontal, 20)
                 }
+            }
+                
+            
+            
+            Spacer()
+            
+            if let errorMessage = userVM.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            }
+            
+
+            Button("Send"){
+                userVM.sendVerificationCode()
+                isShowingOTPView.toggle()
+            }
+            .buttonStyle(GreenButton())
+            .shadow(radius: 7, x: 0, y: 5)
+            .padding(.horizontal, 20)
+            .fullScreenCover(isPresented: $isShowingOTPView) {
+//                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
+//                OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber, verificationID: "666")
+                OTP_view(userVM: userVM)
                 
             }
             
             
             
             
-            Spacer()
-            
-            // Send Button
-                        Button("Send") {
-                            userVM.saveUser { result in
-                                switch result {
-                                case .success:
-                                    print("User saved successfully to CloudKit")
-                                    bool.toggle()
-                                case .failure(let error):
-                                    print("Failed to save user: \(error.localizedDescription)")
-                                    userVM.errorMessage = error.localizedDescription
-                                }
-                            }
-                        }
-                        .buttonStyle(GreenButton())
-                        .padding(.horizontal, 20)
-                        .fullScreenCover(isPresented: $bool) {
-                            OTP_view(phoneNumber: (userVM.selectedCountry?.code ?? userVM.defaultCountry.code) + userVM.phoneNumber)
-                        }
-
         } // end vstack
         .onTapGesture {
             userVM.hideKeyboard()
@@ -207,6 +204,9 @@ struct SignUp: View {
         
     }
     
+    
+    
+   
     
 }
 
