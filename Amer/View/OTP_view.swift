@@ -118,8 +118,14 @@ struct OTP_view: View {
             Button {
                 
                 if userVM.timeRemaining == 0 {
-                    userVM.startResendTimer()
-                    userVM.sendVerificationCode()
+                    
+                    userVM.sendVerificationCode { success in
+                        if success {
+                            userVM.startResendTimer()
+                        } else {
+                            userVM.errorMessage = "Failed to send OTP. Please try again."
+                        }
+                    }
                }
             } label: {
                 if isLoading2{

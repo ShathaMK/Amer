@@ -28,15 +28,24 @@ struct ProfileView: View {
                     
                     // User Info Section
                     VStack {
-                        Text(userVM.name)
+                        Text(userVM.name.isEmpty ? "Loading..." : userVM.name)
                             .font(.custom("Tajawal-Bold", size: 30))
                             .foregroundStyle(Color("FontColor"))
-                        
-                        Text(userVM.phoneNumber)
+
+                        Text(userVM.phoneNumber.isEmpty ? "Loading..." : userVM.phoneNumber)
                             .font(.custom("Tajawal-Bold", size: 20))
                             .foregroundStyle(Color("FontColor"))
                     }
-                    
+                    .onAppear {
+                        let signedInPhoneNumber = userVM.phoneNumber // Use the phone number of the signed-in user
+                        userVM.fetchUserData(forPhoneNumber: signedInPhoneNumber) { success in
+                            if success {
+                                print("User data fetched successfully")
+                            } else {
+                                print("Failed to fetch user data")
+                            }
+                        }
+                    }
                     Spacer()
                         .frame(height: 50)
                     
@@ -101,23 +110,24 @@ struct ProfileView: View {
                     
                     
                     
-                    // Members Button
-                    Button {
-                        bool.toggle()
-                        
-                    } label: {
+                    // Edit Profile Navigation
+                    NavigationLink(destination: MembersView()) {
                         HStack {
                             Text("Members")
-                                .padding()
+                                .font(.custom("Tajawal-Bold", size: 20))
+                                .foregroundStyle(Color.white)
+                            
                             Spacer()
+                            
                             Image(systemName: "person.2.fill")
                                 .foregroundStyle(Color.white)
-                                .padding()
+                                
                         }
+                        .padding()
+
                     }
                     .buttonStyle(GreenButton())
-                    .padding()
-                    
+                    .padding(.horizontal)
                     
                     
                     Spacer()

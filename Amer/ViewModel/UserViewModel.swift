@@ -75,6 +75,60 @@ class UserViewModel: ObservableObject {
         phoneNumber = (selectedCountry?.code ?? "") + codePhone
     }
     
+    
+    
+    
+    // MARK: - checkUserExists
+    
+
+    func checkUserExists(completion: @escaping (Bool, Error?) -> Void) {
+        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
+        let query = CKQuery(recordType: "User", predicate: predicate)
+        
+        database.perform(query, inZoneWith: nil) { records, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    completion(false, error)
+                } else if let records = records, !records.isEmpty {
+                    completion(true, nil)
+                } else {
+                    completion(false, nil)
+                }
+            }
+        }
+    }
+
+    
+    
+    // MARK: - settings page
+    
+    func saveUserToCloud(completion: @escaping (Result<Void, Error>) -> Void) {
+            guard !name.isEmpty, !phoneNumber.isEmpty, !selectedRole.isEmpty else {
+                completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "All fields are required."])))
+                return
+            }
+
+            let record = CKRecord(recordType: "User")
+            record["name"] = name as CKRecordValue
+            record["phoneNumber"] = phoneNumber as CKRecordValue
+            record["role"] = selectedRole as CKRecordValue
+
+            let database = CKContainer.default().publicCloudDatabase
+            database.save(record) { _, error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(()))
+                    }
+                }
+            }
+        }
+    
+    
+    
+    
+    
     //MARK: - settings page
     @Published var fontSize: Double = 20.0 // Default font size
     @Published var isHapticsEnabled: Bool = true // Haptic feedback toggle
@@ -85,6 +139,7 @@ class UserViewModel: ObservableObject {
         self.name = name
         self.phoneNumber = phone
     }
+    
     
     
     
@@ -124,8 +179,34 @@ class UserViewModel: ObservableObject {
     // MARK: - fetch User Data
     
     
-    func fetchUserData(completion: @escaping (Bool) -> Void) {
-        let predicate = NSPredicate(value: true) // Adjust predicate as needed
+//    func fetchUserData(completion: @escaping (Bool) -> Void) {
+//        let predicate = NSPredicate(value: true) // Adjust predicate as needed
+//        let query = CKQuery(recordType: "User", predicate: predicate)
+//
+//        database.perform(query, inZoneWith: nil) { [weak self] records, error in
+//            if let error = error {
+//                print("Error fetching user data: \(error.localizedDescription)")
+//                completion(false)
+//                return
+//            }
+//
+//            guard let records = records, let firstRecord = records.first else {
+//                print("No user data found")
+//                completion(false)
+//                return
+//            }
+//
+//            DispatchQueue.main.async {
+//                self?.name = firstRecord["name"] as? String ?? ""
+//                self?.phoneNumber = firstRecord["phoneNumber"] as? String ?? ""
+//                self?.selectedRole = firstRecord["role"] as? String ?? "Reciver"
+//                completion(true)
+//            }
+//        }
+//    }
+    
+    func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
+        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
         let query = CKQuery(recordType: "User", predicate: predicate)
 
         database.perform(query, inZoneWith: nil) { [weak self] records, error in
@@ -321,24 +402,45 @@ class UserViewModel: ObservableObject {
     
     
     //MARK: - Function to send the OTP
-    func sendVerificationCode() {
+    
+//    func sendVerificationCode() {
+//        let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
+//        PhoneAuthProvider.provider()
+//            .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
+//                if let error = error {
+//                    DispatchQueue.main.async {
+//                        self?.errorMessage = "Error: \(error.localizedDescription)"
+//                    }
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    self?.verificationID = verificationID
+//                    self?.isVerificationSent = true
+//                    self?.errorMessage = nil
+//                }
+//            }
+//    }
+    
+    
+    //Updated
+    
+    func sendVerificationCode(completion: @escaping (Bool) -> Void) {
         let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
         PhoneAuthProvider.provider()
             .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        self?.errorMessage = "Error: \(error.localizedDescription)"
-                    }
-                    return
-                }
                 DispatchQueue.main.async {
+                    if let error = error {
+                        self?.errorMessage = "Error: \(error.localizedDescription)"
+                        completion(false) // Signal failure
+                        return
+                    }
                     self?.verificationID = verificationID
                     self?.isVerificationSent = true
                     self?.errorMessage = nil
+                    completion(true) // Signal success
                 }
             }
     }
-    
     
     
     //MARK: -  Function to verify OTP

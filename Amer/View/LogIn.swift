@@ -13,7 +13,7 @@ struct LogIn: View {
     @StateObject private var userVM = UserViewModel()
     @State private var isExpanded2: Bool = false // sheet bool
     @State private var isShowingOTPView = false
-    
+    @State private var showErrorAlert = false // To display error messages
     
     var body: some View {
         
@@ -86,18 +86,44 @@ struct LogIn: View {
             Spacer()
 
              Button("Send"){
-                 userVM.sendVerificationCode()
-                 isShowingOTPView.toggle()
+                 
+                 guard !userVM.phoneNumber.isEmpty else {
+                     userVM.errorMessage = "Please enter a valid phone number."
+                     showErrorAlert = true
+                     return
+                 }
+                                  
+                // Check if the user exists in CloudKit
+                 userVM.checkUserExists { exists, error in
+                     if let error = error {
+                         userVM.errorMessage = "Error checking user: \(error.localizedDescription)"
+                         showErrorAlert = true
+                     } else if exists {
+                         // Proceed with sending OTP
+                         userVM.sendVerificationCode { success in
+                             if success {
+                                 isShowingOTPView.toggle()
+                             } else {
+                                 userVM.errorMessage = "Failed to send OTP. Please try again."
+                                 showErrorAlert = true
+                             }
+                         }
+                     } else {
+                         userVM.errorMessage = "User does not exist. Please sign up first."
+                         showErrorAlert = true
+                     }
+                 }
+//                 userVM.sendVerificationCode()
+//                 isShowingOTPView.toggle()
              }
              .buttonStyle(GreenButton())
+             .disabled(userVM.phoneNumber.isEmpty)
              .shadow(radius: 7, x: 0, y: 5)
              .padding(.horizontal, 20)
              .fullScreenCover(isPresented: $isShowingOTPView) {
                  OTP_view(userVM : userVM)
-//                 OTP_view(userVM : userVM, phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
-//                 OTP_view(phoneNumber: userVM.selectedCountry!.code + userVM.phoneNumber)
              }
-             .disabled(userVM.phoneNumber.isEmpty)
+             
                          
             
             
@@ -106,7 +132,13 @@ struct LogIn: View {
         .onTapGesture {
             userVM.hideKeyboard()
         }
-        
+        .alert(isPresented: $showErrorAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(userVM.errorMessage ?? "An unknown error occurred."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
         
         
         

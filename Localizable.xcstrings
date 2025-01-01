@@ -58,6 +58,9 @@
         }
       }
     },
+    "%lld" : {
+
+    },
     "+966" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -70,6 +73,7 @@
       }
     },
     "+96650789644" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -414,6 +418,9 @@
         }
       }
     },
+    "Error" : {
+
+    },
     "Font Size" : {
       "localizations" : {
         "ar" : {
@@ -423,6 +430,9 @@
           }
         }
       }
+    },
+    "Font Size: %lld" : {
+
     },
     "Get real-time updates and notifications that matter." : {
       "localizations" : {
@@ -457,7 +467,11 @@
         }
       }
     },
+    "Hello %@" : {
+
+    },
     "Hello Mama Munerah" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -498,6 +512,7 @@
       }
     },
     "Large" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -521,6 +536,7 @@
       }
     },
     "Medium" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -541,6 +557,7 @@
       }
     },
     "Mohammad Saleh" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -640,6 +657,9 @@
         }
       }
     },
+    "OK" : {
+
+    },
     "OTP will be sent to this number %@" : {
 
     },
@@ -685,6 +705,9 @@
         }
       }
     },
+    "Requests" : {
+
+    },
     "Resend OTP" : {
 
     },
@@ -702,6 +725,9 @@
       }
     },
     "Save" : {
+
+    },
+    "Search" : {
 
     },
     "Search countries" : {
@@ -738,6 +764,9 @@
         }
       }
     },
+    "Send Invitation" : {
+
+    },
     "Sign Up" : {
       "localizations" : {
         "ar" : {
@@ -759,6 +788,7 @@
       }
     },
     "Small" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
