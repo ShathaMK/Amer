@@ -15,7 +15,7 @@ import Combine
 class UserViewModel: ObservableObject {
     
     @Published var name: String = ""
-//    @Published var codePhone: String = ""
+    @Published var codePhone: String = ""
     @Published var phoneNumber: String = ""
     
     @State var roles: [String] = ["Assistant", "Reciver"]
@@ -71,9 +71,9 @@ class UserViewModel: ObservableObject {
     }
     
     
-//    private func updatePhoneNumber() {
-//        phoneNumber = (selectedCountry?.code ?? "") + codePhone
-//    }
+     func updatePhoneNumber() {
+        phoneNumber = (selectedCountry?.code ?? "") + codePhone
+    }
     
     
     
@@ -132,10 +132,10 @@ class UserViewModel: ObservableObject {
     
     // MARK: - Fetch User Data
     func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
-        let phoneNumberCode = phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines)
-        print("Fetching user data for exact phone number: \(phoneNumberCode)")
+//        let phoneNumberCode = selectedCountry!.code + phoneNumber
+        print("Fetching user data for exact phone number: \(phoneNumber)")
 
-        fetchUserRecord(phoneNumberCode: phoneNumberCode) { [weak self] record, error in
+        fetchUserRecord(phoneNumberCode: phoneNumber) { [weak self] record, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
@@ -146,14 +146,14 @@ class UserViewModel: ObservableObject {
                 
                 guard let record = record else {
                     self?.errorMessage = "User not found."
-                    print("No user data found for phone number: \(phoneNumberCode)")
+                    print("No user data found for phone number: \(phoneNumber)")
                     completion(false)
                     return
                 }
                 
                 // Populate ViewModel with fetched data
                 self?.populateUserData(from: record)
-                print("User data fetched successfully for \(phoneNumberCode)")
+                print("User data fetched successfully for \(phoneNumber)")
                 completion(true)
             }
         }
@@ -162,7 +162,7 @@ class UserViewModel: ObservableObject {
     // MARK: - Verify Logged-In User and Fetch Data
     func fetchLoggedInUserData(completion: @escaping (Bool) -> Void) {
         // Combine country code and phone number
-        let countryCode = selectedCountry?.code ?? defaultCountry.code
+        let countryCode = selectedCountry?.code ?? defaultCountry.code + phoneNumber
         
         guard !phoneNumber.isEmpty else {
             errorMessage = "Phone number is missing."

@@ -480,6 +480,9 @@
         }
       }
     },
+    "Hello %@" : {
+
+    },
     "Hello Mama Munerah" : {
       "extractionState" : "stale",
       "localizations" : {
