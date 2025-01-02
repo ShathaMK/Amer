@@ -34,7 +34,6 @@ struct OTP_view: View {
                 Image("sms")
                     .resizable()
                     .frame(width: 142.85, height: 169.31)
-                    .padding(.leading, 50)
 
                 Spacer()
                     .frame(height: userVM.scaledFont(baseSize: 24))
@@ -46,14 +45,10 @@ struct OTP_view: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 
-                
-                
                 Spacer()
                     .frame(height: userVM.scaledFont(baseSize: 32))
 
-                
-                
-                //MARK: - OTP Input Fields
+                // OTP Input Fields
                 HStack(spacing: 10) {
                     ForEach(0..<6, id: \.self) { index in
                         TextField("", text: Binding(
@@ -87,9 +82,7 @@ struct OTP_view: View {
                 Spacer()
                     .frame(height: userVM.scaledFont(baseSize: 24))
 
-                
-                
-                //MARK: - Resend Button
+                // Resend Button
                 Button {
                     userVM.triggerHapticFeedback()
                     if userVM.timeRemaining == 0 {
@@ -110,20 +103,15 @@ struct OTP_view: View {
                 }
                 .disabled(userVM.timeRemaining > 0)
 
-                
                 Spacer()
-                
-                
 
                 if let errorMessage = userVM.errorMessage {
                     Text(errorMessage)
                         .foregroundColor(.red)
                         .padding()
                 }
-                
-                
 
-                //MARK: - Submit Button
+                // Submit Button
                 Button(action: {
                     userVM.triggerHapticFeedback()
                     isLoading = true
@@ -133,7 +121,6 @@ struct OTP_view: View {
                             isAuthenticated = true
                         }
                     }
-                    
                 }) {
                     if isLoading {
                         ProgressView()
@@ -186,6 +173,5 @@ struct OTP_view: View {
 struct OTPView_Previews: PreviewProvider {
     static var previews: some View {
         OTP_view()
-            .environmentObject(UserViewModel()) 
     }
 }

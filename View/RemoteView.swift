@@ -118,23 +118,11 @@ struct RemoteView: View {
                 }
                 .padding(.bottom, 50)
             }
-            .onAppear {
-                // Fetch user data when the view appears
-                userVM.fetchLoggedInUserData { success in
-                    if success {
-                        print("User data fetched successfully")
-                        print("Name: \(userVM.name)")
-                        print("Role: \(userVM.selectedRole)")
-                    } else {
-                        print("Failed to fetch user data: \(userVM.errorMessage ?? "Unknown error")")
-                    }
-                }
-            }
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 // Add Button Navigation
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: ButtonListView()) {
+                    NavigationLink(destination: ButtonListView().navigationBarBackButtonHidden(true)) {
                         Image("AddButton")
                             .resizable()
                             .frame(width: 43, height: 43)
@@ -160,7 +148,6 @@ struct RemoteView: View {
                                 .frame(width: 43, height: 43)
                         }
                     }
-                    
                 }
             }
         }
@@ -170,7 +157,6 @@ struct RemoteView: View {
 #Preview {
     RemoteView()
         .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
 }
 
 //class ButtonsViewModl: ObservableObject {

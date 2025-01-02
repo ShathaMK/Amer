@@ -149,73 +149,44 @@ struct EditProfileView: View {
                             
                         Spacer().frame(height: 100)
                         
-                        VStack (spacing: 8) {
-                            //MARK: - Save Button
-                            Button("Save") {
-                                guard
-                                    !userVM.name.isEmpty,
-                                    !userVM.phoneNumber.isEmpty
-                                else {
-                                    print("User details can't be empty")
-                                    return
-                                }
-                                
-                                let newUserInfo = User(
-                                    id: EditUserInfo?.id ?? CKRecord.ID(),
-                                    name: userVM.name,
-                                    phoneNumber: userVM.phoneNumber,
-                                    role: userVM.selectedRole
-                                )
-                                
-                                if let EditUserInfo = EditUserInfo {
-                                    userVM.editUser(oldUserInfo: EditUserInfo, with: newUserInfo)
-                                }
+                        // Save Button
+                        Button("Save") {
+                            guard
+                                !userVM.name.isEmpty,
+                                !userVM.phoneNumber.isEmpty
+                            else {
+                                print("User details can't be empty")
+                                return
                             }
-                            .buttonStyle(GreenButton())
                             
+                            let newUserInfo = User(
+                                id: EditUserInfo?.id ?? CKRecord.ID(),
+                                name: userVM.name,
+                                phoneNumber: userVM.phoneNumber,
+                                role: userVM.selectedRole
+                            )
                             
-                            //MARK: - Cancel Button
-                            Button("Cancel") {
-                                presentationMode.wrappedValue.dismiss()
-                                userVM.triggerHapticFeedback() // Haptic feedback
+                            if let EditUserInfo = EditUserInfo {
+                                userVM.editUser(oldUserInfo: EditUserInfo, with: newUserInfo)
                             }
-                            .buttonStyle(cancelGreen())
-
                         }
+                        .buttonStyle(GreenButton())
                         .padding()
                         
-                        
-                    } // end vstack
+                        // Cancel Button
+                        Button("Cancel") {
+                            presentationMode.wrappedValue.dismiss()
+                            userVM.triggerHapticFeedback() // Haptic feedback
+                        }
+                        .buttonStyle(cancelGreen())
+                        .padding(.vertical, -30)
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 670)
                 .background(Color("VLightBlue"))
                 .cornerRadius(52)
                 .padding(.top, 80)
-                
-                
-                
-                //MARK: - Role-based Image
-                if userVM.selectedRole == "Assistant" {
-                    Image("User_Assistant")
-                        .resizable()
-                        .frame(width: 110, height: 110)
-                        .padding(.bottom, 600)
-                } else if userVM.selectedRole == "Reciver" {
-                    Image("User_Reciver")
-                        .resizable()
-                        .frame(width: 110, height: 110)
-                        .padding(.bottom, 600)
-                } else {
-                    Image(systemName: "person.crop.circle") // Default profile image
-                        .resizable()
-                        .foregroundStyle(Color.gray)
-                        .frame(width: 110, height: 110)
-                        .padding(.bottom, 600)
-                }
-                
-                
-                
             }
             .onTapGesture {
                 userVM.hideKeyboard()

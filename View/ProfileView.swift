@@ -32,14 +32,11 @@ struct ProfileView: View {
 
                         Text(userVM.phoneNumber.isEmpty ? "Loading..." : userVM.phoneNumber)
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
-
                             .foregroundStyle(Color("FontColor"))
-
                     }
                     .onAppear {
-                        let phoneNumberCode = userVM.selectedCountry?.code ?? userVM.defaultCountry.code + userVM.phoneNumber
-                        print("Phone Number Code for Fetching: \(phoneNumberCode)")
-                        userVM.fetchUserData(forPhoneNumber: phoneNumberCode) { success in
+                        let signedInPhoneNumber = userVM.phoneNumber // Use the phone number of the signed-in user
+                        userVM.fetchUserData(forPhoneNumber: signedInPhoneNumber) { success in
                             if success {
                                 print("User data fetched successfully")
                             } else {
@@ -47,7 +44,7 @@ struct ProfileView: View {
                             }
                         }
                     }
-
+                    
                     Spacer()
                         .frame(height: userVM.scaledFont(baseSize: 50))
                     
@@ -109,27 +106,22 @@ struct ProfileView: View {
                     
                     Spacer()
                     
-
                     // Members Navigation
                     NavigationLink(destination: MembersView()) {
                         HStack {
                             Text("Members")
                                 .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
-
                                 .foregroundStyle(Color.white)
                             
                             Spacer()
                             
                             Image(systemName: "person.2.fill")
-                                .foregroundStyle(Color.white)        
+                                .foregroundStyle(Color.white)
                         }
                         .padding()
-
                     }
                     .buttonStyle(GreenButton())
                     .padding(.horizontal)
-                    
-
                     
                     Spacer()
                         .frame(height: userVM.scaledFont(baseSize: 50))
@@ -187,5 +179,4 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(UserViewModel())
 }

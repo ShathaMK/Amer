@@ -5,6 +5,7 @@
 
     },
     " Enter Button Label" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -97,6 +98,7 @@
       }
     },
     "2 Min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -117,6 +119,7 @@
       }
     },
     "5 Min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -157,6 +160,9 @@
           }
         }
       }
+    },
+    "Add Members" : {
+
     },
     "Are you sure you want to delete this button?" : {
       "localizations" : {
@@ -388,6 +394,9 @@
         }
       }
     },
+    "Enter Button Label" : {
+
+    },
     "Enter OTP" : {
       "localizations" : {
         "ar" : {
@@ -445,6 +454,7 @@
       }
     },
     "Getting Started !" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -453,6 +463,9 @@
           }
         }
       }
+    },
+    "Getting Started!" : {
+
     },
     "GreenButton" : {
 
@@ -568,6 +581,7 @@
       }
     },
     "Mom Monira wants the  \nwheelchair" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -578,6 +592,7 @@
       }
     },
     "Mom Monira wants to \n shower" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -588,6 +603,7 @@
       }
     },
     "Mom Monira wants to eat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -598,6 +614,7 @@
       }
     },
     "Mom Monira wants Water" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -648,6 +665,7 @@
       }
     },
     "Now" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -658,6 +676,9 @@
       }
     },
     "OK" : {
+
+    },
+    "OTP Verification" : {
 
     },
     "OTP will be sent to this number %@" : {
@@ -763,9 +784,6 @@
           }
         }
       }
-    },
-    "Send Invitation" : {
-
     },
     "Sign Up" : {
       "localizations" : {
