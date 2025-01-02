@@ -14,7 +14,6 @@ struct SignUp: View {
     @StateObject var userVM = UserViewModel()
     @State private var isExpanded: Bool = false // Dropdown state
     @State private var isExpanded2: Bool = false // Sheet state
-    
     @State private var isShowingOTPView = false
     @State private var showErrorAlert = false // To display error messages
     

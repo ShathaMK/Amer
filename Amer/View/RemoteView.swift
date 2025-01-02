@@ -1,33 +1,54 @@
 
-
 import SwiftUI
 
+///import NotificationService
+
+
 struct RemoteView: View {
-    @EnvironmentObject var vm: ButtonsViewModel // ViewModel for button management
-//    @EnvironmentObject var userVM = UserViewModel
-    @StateObject var userVM = UserViewModel() // Dynamic font scaling and haptics
+    @EnvironmentObject var vm: ButtonsViewModel
+    @StateObject private var userVM = UserViewModel()
+    //    let sender: User
+    //    let receiver: User
+    // @enviromentobject for userviewmodel to take the user name
+    let maxItems = 9
     
-    let maxItems = 9 // Maximum items to display in the grid
     
+    func scheduleLocalNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Test Notification"
+        content.body = 
+        "This is a test notification!"
+        content.sound = .default
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification: \(error)")
+            } else {
+                print("Notification scheduled!")
+            }
+        }
+    }
+    // @State var buttonslist:[Buttons]
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background color
                 Color("Background")
                     .ignoresSafeArea()
                 
                 VStack {
                     VStack {
                         HStack {
-                            // Greeting text with dynamic font
                             Text("Hello \(userVM.name)")
-                                .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 28)))
+                                .font(Font.custom("Tajawal-Bold", size: 28))
                                 .foregroundColor(Color("FontColor"))
                                 .padding(.trailing, 200)
+                            
                         }
                         .padding(.top, 30)
                         
-                        // Divider line
                         Divider()
                             .background(Color.gray.opacity(0.5))
                             .padding(.top, 8)
@@ -35,194 +56,222 @@ struct RemoteView: View {
                         
                         Spacer()
                     }
-                    
-                    VStack(spacing: 32) {
-                        // Fetch active buttons (not disabled)
+                    VStack(spacing:32) {
+                        
+                        // list only active buttons if they exist
                         let activeButtons = vm.buttons.filter { !$0.isDisabled }
                         
-                        if !activeButtons.isEmpty {
-                            let buttonsToDisplay = Array(activeButtons.prefix(maxItems))
+                        if (!activeButtons.isEmpty) {
                             
-                            // LazyVGrid for 3-column layout
+                            let buttonsToDisplay = Array(activeButtons.prefix(maxItems))
+                            // LazyVGrid for 3 columns
                             LazyVGrid(columns: [
-                                GridItem(.fixed(76), spacing: 40),
-                                GridItem(.fixed(76), spacing: 40),
-                                GridItem(.fixed(76), spacing: 40)
+                                GridItem(.fixed(76),spacing: 40),
+                                GridItem(.fixed(76),spacing: 40),
+                                GridItem(.fixed(76),spacing: 40)
                             ], spacing: 40) {
                                 ForEach(buttonsToDisplay) { button in
                                     Button(action: {
+                                        scheduleLocalNotification()
+
                                         userVM.triggerHapticFeedback() // Trigger haptic feedback
+                                        // Define button action here
                                         print("Button \(button.label) tapped")
                                     }) {
                                         VStack(spacing: 8) {
                                             Text(button.icon)
                                                 .font(.system(size: 30))
-                                                .frame(width: 74, height: 74)
+                                                .frame(width: 74,height: 74)
                                                 .background(button.color)
                                                 .cornerRadius(20)
                                                 .shadow(radius: 4, y: 4)
-                                            
                                             Text(button.label)
-                                                .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16)))
-                                                .foregroundColor(Color("FontColor"))
+                                                .font(Font.custom("Tajawal-Bold", size: 16))
+                                                .foregroundStyle(Color("FontColor"))
                                         }
                                     }
                                 }
                             }
                             
-                            // Bell Button for active buttons
+                            // Bell Button
                             Button(action: {
-                                userVM.triggerHapticFeedback() // Trigger haptic feedback
                                 print("Bell button tapped")
+                                scheduleLocalNotification()
+
+
+                                userVM.triggerHapticFeedback() // Trigger haptic feedback
+
                             }) {
                                 VStack(spacing: 8) {
                                     Text("🔔")
                                         .font(.system(size: 30))
-                                        .frame(width: 114, height: 114)
+                                        .frame(width: 114,height: 114)
                                         .background(Color("DarkBlue"))
                                         .cornerRadius(60)
                                         .shadow(radius: 4, y: 4)
-                                    
                                     Text("Bell")
-                                        .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16)))
-                                        .foregroundColor(Color("FontColor"))
+                                        .font(Font.custom("Tajawal-Bold", size: 16))
+                                        .foregroundStyle(Color("FontColor"))
                                 }
                             }
-                        } else {
-                            // Fallback for no active buttons
-                            Spacer()
+                            // Spacer()
                             
+                        } else {
+                            
+                            
+                            
+                            Spacer()
                             Button(action: {
+                                
                                 userVM.triggerHapticFeedback() // Trigger haptic feedback
+                                // Add Bell button action here
+                                scheduleLocalNotification()
                                 print("Bell button tapped")
                             }) {
                                 VStack(spacing: 16) {
                                     Text("🔔")
                                         .font(.system(size: 70))
-                                        .frame(width: 220, height: 220)
+                                        .frame(width: 220,height: 220)
                                         .background(Color("DarkBlue"))
                                         .cornerRadius(120)
                                         .shadow(radius: 4, y: 4)
                                     
                                     Text("Bell")
-                                        .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 30)))
-                                        .foregroundColor(Color("FontColor"))
+                                        .font(Font.custom("Tajawal-Bold", size: 30))
+                                        .foregroundStyle(Color("FontColor"))
                                 }
                             }
                             
                             Spacer()
                             Spacer()
                             Spacer()
+                            
                         }
+                        
+                        
                     }
                 }
                 .padding(.bottom, 50)
-            }
-            .onAppear {
-                // Fetch user data when the view appears
-                userVM.fetchLoggedInUserData { success in
-                    if success {
-                        print("User data fetched successfully")
-                        print("Name: \(userVM.name)")
-                        print("Role: \(userVM.selectedRole)")
-                    } else {
-                        print("Failed to fetch user data: \(userVM.errorMessage ?? "Unknown error")")
-                    }
-                }
+                
             }
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                // Add Button Navigation
+                
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: ButtonListView()) {
+                    NavigationLink(destination: ButtonListView().navigationBarBackButtonHidden(true)) {
                         Image("AddButton")
                             .resizable()
                             .frame(width: 43, height: 43)
-                            .padding(.trailing, 10)
+                            .ignoresSafeArea().padding(.trailing,10)
                     }
                 }
                 
-                // Profile Navigation
+                
                 ToolbarItem(placement: .topBarLeading) {
+                    
                     NavigationLink(destination: ProfileView()) {
+                        
                         if userVM.selectedRole == "Assistant" {
                             Image("User_Assistant")
                                 .resizable()
                                 .frame(width: 43, height: 43)
+                            
                         } else if userVM.selectedRole == "Reciver" {
                             Image("User_Reciver")
                                 .resizable()
                                 .frame(width: 43, height: 43)
+                            
                         } else {
                             Image(systemName: "person.crop.circle")
                                 .resizable()
                                 .foregroundStyle(Color.gray)
                                 .frame(width: 43, height: 43)
+                            
                         }
+                        
+                        
                     }
-                    
                 }
+                
+                
+                
+            }// end toolbar
+            
+        }
+        
+        
+    }
+    //    private func sendNotification() {
+    //        userVM.validateRelationship(senderId: sender.id, receiverId: receiver.id) { isValid in
+    //            guard isValid else {
+    //                print("No active relationship found.")
+    //                return
+    //            }
+    //
+    //            userVM.fetchDeviceToken(forUserId: receiver.id) { deviceToken in
+    //                guard let deviceToken = deviceToken else {
+    //                    print("Device token not found.")
+    //                    return
+    //                }
+    //
+    //                userVM.sendNotification(to: deviceToken, message: "You have a new message from \(sender.name).")
+    //            }
+    //        }
+    //    }
+}
+    
+    
+    #Preview {
+        RemoteView()
+            .environmentObject(ButtonsViewModel())
+            .environmentObject(UserViewModel())
+    }
+    
+    
+    //class ButtonsViewModl: ObservableObject {
+    //    @Published var buttons: [Buttons] = []
+    //
+    //    init(sampleData: Bool = false) {
+    //        if sampleData {
+    //            buttons = [
+    //                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
+    //                Buttons(label: "Button 2", icon: "📞", color: Color.green),
+    //                Buttons(label: "Button 3", icon: "📷", color: Color.red),
+    //                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
+    //                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
+    //                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
+    //            ]
+    //        }
+    //    }
+    //}
+    
+    
+    // to pick color in hex format Color(hex:0x000000) used like this
+    extension Color {
+        init(hex: UInt, alpha: Double = 1) {
+            self.init(
+                .sRGB,
+                red: Double((hex >> 16) & 0xff) / 255,
+                green: Double((hex >> 8) & 0xff) / 255,
+                blue: Double((hex >> 0) & 0xff) / 255,
+                opacity: alpha
+            )
+        }
+    }
+    
+    // to make the interfaces responsive to each device we use this extension
+    // to use UIScreen.screenWidth for example
+    extension UIScreen{
+        static let screenWidth = UIScreen.main.bounds.size.width
+        static let screenHeight = UIScreen.main.bounds.size.height
+        static let screenSize = UIScreen.main.bounds.size
+    }
+    extension Array {
+        func chunked(into size: Int) -> [[Element]] {
+            return stride(from: 0, to: count, by: size).map {
+                Array(self[$0 ..< Swift.min($0 + size, count)])
             }
         }
     }
-}
-
-#Preview {
-    RemoteView()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
-}
-
-//class ButtonsViewModl: ObservableObject {
-//    @Published var buttons: [Buttons] = []
-//
-//    init(sampleData: Bool = false) {
-//        if sampleData {
-//            buttons = [
-//                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
-//                Buttons(label: "Button 2", icon: "📞", color: Color.green),
-//                Buttons(label: "Button 3", icon: "📷", color: Color.red),
-//                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
-//                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
-//                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
-//            ]
-//        }
-//    }
-//}
-
-
-// MARK: - Extensions
-
-// to pick color in hex format Color(hex:0x000000) used like this
-// Hex-based Color Extension
-extension Color {
-    init(hex: UInt, alpha: Double = 1) {
-        self.init(
-            .sRGB,
-            red: Double((hex >> 16) & 0xff) / 255,
-            green: Double((hex >> 8) & 0xff) / 255,
-            blue: Double((hex >> 0) & 0xff) / 255,
-            opacity: alpha
-        )
-    }
-}
-
-// to make the interfaces responsive to each device we use this extension
-// to use UIScreen.screenWidth for example
-// UIScreen Size Extension
-extension UIScreen {
-    static let screenWidth = UIScreen.main.bounds.size.width
-    static let screenHeight = UIScreen.main.bounds.size.height
-    static let screenSize = UIScreen.main.bounds.size
-}
-
-// Array Chunking Extension
-extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        return stride(from: 0, to: count, by: size).map {
-            Array(self[$0 ..< Swift.min($0 + size, count)])
-        }
-    }
-}
-
+    
 

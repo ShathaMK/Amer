@@ -20,6 +20,7 @@ class UserViewModel: ObservableObject {
     
     @State var roles: [String] = ["Assistant", "Reciver"]
     @Published var selectedRole: String = ""
+    @Published var assistantRecordID: CKRecord.ID? // This should hold the assistant's record ID
 
     
     

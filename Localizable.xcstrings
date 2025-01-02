@@ -162,7 +162,14 @@
       }
     },
     "Add Members" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة أعضاء"
+          }
+        }
+      }
     },
     "Are you sure you want to delete this button?" : {
       "localizations" : {
@@ -276,7 +283,14 @@
       }
     },
     "Close" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إغلاق"
+          }
+        }
+      }
     },
     "cnacleGreen" : {
 
@@ -395,7 +409,14 @@
       }
     },
     "Enter Button Label" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل اسم الزر "
+          }
+        }
+      }
     },
     "Enter OTP" : {
       "localizations" : {
@@ -441,7 +462,14 @@
       }
     },
     "Font Size: %lld" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حجم الخط  %lld"
+          }
+        }
+      }
     },
     "Get real-time updates and notifications that matter." : {
       "localizations" : {
@@ -465,7 +493,14 @@
       }
     },
     "Getting Started!" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أبدأ من هنا"
+          }
+        }
+      }
     },
     "GreenButton" : {
 
@@ -676,13 +711,34 @@
       }
     },
     "OK" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنًا"
+          }
+        }
+      }
     },
     "OTP Verification" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز التحقق "
+          }
+        }
+      }
     },
     "OTP will be sent to this number %@" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز التحقق تم إرساله إلى هذا الرقم %@"
+          }
+        }
+      }
     },
     "OTP will be sent to this number 501234567 " : {
       "extractionState" : "stale",
@@ -727,13 +783,34 @@
       }
     },
     "Requests" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الدعوات"
+          }
+        }
+      }
     },
     "Resend OTP" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرسل رمز التحقق مره أخرى"
+          }
+        }
+      }
     },
     "Resend OTP in %llds" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرسل رمز التحقق بعد %lld"
+          }
+        }
+      }
     },
     "Role" : {
       "localizations" : {
@@ -746,10 +823,24 @@
       }
     },
     "Save" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حفظ"
+          }
+        }
+      }
     },
     "Search" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث"
+          }
+        }
+      }
     },
     "Search countries" : {
       "localizations" : {
@@ -773,7 +864,14 @@
       }
     },
     "Select Country" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر دولة"
+          }
+        }
+      }
     },
     "Send" : {
       "localizations" : {
@@ -837,7 +935,14 @@
       }
     },
     "Verify" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحقق"
+          }
+        }
+      }
     },
     "Your Wish is Our Command" : {
       "localizations" : {
