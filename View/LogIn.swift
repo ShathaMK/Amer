@@ -118,7 +118,7 @@ struct LogIn: View {
             .shadow(radius: 7, x: 0, y: 5)
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $isShowingOTPView) {
-                OTP_view(userVM: userVM)
+                OTP_view()
             }
             .fullScreenCover(isPresented: $isShowingSignupView) {
                 LoginSignupView(selectedTab: 0) // Navigate to Signup Tab

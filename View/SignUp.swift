@@ -148,7 +148,6 @@ struct SignUp: View {
             
             Spacer()
             
-
             // MARK: - Send Button
             Button(action: {
                 userVM.triggerHapticFeedback() // Haptic feedback
@@ -191,15 +190,6 @@ struct SignUp: View {
                 Text("Send")
                     .font(Font.custom("Tajawal-Medium", size: userVM.scaledFont(baseSize: 20)))
                     .foregroundColor(.white)
-
-            if let errorMessage = userVM.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding()
-            }
-            
-            
-          
             }
             .buttonStyle(GreenButton())
             .shadow(radius: 7, x: 0, y: 5)
@@ -208,13 +198,10 @@ struct SignUp: View {
                 if userVM.errorMessage == "User already exists. Redirecting to login..." {
                     LoginSignupView(selectedTab: 1)
                 } else {
-                    OTP_view(userVM: userVM)
+                    OTP_view()
                 }
             }
-
-            
-        } // end vstack
-
+        }
         .onTapGesture {
             userVM.hideKeyboard()
         }
@@ -225,7 +212,6 @@ struct SignUp: View {
                 dismissButton: .default(Text("OK"))
             )
         }
-        
     }
 }
 

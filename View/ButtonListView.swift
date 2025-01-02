@@ -5,8 +5,6 @@ struct ButtonListView: View {
     @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State var navigateToEdit = false
     @State var selectedButton: Buttons? // Track selected button for editing
-    @Environment(\.presentationMode) var presentationMode // To dismiss the view
-
 
     var body: some View {
         NavigationStack {
@@ -25,18 +23,14 @@ struct ButtonListView: View {
                 }
                 .padding()
             }
-            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
+                    NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)) {
                         Image(systemName: "chevron.backward")
                             .resizable()
                             .frame(width: 15, height: 25.5)
-                            .foregroundStyle(Color("FontColor"))
+                            .foregroundStyle(Color("DarkBlue"))
                     }
-                    
                 }
                 ToolbarItem(placement: .principal) {
                     Text("Button List")
@@ -44,7 +38,7 @@ struct ButtonListView: View {
                         .foregroundStyle(Color("FontColor"))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: AddNewButtonView()) {
+                    NavigationLink(destination: AddNewButtonView().navigationBarBackButtonHidden(true)) {
                         Image("AddButton")
                             .resizable()
                             .frame(width: 43, height: 43)
