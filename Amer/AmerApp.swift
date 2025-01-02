@@ -9,16 +9,20 @@ import SwiftUI
 
 @main
 struct AmerApp: App {
-//    @StateObject private var viewModel = ButtonsViewModel()
-    
+    @StateObject private var viewModel = ButtonsViewModel()
+    @StateObject private var userVM = UserViewModel()
+    @StateObject private var memberVM = MembersViewModel()
+//    @StateObject private var noteVM = NotificationViewModel()
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+
     var body: some Scene {
         WindowGroup {
             Onboarding_1()
-//        AddNewButtonView().environmentObject(ButtonsViewModel()) // Inject EnvironmentObject here
-
-
+                .environmentObject(viewModel) // Pass ButtonsViewModel
+                .environmentObject(userVM) // Pass UserViewModel
+                .environmentObject(memberVM) // Pass MembersViewModel
+                // .environmentObject(noteVM) 
         }
     }
 }

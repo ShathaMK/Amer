@@ -16,7 +16,6 @@ struct InitialView: View {
         
           
         VStack{
-            
             if userLoggedIn{
                 
                 ButtonListView()
@@ -24,19 +23,17 @@ struct InitialView: View {
                 
                 LoginSignupView()
             }
-            
-            
-        }.onAppear{
+        }
+        .onAppear{
             
             Auth.auth().addStateDidChangeListener{auth, user in
-                
                 if (user != nil) {
-                    
                     userLoggedIn = true
                 } else{
                     userLoggedIn = false
                 }
             }
+            
         }
         
         

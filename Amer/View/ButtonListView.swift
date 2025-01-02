@@ -2,10 +2,9 @@ import SwiftUI
 
 struct ButtonListView: View {
     @EnvironmentObject var vm: ButtonsViewModel
+    @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State var navigateToEdit = false
     @State var selectedButton: Buttons? // Track selected button for editing
-    var buttonToDelete: Buttons?
-    //var button: Buttons
 
     var body: some View {
         NavigationStack {
@@ -22,7 +21,6 @@ struct ButtonListView: View {
                 ButtonGrid(buttons: vm.buttons.filter { $0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
-
                 .padding()
             }
             .toolbar {
@@ -36,7 +34,7 @@ struct ButtonListView: View {
                 }
                 ToolbarItem(placement: .principal) {
                     Text("Button List")
-                        .font(.custom("Tajawal-Bold", size: 30))
+                        .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 30))) // Dynamic font scaling
                         .foregroundStyle(Color("FontColor"))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
@@ -57,19 +55,20 @@ struct ButtonListView: View {
     }
 
     private func handleButtonTap(_ button: Buttons) {
+        userVM.triggerHapticFeedback() // Trigger haptic feedback
         print("Button \(button.label) tapped")
     }
 }
-
 
 // MARK: - Section Header View
 struct SectionHeader: View {
     let title: String
     let color: Color
-    
+    @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling
+
     var body: some View {
         Text(title)
-            .font(Font.custom("Tajawal-Bold", size: 22))
+            .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 22))) // Dynamic font scaling
             .foregroundStyle(color)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
@@ -99,7 +98,6 @@ struct ButtonGrid: View {
                     }
                 }
                 .padding(.top, 20)
-                
             }
         }
     }
@@ -111,41 +109,46 @@ struct ButtonView: View {
     let action: (Buttons) -> Void
 
     @EnvironmentObject var vm: ButtonsViewModel
+    @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State private var navigateToEdit = false
     @State private var showingAlert = false
 
     var body: some View {
         Button(action: {
             if !button.isDisabled { // Only allow action if button is not disabled
+                userVM.triggerHapticFeedback() // Trigger haptic feedback
                 action(button)
             }
         }) {
             VStack(spacing: 8) {
                 Text(button.icon)
-                    .font(.system(size: 30))
+                    .font(.system(size: userVM.scaledFont(baseSize: 30))) // Dynamic font scaling
                     .frame(width: 74, height: 74)
                     .background(button.isDisabled ? Color.gray : Color(button.color)) // Gray out if disabled
                     .cornerRadius(20)
                     .shadow(radius: 4, y: 4)
                 Text(button.label)
-                    .font(Font.custom("Tajawal-Bold", size: 16))
+                    .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16))) // Dynamic font scaling
                     .foregroundStyle(button.isDisabled ? .gray : Color("FontColor")) // Gray out text if disabled
             }
         }
         .contextMenu {
             Button {
+                userVM.triggerHapticFeedback() // Trigger haptic feedback
                 print("Edit \(button.label)")
                 navigateToEdit = true
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
             Button {
+                userVM.triggerHapticFeedback() // Trigger haptic feedback
                 vm.toggleDisableButton(button) // Toggle disable status
                 print("Disable \(button.label)")
             } label: {
                 Label(button.isDisabled ? "Enable" : "Disable", systemImage: button.isDisabled ? "lock.open" : "lock")
             }
             Button(role: .destructive) {
+                userVM.triggerHapticFeedback() // Trigger haptic feedback
                 print("Delete \(button.label)")
                 showingAlert = true
             } label: {
@@ -168,12 +171,7 @@ struct ButtonView: View {
     }
 }
 
-
-
 // MARK: - Preview
 #Preview {
     ButtonListView()
-
 }
-
-

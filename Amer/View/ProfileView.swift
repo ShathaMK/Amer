@@ -3,18 +3,16 @@
 //  Amer
 //
 //  Created by Shaima Alhussain on 22/06/1446 AH.
-
+//
 
 import SwiftUI
 import UIKit
 
 struct ProfileView: View {
-    
-    @StateObject private var userVM = UserViewModel()
+    @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
+//    @EnvironmentObject var userVM = UserViewModel
     @Environment(\.presentationMode) var presentationMode // To dismiss the view
-    
-    @State private var bool: Bool = false
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -24,16 +22,16 @@ struct ProfileView: View {
                 
                 VStack {
                     Spacer()
-                        .frame(height: 64)
+                        .frame(height: userVM.scaledFont(baseSize: 64))
                     
                     // User Info Section
                     VStack {
                         Text(userVM.name.isEmpty ? "Loading..." : userVM.name)
-                            .font(.custom("Tajawal-Bold", size: 30))
+                            .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 30)))
                             .foregroundStyle(Color("FontColor"))
 
                         Text(userVM.phoneNumber.isEmpty ? "Loading..." : userVM.phoneNumber)
-                            .font(.custom("Tajawal-Bold", size: 20))
+                            .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                             .foregroundStyle(Color("FontColor"))
                     }
                     .onAppear {
@@ -46,30 +44,34 @@ struct ProfileView: View {
                             }
                         }
                     }
+                    
                     Spacer()
-                        .frame(height: 50)
+                        .frame(height: userVM.scaledFont(baseSize: 50))
                     
                     // Font Size Section
                     HStack {
                         Text("Font Size")
-                            .font(.custom("Tajawal-Bold", size: 20))
+                            .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                             .foregroundStyle(Color("DarkBlue"))
                             
                         Spacer()
                         
                         Slider(value: $userVM.fontSize, in: 12...24, step: 1) {
                             Text("Font Size")
-                                .font(.custom("Tajawal-Bold", size: CGFloat(userVM.fontSize)))
+                                .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16)))
                         }
                         .frame(width: 250)
+                        .onChange(of: userVM.fontSize) { _ in
+                            userVM.triggerHapticFeedback()
+                        }
                     }
                     .padding(.horizontal)
                     
                     Spacer()
-                        .frame(height: 32)
+                        .frame(height: userVM.scaledFont(baseSize: 32))
                     
                     Text("Font Size: \(Int(userVM.fontSize))")
-                        .font(.custom("Tajawal-Bold", size: CGFloat(userVM.fontSize)))
+                        .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16)))
                     
                     Divider()
                         .padding()
@@ -78,7 +80,7 @@ struct ProfileView: View {
                     NavigationLink(destination: EditProfileView()) {
                         HStack {
                             Text("Edit Profile")
-                                .font(.custom("Tajawal-Bold", size: 20))
+                                .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                                 .foregroundStyle(Color("DarkBlue"))
                             
                             Spacer()
@@ -88,50 +90,41 @@ struct ProfileView: View {
                     }
                     .padding(.horizontal)
                     
-                    
                     Divider()
                         .padding()
                     
                     // Enable Haptics Toggle
                     HStack {
                         Toggle("Haptics", isOn: $userVM.isHapticsEnabled)
-                            .font(.custom("Tajawal-Bold", size: 20))
+                            .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                             .foregroundStyle(Color("DarkBlue"))
-                            .onChange(of: userVM.isHapticsEnabled) { newValue in
-                                if newValue {
-                                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                                    generator.impactOccurred()
-                                }
+                            .onChange(of: userVM.isHapticsEnabled) { _ in
+                                userVM.triggerHapticFeedback()
                             }
                     }
                     .padding(.horizontal)
                     
                     Spacer()
                     
-                    
-                    
-                    // Edit Profile Navigation
+                    // Members Navigation
                     NavigationLink(destination: MembersView()) {
                         HStack {
                             Text("Members")
-                                .font(.custom("Tajawal-Bold", size: 20))
+                                .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                                 .foregroundStyle(Color.white)
                             
                             Spacer()
                             
                             Image(systemName: "person.2.fill")
                                 .foregroundStyle(Color.white)
-                                
                         }
                         .padding()
-
                     }
                     .buttonStyle(GreenButton())
                     .padding(.horizontal)
                     
-                    
                     Spacer()
-                        .frame(height: 50)
+                        .frame(height: userVM.scaledFont(baseSize: 50))
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 680)
@@ -157,7 +150,6 @@ struct ProfileView: View {
                         .frame(width: 110, height: 110)
                         .padding(.bottom, 600)
                 }
-                
             }
             .onTapGesture {
                 userVM.hideKeyboard()
@@ -178,7 +170,7 @@ struct ProfileView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Profile")
                         .foregroundColor(Color.white)
-                        .font(.custom("Tajawal-Bold", size: 30))
+                        .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 30)))
                 }
             }
         }

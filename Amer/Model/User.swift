@@ -62,8 +62,15 @@ struct Country: Codable {
 
 
 // MARK: - Member Model
+
 struct Member: Identifiable {
-    let id = UUID()
-    let name: String
-    let phone: String
+    var id = UUID()
+    var name: String
+    var phone: String
+}
+
+struct Contact: Identifiable {
+    var id = UUID()
+    var name: String
+    var phoneNumber: String
 }
