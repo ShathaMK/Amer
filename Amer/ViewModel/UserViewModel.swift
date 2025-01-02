@@ -78,12 +78,7 @@ class UserViewModel: ObservableObject {
     
     
     
-    
-    // MARK: - Siginup and login functionalities
-    
-    
-    
-    
+
     // MARK: - checkUserExists
     
 
@@ -130,6 +125,7 @@ class UserViewModel: ObservableObject {
                 }
             }
         }
+    
     
     
     
@@ -287,7 +283,34 @@ class UserViewModel: ObservableObject {
     
     // MARK: - fetch User Data
     
+
+//    func fetchUserData(completion: @escaping (Bool) -> Void) {
+//        let predicate = NSPredicate(value: true) // Adjust predicate as needed
+//        let query = CKQuery(recordType: "User", predicate: predicate)
+//
+//        database.perform(query, inZoneWith: nil) { [weak self] records, error in
+//            if let error = error {
+//                print("Error fetching user data: \(error.localizedDescription)")
+//                completion(false)
+//                return
+//            }
+//
+//            guard let records = records, let firstRecord = records.first else {
+//                print("No user data found")
+//                completion(false)
+//                return
+//            }
+//
+//            DispatchQueue.main.async {
+//                self?.name = firstRecord["name"] as? String ?? ""
+//                self?.phoneNumber = firstRecord["phoneNumber"] as? String ?? ""
+//                self?.selectedRole = firstRecord["role"] as? String ?? "Reciver"
+//                completion(true)
+//            }
+//        }
+//    }
     
+
     func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
         let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
         let query = CKQuery(recordType: "User", predicate: predicate)
@@ -637,6 +660,27 @@ class UserViewModel: ObservableObject {
     
     //MARK: - Function to send the OTP
     
+//    func sendVerificationCode() {
+//        let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
+//        PhoneAuthProvider.provider()
+//            .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
+//                if let error = error {
+//                    DispatchQueue.main.async {
+//                        self?.errorMessage = "Error: \(error.localizedDescription)"
+//                    }
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    self?.verificationID = verificationID
+//                    self?.isVerificationSent = true
+//                    self?.errorMessage = nil
+//                }
+//            }
+//    }
+    
+    
+    //Updated
+
     func sendVerificationCode(completion: @escaping (Bool) -> Void) {
         let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
         PhoneAuthProvider.provider()
