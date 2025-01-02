@@ -179,6 +179,7 @@ struct OTP_view: View {
 //                EditProfileView()
                 RemoteView()
                     .environmentObject(buttonsVM)
+                    .environmentObject(userVM)
             }
             .disabled(isLoading || otp.joined().count < 6)
             .disabled(otp.contains(where: { $0.isEmpty })) // Disable if any OTP field is empty

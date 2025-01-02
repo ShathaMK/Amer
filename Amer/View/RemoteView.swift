@@ -1,13 +1,34 @@
 import SwiftUI
 
+///import NotificationService
 
 
 struct RemoteView: View {
     @EnvironmentObject var vm: ButtonsViewModel
     @StateObject private var userVM = UserViewModel()
-    
+    //    let sender: User
+    //    let receiver: User
     // @enviromentobject for userviewmodel to take the user name
     let maxItems = 9
+    
+    
+    func scheduleLocalNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Test Notification"
+        content.body = "This is a test notification!"
+        content.sound = .default
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 20, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification: \(error)")
+            } else {
+                print("Notification scheduled!")
+            }
+        }
+    }
     // @State var buttonslist:[Buttons]
     var body: some View {
         NavigationStack {
@@ -49,6 +70,8 @@ struct RemoteView: View {
                             ], spacing: 40) {
                                 ForEach(buttonsToDisplay) { button in
                                     Button(action: {
+                                        scheduleLocalNotification()
+
                                         // Define button action here
                                         print("Button \(button.label) tapped")
                                     }) {
@@ -70,6 +93,10 @@ struct RemoteView: View {
                             // Bell Button
                             Button(action: {
                                 print("Bell button tapped")
+                                scheduleLocalNotification()
+
+
+
                             }) {
                                 VStack(spacing: 8) {
                                     Text("🔔")
@@ -92,6 +119,7 @@ struct RemoteView: View {
                             Spacer()
                             Button(action: {
                                 // Add Bell button action here
+                                scheduleLocalNotification()
                                 print("Bell button tapped")
                             }) {
                                 VStack(spacing: 16) {
@@ -136,27 +164,27 @@ struct RemoteView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     
                     NavigationLink(destination: ProfileView()) {
+                        
+                        if userVM.selectedRole == "Assistant" {
+                            Image("User_Assistant")
+                                .resizable()
+                                .frame(width: 43, height: 43)
                             
-                            if userVM.selectedRole == "Assistant" {
-                                Image("User_Assistant")
-                                    .resizable()
-                                    .frame(width: 43, height: 43)
-                                    
-                            } else if userVM.selectedRole == "Reciver" {
-                                Image("User_Reciver")
-                                    .resizable()
-                                    .frame(width: 43, height: 43)
-                                    
-                            } else {
-                                Image(systemName: "person.crop.circle")
-                                    .resizable()
-                                    .foregroundStyle(Color.gray)
-                                    .frame(width: 43, height: 43)
-                                    
-                            }
+                        } else if userVM.selectedRole == "Reciver" {
+                            Image("User_Reciver")
+                                .resizable()
+                                .frame(width: 43, height: 43)
                             
+                        } else {
+                            Image(systemName: "person.crop.circle")
+                                .resizable()
+                                .foregroundStyle(Color.gray)
+                                .frame(width: 43, height: 43)
                             
                         }
+                        
+                        
+                    }
                 }
                 
                 
@@ -164,57 +192,80 @@ struct RemoteView: View {
             }// end toolbar
             
         }
+        
+        
     }
+    //    private func sendNotification() {
+    //        userVM.validateRelationship(senderId: sender.id, receiverId: receiver.id) { isValid in
+    //            guard isValid else {
+    //                print("No active relationship found.")
+    //                return
+    //            }
+    //
+    //            userVM.fetchDeviceToken(forUserId: receiver.id) { deviceToken in
+    //                guard let deviceToken = deviceToken else {
+    //                    print("Device token not found.")
+    //                    return
+    //                }
+    //
+    //                userVM.sendNotification(to: deviceToken, message: "You have a new message from \(sender.name).")
+    //            }
+    //        }
+    //    }
 }
-
-
-#Preview {
-    RemoteView()
-        .environmentObject(ButtonsViewModel())
-}
-
-//class ButtonsViewModl: ObservableObject {
-//    @Published var buttons: [Buttons] = []
-//
-//    init(sampleData: Bool = false) {
-//        if sampleData {
-//            buttons = [
-//                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
-//                Buttons(label: "Button 2", icon: "📞", color: Color.green),
-//                Buttons(label: "Button 3", icon: "📷", color: Color.red),
-//                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
-//                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
-//                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
-//            ]
-//        }
-//    }
-//}
-
-
-// to pick color in hex format Color(hex:0x000000) used like this
-extension Color {
-    init(hex: UInt, alpha: Double = 1) {
-        self.init(
-            .sRGB,
-            red: Double((hex >> 16) & 0xff) / 255,
-            green: Double((hex >> 8) & 0xff) / 255,
-            blue: Double((hex >> 0) & 0xff) / 255,
-            opacity: alpha
-        )
+    
+    
+    #Preview {
+        RemoteView()
+            .environmentObject(ButtonsViewModel())
+            .environmentObject(UserViewModel())
     }
-}
-
-// to make the interfaces responsive to each device we use this extension
-// to use UIScreen.screenWidth for example
-extension UIScreen{
-    static let screenWidth = UIScreen.main.bounds.size.width
-    static let screenHeight = UIScreen.main.bounds.size.height
-    static let screenSize = UIScreen.main.bounds.size
-}
-extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        return stride(from: 0, to: count, by: size).map {
-            Array(self[$0 ..< Swift.min($0 + size, count)])
+    
+    
+    //class ButtonsViewModl: ObservableObject {
+    //    @Published var buttons: [Buttons] = []
+    //
+    //    init(sampleData: Bool = false) {
+    //        if sampleData {
+    //            buttons = [
+    //                Buttons(label: "Button 1", icon: "🔑", color: Color.blue),
+    //                Buttons(label: "Button 2", icon: "📞", color: Color.green),
+    //                Buttons(label: "Button 3", icon: "📷", color: Color.red),
+    //                Buttons(label: "Button 4", icon: "🎮", color: Color.purple),
+    //                Buttons(label: "Button 5", icon: "🎵", color: Color.orange),
+    //                Buttons(label: "Button 6", icon: "📁", color: Color.yellow)
+    //            ]
+    //        }
+    //    }
+    //}
+    
+    
+    // to pick color in hex format Color(hex:0x000000) used like this
+    extension Color {
+        init(hex: UInt, alpha: Double = 1) {
+            self.init(
+                .sRGB,
+                red: Double((hex >> 16) & 0xff) / 255,
+                green: Double((hex >> 8) & 0xff) / 255,
+                blue: Double((hex >> 0) & 0xff) / 255,
+                opacity: alpha
+            )
         }
     }
-}
+    
+    // to make the interfaces responsive to each device we use this extension
+    // to use UIScreen.screenWidth for example
+    extension UIScreen{
+        static let screenWidth = UIScreen.main.bounds.size.width
+        static let screenHeight = UIScreen.main.bounds.size.height
+        static let screenSize = UIScreen.main.bounds.size
+    }
+    extension Array {
+        func chunked(into size: Int) -> [[Element]] {
+            return stride(from: 0, to: count, by: size).map {
+                Array(self[$0 ..< Swift.min($0 + size, count)])
+            }
+        }
+    }
+    
+

@@ -20,6 +20,7 @@ class UserViewModel: ObservableObject {
     
     @State var roles: [String] = ["Assistant", "Reciver"]
     @Published var selectedRole: String = ""
+    @Published var assistantRecordID: CKRecord.ID? // This should hold the assistant's record ID
 
     
     
@@ -470,14 +471,90 @@ class UserViewModel: ObservableObject {
                 }
             }
         }
+
+        func saveDeviceToken(token: String, completion: @escaping (Bool) -> Void) {
+            // Assume the current user is already fetched.
+            guard let currentUserId = Auth.auth().currentUser?.uid else {
+                completion(false)
+                return
+            }
+
+            let predicate = NSPredicate(format: "userId == %@", currentUserId)
+            let query = CKQuery(recordType: "User", predicate: predicate)
+
+            database.perform(query, inZoneWith: nil) { records, error in
+                if let error = error {
+                    print("Error fetching user: \(error.localizedDescription)")
+                    completion(false)
+                    return
+                }
+
+                guard let record = records?.first else {
+                    print("User not found.")
+                    completion(false)
+                    return
+                }
+
+                record["deviceToken"] = token as CKRecordValue
+                self.database.save(record) { _, saveError in
+                    if let saveError = saveError {
+                        print("Error saving device token: \(saveError.localizedDescription)")
+                        completion(false)
+                    } else {
+                        completion(true)
+                    }
+                }
+            }
+        }
     
+    func validateRelationship(senderId: CKRecord.ID, receiverId: CKRecord.ID, completion: @escaping (Bool) -> Void) {
+        let predicate = NSPredicate(format: "(userId_1 == %@ AND userId_2 == %@) OR (userId_1 == %@ AND userId_2 == %@)", senderId, receiverId, receiverId, senderId)
+        let query = CKQuery(recordType: "members", predicate: predicate)
+
+        database.perform(query, inZoneWith: nil) { results, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error validating relationship: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    completion(!(results?.isEmpty ?? true))
+                }
+            }
+        }
+    }
+
     
- 
+
+    
+    func fetchDeviceToken(forUserId userId: CKRecord.ID, completion: @escaping (String?) -> Void) {
+        database.fetch(withRecordID: userId) { record, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error fetching device token: \(error.localizedDescription)")
+                    completion(nil)
+                } else if let record = record, let deviceToken = record["deviceToken"] as? String {
+                    completion(deviceToken)
+                } else {
+                    completion(nil)
+                }
+            }
+        }
+    }
+    
+    func sendNotification(to deviceToken: String, message: String) {
+        // Simulating a notification payload
+        print("Sending notification to \(deviceToken): \(message)")
+        
+        // Backend integration or direct APNs connection should go here.
+    }
+
    
     
     
     
-    
+
+
+  
     
     
     

@@ -11,7 +11,7 @@ struct Onboarding_1: View {
     
     @State private var bool = false
     @State private var bool2 = false
-
+    
     
     var body: some View {
         
@@ -43,8 +43,8 @@ struct Onboarding_1: View {
                 
                 Text("Customize Support")
                     .font(Font.custom("Tajawal-Bold", size: 40))
-
-                    
+                
+                
                 
                 // Adding the GIFImage in the center
                 GIFImage(name: "wheelchair")
@@ -56,8 +56,8 @@ struct Onboarding_1: View {
                     .font(Font.custom("Tajawal-Bold", size: 22))
                     .padding(.horizontal)
                     .multilineTextAlignment(.center) // Center alignment
-
-                    
+                
+                
                 HStack(){
                     Spacer()
                     
@@ -83,17 +83,14 @@ struct Onboarding_1: View {
                     
                 }
                 .padding(.top, 70)
-                    
+                
                 
                 Spacer()
             }
-        }
-        
-        
-        
+        }   
     }
-    
 }
+
 
 
 
