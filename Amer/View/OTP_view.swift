@@ -9,11 +9,11 @@ import SwiftUI
 import FirebaseAuth
 
 struct OTP_view: View {
-//    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
+    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
 //    @StateObject var buttonsVM = ButtonsViewModel()
     
     @EnvironmentObject var buttonsVM: ButtonsViewModel
-    @EnvironmentObject var userVM: UserViewModel
+//    @EnvironmentObject var userVM: UserViewModel
     
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
     @FocusState private var focusedIndex: Int? // Tracks which text field is focused
@@ -152,7 +152,7 @@ struct OTP_view: View {
                 .padding()
                 .fullScreenCover(isPresented: $isAuthenticated) {
                     RemoteView()
-                        .environmentObject(buttonsVM)
+                        
                 }
                 .disabled(isLoading || otp.joined().count < 6)
             }
