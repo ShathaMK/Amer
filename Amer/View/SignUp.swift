@@ -12,6 +12,7 @@ import Combine
 
 struct SignUp: View {
     @StateObject var userVM = UserViewModel()
+//    @EnvironmentObject var userVM: UserViewModel
     @State private var isExpanded: Bool = false // Dropdown state
     @State private var isExpanded2: Bool = false // Sheet state
     @State private var isShowingOTPView = false
@@ -207,6 +208,7 @@ struct SignUp: View {
                 if userVM.errorMessage == "User already exists. Redirecting to login..." {
                     LoginSignupView(selectedTab: 1)
                 } else {
+//                    OTP_view()
                     OTP_view(userVM: userVM)
                 }
             }
@@ -230,4 +232,5 @@ struct SignUp: View {
 
 #Preview {
     SignUp()
+//        .environmentObject(UserViewModel())
 }

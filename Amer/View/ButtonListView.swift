@@ -180,4 +180,7 @@ struct ButtonView: View {
 // MARK: - Preview
 #Preview {
     ButtonListView()
+//        .environmentObject(ButtonsViewModel())
+//        .environmentObject(UserViewModel())
+    
 }

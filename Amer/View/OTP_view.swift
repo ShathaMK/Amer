@@ -9,11 +9,11 @@ import SwiftUI
 import FirebaseAuth
 
 struct OTP_view: View {
-    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
+//    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
     @StateObject var buttonsVM = ButtonsViewModel()
     
-//    @EnvironmentObject var buttonsVM = ButtonsViewModel
-//    @EnvironmentObject var userVM = UserViewModel
+//    @EnvironmentObject var buttonsVM : ButtonsViewModel
+    @EnvironmentObject var userVM : UserViewModel
     
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
     @FocusState private var focusedIndex: Int? // Tracks which text field is focused
@@ -77,11 +77,11 @@ struct OTP_view: View {
                                 .stroke(focusedIndex == index ? Color("ColorBlue") : Color.gray.opacity(0.5), lineWidth: 2)
                         )
                         .focused($focusedIndex, equals: index)
-                        .onTapGesture {
-                            userVM.hideKeyboard()
-                            userVM.triggerHapticFeedback()
-                        }
+                        
                     }
+                }
+                .onTapGesture {
+                    userVM.hideKeyboard()
                 }
 
                 Spacer()
@@ -176,16 +176,27 @@ struct OTP_view: View {
                 }
             }
         }
+        .onTapGesture {
+            userVM.hideKeyboard()
+        }
         .onAppear {
             focusedIndex = 0
             userVM.startResendTimer()
         }
+        
+        
     }
 }
 
-struct OTPView_Previews: PreviewProvider {
-    static var previews: some View {
-        OTP_view()
-            .environmentObject(UserViewModel()) 
-    }
+//struct OTPView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OTP_view()
+//            .environmentObject(UserViewModel()) 
+//    }
+//}
+
+#Preview {
+    OTP_view()
+//        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
 }

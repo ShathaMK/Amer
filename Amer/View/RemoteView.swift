@@ -6,13 +6,13 @@ import SwiftUI
 
 struct RemoteView: View {
     @EnvironmentObject var vm: ButtonsViewModel
-    @StateObject private var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
     //    let sender: User
     //    let receiver: User
     // @enviromentobject for userviewmodel to take the user name
     let maxItems = 9
     
-    
+    // MARK: - the notification sending process
     func scheduleLocalNotification() {
         let content = UNMutableNotificationContent()
         content.title = "Test Notification"
@@ -221,11 +221,7 @@ struct RemoteView: View {
 }
     
     
-    #Preview {
-        RemoteView()
-            .environmentObject(ButtonsViewModel())
-            .environmentObject(UserViewModel())
-    }
+
     
     
     //class ButtonsViewModl: ObservableObject {
@@ -275,3 +271,8 @@ struct RemoteView: View {
     }
     
 
+#Preview {
+    RemoteView()
+        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
+}

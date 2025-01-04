@@ -9,20 +9,26 @@ import SwiftUI
 
 @main
 struct AmerApp: App {
-    @StateObject private var viewModel = ButtonsViewModel()
-    @StateObject private var userVM = UserViewModel()
-    @StateObject private var memberVM = MembersViewModel()
+//    @StateObject private var viewModel = ButtonsViewModel()
+//    @StateObject private var userVM = UserViewModel()
+//    @StateObject private var memberVM = MembersViewModel()
 //    @StateObject private var noteVM = NotificationViewModel()
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+        @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     var body: some Scene {
         WindowGroup {
-            Onboarding_1()
-                .environmentObject(viewModel) // Pass ButtonsViewModel
-                .environmentObject(userVM) // Pass UserViewModel
-                .environmentObject(memberVM) // Pass MembersViewModel
-                // .environmentObject(noteVM) 
+            if hasSeenOnboarding {
+                SignUp()
+                    .environmentObject(ButtonsViewModel())
+                    .environmentObject(UserViewModel())
+            } else {
+                Onboarding_1()
+                    .environmentObject(ButtonsViewModel())
+                    .environmentObject(UserViewModel())
+            }
         }
     }
 }
+

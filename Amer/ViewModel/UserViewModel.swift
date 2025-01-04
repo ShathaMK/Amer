@@ -15,7 +15,6 @@ import Combine
 class UserViewModel: ObservableObject {
     
     @Published var name: String = ""
-    @Published var codePhone: String = ""
     @Published var phoneNumber: String = ""
     
     @State var roles: [String] = ["Assistant", "Reciver"]
@@ -36,10 +35,21 @@ class UserViewModel: ObservableObject {
 
     private let database = CKContainer.default().publicCloudDatabase
     
+    
+    
     init() {
         selectedCountry = Country(id: 0, name: "Saudi Arabia", flag: "🇸🇦", code: "+966")
         loadCountries()
+        startKeyboardObserver()
     }
+    
+    
+    
+    
+    
+    // =======================================================
+    // MARK: - country json file decoding
+    // =======================================================
     
     //MARK: - Filtered Countries Based on Search
     
@@ -72,20 +82,45 @@ class UserViewModel: ObservableObject {
     }
     
     
-     func updatePhoneNumber() {
-        phoneNumber = (selectedCountry?.code ?? "") + codePhone
-    }
     
-    
-    
+    // =======================================================
+    // MARK: - END country json file decoding
+    // =======================================================
     
 
+    
+    // =======================================================
+    // MARK: - sign up process evaluation
+    // =======================================================
+    
     // MARK: - checkUserExists
     
+//    func checkUserExists(completion: @escaping (Bool, Error?) -> Void) {
+//        let phoneNumberCode = selectedCountry!.code + phoneNumber
+//        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
+//        let query = CKQuery(recordType: "User", predicate: predicate)
+//        
+//        print(phoneNumberCode)
+//        
+//        database.perform(query, inZoneWith: nil) { records, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    completion(false, error)
+//                } else if let records = records, !records.isEmpty {
+//                    completion(true, nil)
+//                } else {
+//                    completion(false, nil)
+//                }
+//            }
+//        }
+//    }
 
+    
     func checkUserExists(completion: @escaping (Bool, Error?) -> Void) {
-        let phoneNumberCode = selectedCountry!.code + phoneNumber
-        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
+        let fullPhoneNumber = constructFullPhoneNumber(phoneNumber)
+        print("DEBUG: Checking user existence for phone number: \(fullPhoneNumber)")
+        
+        let predicate = NSPredicate(format: "phoneNumber == %@", fullPhoneNumber)
         let query = CKQuery(recordType: "User", predicate: predicate)
         
         database.perform(query, inZoneWith: nil) { records, error in
@@ -100,7 +135,6 @@ class UserViewModel: ObservableObject {
             }
         }
     }
-
     
     
     // MARK: -  saving the user information in sign up process
@@ -131,12 +165,46 @@ class UserViewModel: ObservableObject {
     
     
     
-    // MARK: - Fetch User Data
+    // =======================================================
+    // MARK: - END sign up process evaluation
+    // =======================================================
+    
+    
+    
+    
+    // =======================================================
+    // MARK: - User data mining
+    // =======================================================
+    
+    private func constructFullPhoneNumber(_ phoneNumber: String) -> String {
+        return (selectedCountry?.code ?? defaultCountry.code) + phoneNumber
+    }
+    
+    
+    private func fetchUserRecord(phoneNumber: String, completion: @escaping (CKRecord?, Error?) -> Void) {
+        print("DEBUG: Fetching record for phone number: \(phoneNumber)")
+        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
+        let query = CKQuery(recordType: "User", predicate: predicate)
+        
+        database.perform(query, inZoneWith: nil) { records, error in
+            if let error = error {
+                print("DEBUG: Error during query: \(error.localizedDescription)")
+            }
+            if let records = records, !records.isEmpty {
+                print("DEBUG: Found \(records.count) record(s)")
+            } else {
+                print("DEBUG: No records found for \(phoneNumber)")
+            }
+            completion(records?.first, error)
+        }
+    }
+    
+    
     func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
-//        let phoneNumberCode = selectedCountry!.code + phoneNumber
-        print("Fetching user data for exact phone number: \(phoneNumber)")
+        let fullPhoneNumber = constructFullPhoneNumber(phoneNumber)
+        print("Fetching user data for exact phone number: \(phoneNumber) or \(fullPhoneNumber)")
 
-        fetchUserRecord(phoneNumberCode: phoneNumber) { [weak self] record, error in
+        fetchUserRecord(phoneNumber: fullPhoneNumber) { [weak self] record, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
@@ -147,23 +215,22 @@ class UserViewModel: ObservableObject {
                 
                 guard let record = record else {
                     self?.errorMessage = "User not found."
-                    print("No user data found for phone number: \(phoneNumber)")
+                    print("No user data found for phone number: \(phoneNumber) or \(fullPhoneNumber)")
                     completion(false)
                     return
                 }
                 
                 // Populate ViewModel with fetched data
                 self?.populateUserData(from: record)
-                print("User data fetched successfully for \(phoneNumber)")
+                print("User data fetched successfully for \(fullPhoneNumber)")
                 completion(true)
             }
         }
     }
-
-    // MARK: - Verify Logged-In User and Fetch Data
+    
+    
     func fetchLoggedInUserData(completion: @escaping (Bool) -> Void) {
-        // Combine country code and phone number
-        let countryCode = selectedCountry?.code ?? defaultCountry.code + phoneNumber
+        let fullPhoneNumber = constructFullPhoneNumber(phoneNumber)
         
         guard !phoneNumber.isEmpty else {
             errorMessage = "Phone number is missing."
@@ -172,10 +239,9 @@ class UserViewModel: ObservableObject {
             return
         }
         
-        let phoneNumberCode = countryCode + phoneNumber
-        print("Fetching user data for phone number: \(phoneNumberCode)")
+        print("Fetching user data for phone number: \(fullPhoneNumber)")
 
-        fetchUserRecord(phoneNumberCode: phoneNumberCode) { [weak self] record, error in
+        fetchUserRecord(phoneNumber: fullPhoneNumber) { [weak self] record, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
@@ -186,35 +252,115 @@ class UserViewModel: ObservableObject {
                 
                 guard let record = record else {
                     self?.errorMessage = "User not found."
-                    print("No user data found for phone number: \(phoneNumberCode)")
+                    print("No user data found for phone number: \(fullPhoneNumber)")
                     completion(false)
                     return
                 }
                 
                 // Populate ViewModel with fetched data
                 self?.populateUserData(from: record)
-                print("User data fetched successfully for \(phoneNumberCode)")
+                print("User data fetched successfully for \(fullPhoneNumber)")
                 completion(true)
             }
         }
     }
-
-    // MARK: - Helper Method to Fetch User Record
-    private func fetchUserRecord(phoneNumberCode: String, completion: @escaping (CKRecord?, Error?) -> Void) {
-        // Create a predicate to match the exact phone number
-        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
-        let query = CKQuery(recordType: "User", predicate: predicate)
-        
-        database.perform(query, inZoneWith: nil) { records, error in
-            completion(records?.first, error)
-        }
-    }
-
-    // MARK: - Helper Method to Populate ViewModel with User Data
+    
+    
+    
+    
+    // MARK: - Fetch User Data
+    
+//     func updatePhoneNumber() {
+//         var nonsence = selectedCountry!.code + phoneNumber
+//         print(nonsence + "this is what was bothring me ")
+//    }
+//    
+//    
+//    
+//    func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
+//        let phoneNumberCode = selectedCountry!.code + phoneNumber
+//        print("Fetching user data for exact phone number: \(phoneNumber) or \(phoneNumberCode)")
+//
+//        fetchUserRecord(phoneNumber: phoneNumberCode) { [weak self] record, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
+//                    print("Error fetching user data: \(error.localizedDescription)")
+//                    completion(false)
+//                    return
+//                }
+//                
+//                guard let record = record else {
+//                    self?.errorMessage = "User not found."
+//                    print("No user data found for phone number: \(phoneNumber) or \(phoneNumberCode) ")
+//                    completion(false)
+//                    return
+//                }
+//                
+//                // Populate ViewModel with fetched data
+//                self?.populateUserData(from: record)
+//                print("User data fetched successfully for \(phoneNumber)")
+//                completion(true)
+//            }
+//        }
+//    }
+//
+//    // MARK: - Verify Logged-In User and Fetch Data
+//    func fetchLoggedInUserData(completion: @escaping (Bool) -> Void) {
+//        // Combine country code and phone number
+//        let phoneNumberCode = selectedCountry!.code + phoneNumber
+//        
+//        guard !phoneNumber.isEmpty else {
+//            errorMessage = "Phone number is missing."
+//            print("Error: Phone number is missing.")
+//            completion(false)
+//            return
+//        }
+//        
+//    
+//        print("Fetching user data for phone number: \(phoneNumberCode)")
+//
+//        fetchUserRecord(phoneNumber: phoneNumberCode) { [weak self] record, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
+//                    print("Error fetching user data: \(error.localizedDescription)")
+//                    completion(false)
+//                    return
+//                }
+//                
+//                guard let record = record else {
+//                    self?.errorMessage = "User not found."
+//                    print("No user data found for phone number: \(phoneNumberCode)")
+//                    completion(false)
+//                    return
+//                }
+//                
+//                // Populate ViewModel with fetched data
+//                self?.populateUserData(from: record)
+//                print("User data fetched successfully for \(phoneNumberCode)")
+//                completion(true)
+//            }
+//        }
+//    }
+//
+//    // MARK: - Helper Method to Fetch User Record
+//    private func fetchUserRecord(phoneNumber: String, completion: @escaping (CKRecord?, Error?) -> Void) {
+//        let phoneNumberCode = selectedCountry!.code + phoneNumber
+//        // Create a predicate to match the exact phone number
+//        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
+//        let query = CKQuery(recordType: "User", predicate: predicate)
+//        
+//        database.perform(query, inZoneWith: nil) { records, error in
+//            completion(records?.first, error)
+//        }
+//    }
+//
+//    // MARK: - Helper Method to Populate ViewModel with User Data
     private func populateUserData(from record: CKRecord) {
         self.name = record["name"] as? String ?? "Unknown"
         self.phoneNumber = record["phoneNumber"] as? String ?? "Unknown"
-        self.selectedRole = record["role"] as? String ?? "Reciver"
+        self.selectedRole = record["role"] as? String ?? " "
         self.fontSize = record["fontSize"] as? Double ?? 20.0
         self.isHapticsEnabled = record["isHapticsEnabled"] as? Bool ?? true
         
@@ -251,7 +397,10 @@ class UserViewModel: ObservableObject {
     
     
     
-    //MARK: - settings page
+    // =======================================================
+    // MARK: - settings page
+    // =======================================================
+    
     @Published var fontSize: Double = 20.0 // Default font size
     @Published var isHapticsEnabled: Bool = true // Default haptics setting
     
@@ -372,23 +521,58 @@ class UserViewModel: ObservableObject {
 
     
     
+    // =======================================================
+    // MARK: -  END settings page
+    // =======================================================
+    
+    
    
 
     
+    // =======================================================
+    // MARK: -  Keyboard edits
+    // =======================================================
    
     // MARK: - Dismiss Keyboard
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
+    // to help not shiftin elements when the keyboard shows
+    
+    @Published var keyboardHeight: CGFloat = 0
+    private var cancellable: AnyCancellable?
+    
+    deinit {
+        cancellable?.cancel() // Cancel the subscription when UserViewModel is deinitialized
+    }
+    
+    // MARK: - Start Keyboard Observer
+    private func startKeyboardObserver() {
+        cancellable = NotificationCenter.default
+            .publisher(for: UIResponder.keyboardWillChangeFrameNotification)
+            .merge(with: NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification))
+            .compactMap { notification -> CGFloat? in
+                if let frameEnd = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                    return frameEnd.height
+                }
+                return 0
+            }
+            .assign(to: \.keyboardHeight, on: self)
+    }
     
     
+    // =======================================================
+    // MARK: - END Keyboard edits
+    // =======================================================
     
     
+
     
-    // MARK: - this is the otp part
     
-    
+    // =======================================================
+    // MARK: -  this is the otp part
+    // =======================================================
     
     // MARK: - Start Resend Timer
     
@@ -492,4 +676,21 @@ class UserViewModel: ObservableObject {
     
     
     
+}
+
+// MARK: - for the onbarding pages to only start for new users
+
+extension UserDefaults {
+    private enum Keys {
+        static let hasSeenOnboarding = "hasSeenOnboarding"
+    }
+    
+    var hasSeenOnboarding: Bool {
+        get {
+            return bool(forKey: Keys.hasSeenOnboarding)
+        }
+        set {
+            set(newValue, forKey: Keys.hasSeenOnboarding)
+        }
+    }
 }

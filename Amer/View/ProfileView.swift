@@ -1,17 +1,10 @@
-//
-//  ProfileView.swift
-//  Amer
-//
-//  Created by Shaima Alhussain on 22/06/1446 AH.
-//
-
 import SwiftUI
 import UIKit
 
 struct ProfileView: View {
     @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
-//    @EnvironmentObject var userVM = UserViewModel
     @Environment(\.presentationMode) var presentationMode // To dismiss the view
+    @State private var showErrorAlert = false // State to control alert visibility
 
     var body: some View {
         NavigationStack {
@@ -32,18 +25,17 @@ struct ProfileView: View {
 
                         Text(userVM.phoneNumber.isEmpty ? "Loading..." : userVM.phoneNumber)
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
-
                             .foregroundStyle(Color("FontColor"))
-
                     }
                     .onAppear {
-                        let phoneNumberCode = userVM.selectedCountry?.code ?? userVM.defaultCountry.code + userVM.phoneNumber
+                        let phoneNumberCode = userVM.selectedCountry!.code + userVM.phoneNumber
                         print("Phone Number Code for Fetching: \(phoneNumberCode)")
                         userVM.fetchUserData(forPhoneNumber: phoneNumberCode) { success in
                             if success {
                                 print("User data fetched successfully")
                             } else {
                                 print("Failed to fetch user data")
+                                showErrorAlert = true // Show alert on failure
                             }
                         }
                     }
@@ -109,27 +101,22 @@ struct ProfileView: View {
                     
                     Spacer()
                     
-
                     // Members Navigation
                     NavigationLink(destination: MembersView()) {
                         HStack {
                             Text("Members")
                                 .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
-
                                 .foregroundStyle(Color.white)
                             
                             Spacer()
                             
                             Image(systemName: "person.2.fill")
-                                .foregroundStyle(Color.white)        
+                                .foregroundStyle(Color.white)
                         }
                         .padding()
-
                     }
                     .buttonStyle(GreenButton())
                     .padding(.horizontal)
-                    
-
                     
                     Spacer()
                         .frame(height: userVM.scaledFont(baseSize: 50))
@@ -182,10 +169,19 @@ struct ProfileView: View {
                 }
             }
         }
+        // Alert to show errors
+        .alert(isPresented: $showErrorAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(userVM.errorMessage ?? "An unknown error occurred."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
 }
 
 #Preview {
     ProfileView()
+        .environmentObject(ButtonsViewModel())
         .environmentObject(UserViewModel())
 }
