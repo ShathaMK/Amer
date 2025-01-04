@@ -5,7 +5,7 @@ import SwiftUI
 
 
 struct RemoteView: View {
-    @EnvironmentObject var vm: ButtonsViewModel
+    @EnvironmentObject var buttonsVM: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel
     //    let sender: User
     //    let receiver: User
@@ -59,7 +59,7 @@ struct RemoteView: View {
                     VStack(spacing:32) {
                         
                         // list only active buttons if they exist
-                        let activeButtons = vm.buttons.filter { !$0.isDisabled }
+                        let activeButtons = buttonsVM.buttons.filter { !$0.isDisabled }
                         
                         if (!activeButtons.isEmpty) {
                             

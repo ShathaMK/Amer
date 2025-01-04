@@ -120,7 +120,7 @@ struct LogIn: View {
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $isShowingOTPView) {
 //                OTP_view()
-                OTP_view(userVM: userVM)
+                OTP_view(userVM: _userVM)
             }
             .fullScreenCover(isPresented: $isShowingSignupView) {
                 LoginSignupView(selectedTab: 0) // Navigate to Signup Tab
@@ -141,4 +141,6 @@ struct LogIn: View {
 
 #Preview {
     LogIn()
+        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
 }

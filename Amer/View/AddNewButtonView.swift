@@ -87,7 +87,7 @@ extension UITextField {
     
     
 struct AddNewButtonView: View {
-    @EnvironmentObject var vm: ButtonsViewModel// Make sure this is injected into the view
+    @EnvironmentObject var buttonsVM: ButtonsViewModel// Make sure this is injected into the view
     @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State private var ButtonLabel: String = ""
     @State private var showPopUp = false
@@ -117,14 +117,14 @@ struct AddNewButtonView: View {
                             Rectangle()
                                 .frame(width: 106, height: 106)
                                 .cornerRadius(20)
-                                .foregroundStyle(vm.selectedColor)
+                                .foregroundStyle(buttonsVM.selectedColor)
                                 .shadow(radius: 4, y: 4)
                             
-                            Text("\(vm.selectedIcon)")
+                            Text("\(buttonsVM.selectedIcon)")
                                 .font(.system(size: userVM.scaledFont(baseSize: 54))) // Dynamic font scaling
                         }
                         
-                        Text("\(vm.currentLabel)")
+                        Text("\(buttonsVM.currentLabel)")
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
                             .foregroundStyle(Color("FontColor"))
                     }
@@ -137,7 +137,7 @@ struct AddNewButtonView: View {
                             .padding(.trailing, 180)
                         
                         ZStack {
-                            TextField("Enter Button Label", text: $vm.currentLabel)
+                            TextField("Enter Button Label", text: $buttonsVM.currentLabel)
                                 .padding()
                                 .frame(width: 290, height: 45)
                         }
@@ -156,7 +156,7 @@ struct AddNewButtonView: View {
                                 .frame(width: 24, height: 24)
                                 .padding(.leading, 230)
                             
-                            EmojiTextFieldWrapper(text: $vm.selectedIcon)
+                            EmojiTextFieldWrapper(text: $buttonsVM.selectedIcon)
                                 .padding()
                                 .frame(width: 290, height: 45)
                                 .cornerRadius(4)
@@ -172,7 +172,7 @@ struct AddNewButtonView: View {
                     .padding()
                     
                     HStack {
-                        ColorPicker("Button Color", selection: $vm.selectedColor)
+                        ColorPicker("Button Color", selection: $buttonsVM.selectedColor)
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
                             .foregroundStyle(Color("FontColor"))
                             .padding(.trailing, 36)
@@ -184,7 +184,7 @@ struct AddNewButtonView: View {
                         userVM.triggerHapticFeedback() // Trigger haptic feedback
                         
                         // Check if button details are not empty before saving
-                        guard !vm.currentLabel.isEmpty, !vm.selectedIcon.isEmpty else {
+                        guard !buttonsVM.currentLabel.isEmpty, !buttonsVM.selectedIcon.isEmpty else {
                             print("Button details can't be empty")
                             return
                         }
@@ -192,17 +192,17 @@ struct AddNewButtonView: View {
                         // Create a new button instance with the details
                         let newButton = Buttons(
                             id: buttonToEdit?.id ?? CKRecord.ID(), // Use CKRecord.ID for CloudKit compatibility
-                            label: vm.currentLabel,
-                            icon: vm.selectedIcon,
-                            color: vm.selectedColor,
+                            label: buttonsVM.currentLabel,
+                            icon: buttonsVM.selectedIcon,
+                            color: buttonsVM.selectedColor,
                             isDisabled: false
                         )
                         
                         // Check if editing an existing button or adding a new one
                         if let buttonToEdit = buttonToEdit {
-                            vm.editButton(oldButton: buttonToEdit, with: newButton)
+                            buttonsVM.editButton(oldButton: buttonToEdit, with: newButton)
                         } else {
-                            vm.addButton(newButton: newButton)
+                            buttonsVM.addButton(newButton: newButton)
                         }
                         
                         print("Saved button: \(newButton)")
@@ -220,7 +220,8 @@ struct AddNewButtonView: View {
                             .padding(.horizontal, 20)
                     }
                     .navigationDestination(isPresented: $isNavigating) {
-                        RemoteView(vm: _vm).navigationBarBackButtonHidden(true)
+                        RemoteView()
+//                        RemoteView(buttonsVM: buttonsVM)
                     }
                     
                     NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)) {
@@ -242,7 +243,7 @@ struct AddNewButtonView: View {
         }
         .onAppear {
             if buttonToEdit == nil {
-                vm.resetCurrentButton()
+                buttonsVM.resetCurrentButton()
             }
         }
         
@@ -253,4 +254,6 @@ struct AddNewButtonView: View {
 
 #Preview {
     AddNewButtonView()
+        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
 }

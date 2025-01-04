@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct Onboarding_2: View {
-    @StateObject var userVM = UserViewModel() // Dynamic font scaling and haptics
+//    @StateObject var userVM = UserViewModel() // Dynamic font scaling and haptics
     
-//    @EnvironmentObject var userVM = UserViewModel
+    @EnvironmentObject var userVM: UserViewModel
     @State private var bool = false
     @State private var bool2 = false
     
@@ -83,4 +83,5 @@ struct Onboarding_2: View {
 
 #Preview {
     Onboarding_2()
+//        .environmentObject(UserViewModel())
 }

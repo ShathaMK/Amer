@@ -10,10 +10,10 @@ import FirebaseAuth
 
 struct OTP_view: View {
 //    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
-    @StateObject var buttonsVM = ButtonsViewModel()
+//    @StateObject var buttonsVM = ButtonsViewModel()
     
-//    @EnvironmentObject var buttonsVM : ButtonsViewModel
-    @EnvironmentObject var userVM : UserViewModel
+    @EnvironmentObject var buttonsVM: ButtonsViewModel
+    @EnvironmentObject var userVM: UserViewModel
     
     @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
     @FocusState private var focusedIndex: Int? // Tracks which text field is focused
@@ -176,13 +176,14 @@ struct OTP_view: View {
                 }
             }
         }
-        .onTapGesture {
-            userVM.hideKeyboard()
-        }
         .onAppear {
             focusedIndex = 0
             userVM.startResendTimer()
         }
+        .onTapGesture {
+            userVM.hideKeyboard()
+        }
+        
         
         
     }
@@ -197,6 +198,6 @@ struct OTP_view: View {
 
 #Preview {
     OTP_view()
-//        .environmentObject(ButtonsViewModel())
+        .environmentObject(ButtonsViewModel())
         .environmentObject(UserViewModel())
 }

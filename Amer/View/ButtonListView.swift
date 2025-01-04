@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ButtonListView: View {
-    @EnvironmentObject var vm: ButtonsViewModel
+    @EnvironmentObject var buttonsVM: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State var navigateToEdit = false
     @State var selectedButton: Buttons? // Track selected button for editing
@@ -13,14 +13,14 @@ struct ButtonListView: View {
             VStack(spacing: 20) {
                 SectionHeader(title: NSLocalizedString("Active", comment: "Active section title"), color: Color("DarkGreen"))
                 
-                ButtonGrid(buttons: vm.buttons.filter { !$0.isDisabled }) { button in
+                ButtonGrid(buttons: buttonsVM.buttons.filter { !$0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
                 .padding()
                 
                 SectionHeader(title: NSLocalizedString("Disabled", comment: "Disabled section title"), color: .red)
                 
-                ButtonGrid(buttons: vm.buttons.filter { $0.isDisabled }) { button in
+                ButtonGrid(buttons: buttonsVM.buttons.filter { $0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
                 .padding()
@@ -54,7 +54,8 @@ struct ButtonListView: View {
             }
             .navigationDestination(isPresented: $navigateToEdit) {
                 if let buttonToEdit = selectedButton {
-                    AddNewButtonView(vm: _vm, buttonToEdit: buttonToEdit)
+//                    AddNewButtonView( buttonToEdit: buttonToEdit)
+                    AddNewButtonView(buttonsVM: _buttonsVM, buttonToEdit: buttonToEdit)
                 }
             }
         }
@@ -114,7 +115,7 @@ struct ButtonView: View {
     let button: Buttons
     let action: (Buttons) -> Void
 
-    @EnvironmentObject var vm: ButtonsViewModel
+    @EnvironmentObject var buttonsVM: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State private var navigateToEdit = false
     @State private var showingAlert = false
@@ -148,7 +149,7 @@ struct ButtonView: View {
             }
             Button {
                 userVM.triggerHapticFeedback() // Trigger haptic feedback
-                vm.toggleDisableButton(button) // Toggle disable status
+                buttonsVM.toggleDisableButton(button) // Toggle disable status
                 print("Disable \(button.label)")
             } label: {
                 Label(button.isDisabled ? "Enable" : "Disable", systemImage: button.isDisabled ? "lock.open" : "lock")
@@ -166,13 +167,14 @@ struct ButtonView: View {
                 title: Text("Delete a Button"),
                 message: Text("Are you sure you want to delete this button?"),
                 primaryButton: .destructive(Text("Delete")) {
-                    vm.deleteButton(button)
+                    buttonsVM.deleteButton(button)
                 },
                 secondaryButton: .cancel()
             )
         }
         .navigationDestination(isPresented: $navigateToEdit) {
-            AddNewButtonView(vm: _vm, buttonToEdit: button)
+//            AddNewButtonView( buttonToEdit: button)
+            AddNewButtonView(buttonsVM: _buttonsVM, buttonToEdit: button)
         }
     }
 }
@@ -180,7 +182,8 @@ struct ButtonView: View {
 // MARK: - Preview
 #Preview {
     ButtonListView()
-//        .environmentObject(ButtonsViewModel())
-//        .environmentObject(UserViewModel())
+        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
+        .environmentObject(MembersViewModel())
     
 }

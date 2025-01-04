@@ -11,8 +11,8 @@ import FirebaseAuth
 import Combine
 
 struct SignUp: View {
-    @StateObject var userVM = UserViewModel()
-//    @EnvironmentObject var userVM: UserViewModel
+//    @StateObject var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
     @State private var isExpanded: Bool = false // Dropdown state
     @State private var isExpanded2: Bool = false // Sheet state
     @State private var isShowingOTPView = false
@@ -191,13 +191,6 @@ struct SignUp: View {
                 Text("Send")
                     .font(Font.custom("Tajawal-Medium", size: userVM.scaledFont(baseSize: 20)))
                     .foregroundColor(.white)
-
-            if let errorMessage = userVM.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .padding()
-            }
-            
             
           
             }
@@ -209,7 +202,7 @@ struct SignUp: View {
                     LoginSignupView(selectedTab: 1)
                 } else {
 //                    OTP_view()
-                    OTP_view(userVM: userVM)
+                    OTP_view(userVM: _userVM)
                 }
             }
 
@@ -232,5 +225,5 @@ struct SignUp: View {
 
 #Preview {
     SignUp()
-//        .environmentObject(UserViewModel())
+        .environmentObject(UserViewModel())
 }

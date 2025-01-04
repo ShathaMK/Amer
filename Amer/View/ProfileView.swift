@@ -2,7 +2,9 @@ import SwiftUI
 import UIKit
 
 struct ProfileView: View {
-    @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
+//    @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
+    @EnvironmentObject var buttonsVM: ButtonsViewModel
+    @EnvironmentObject var userVM: UserViewModel
     @Environment(\.presentationMode) var presentationMode // To dismiss the view
     @State private var showErrorAlert = false // State to control alert visibility
 

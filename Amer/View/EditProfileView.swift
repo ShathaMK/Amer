@@ -220,5 +220,7 @@ struct EditProfileView: View {
 
 #Preview {
     EditProfileView()
-//        .environmentObject(UserViewModel())
+        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
+        .environmentObject(MembersViewModel())
 }
