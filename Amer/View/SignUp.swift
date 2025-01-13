@@ -11,12 +11,14 @@ import FirebaseAuth
 import Combine
 
 struct SignUp: View {
-    @StateObject var userVM = UserViewModel()
-//    @EnvironmentObject var userVM: UserViewModel
+//    @StateObject var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
     @State private var isExpanded: Bool = false // Dropdown state
     @State private var isExpanded2: Bool = false // Sheet state
     @State private var isShowingOTPView = false
     @State private var showErrorAlert = false // To display error messages
+    
+    @State private var localPhoneNumber: String = ""
     
     var body: some View {
         VStack {
@@ -152,6 +154,7 @@ struct SignUp: View {
             // MARK: - Send Button
             Button(action: {
                 userVM.triggerHapticFeedback() // Haptic feedback
+//                userVM.phoneNumber = localPhoneNumber
                 guard !userVM.name.isEmpty, !userVM.phoneNumber.isEmpty, !userVM.selectedRole.isEmpty else {
                     userVM.errorMessage = "Please fill in all fields before proceeding."
                     showErrorAlert = true
@@ -200,15 +203,17 @@ struct SignUp: View {
             .fullScreenCover(isPresented: $isShowingOTPView) {
                 if userVM.errorMessage == "User already exists. Redirecting to login..." {
                     LoginSignupView(selectedTab: 1)
+                        .environmentObject(userVM)
                 } else {
 //                    OTP_view()
-                    OTP_view(userVM: userVM)
+//                    OTP_view(userVM: userVM)
+                    OTP_view()
+                        .environmentObject(userVM)
                 }
             }
 
             
         } // end vstack
-
         .onTapGesture {
             userVM.hideKeyboard()
         }

@@ -731,11 +731,22 @@
       }
     },
     "OTP will be sent to this number %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "رمز التحقق تم إرساله إلى هذا الرقم %@"
+          }
+        }
+      }
+    },
+    "OTP will be sent to this number %@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "OTP will be sent to this number %1$@%2$@"
           }
         }
       }

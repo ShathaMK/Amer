@@ -17,7 +17,7 @@ struct ProfileView: View {
                 
                 VStack {
                     Spacer()
-                        .frame(height: userVM.scaledFont(baseSize: 64))
+                        .frame(height: 70)
                     
                     // User Info Section
                     VStack {
@@ -30,16 +30,8 @@ struct ProfileView: View {
                             .foregroundStyle(Color("FontColor"))
                     }
                     .onAppear {
-                        let phoneNumberCode = userVM.selectedCountry!.code + userVM.phoneNumber
-                        print("Phone Number Code for Fetching: \(phoneNumberCode)")
-                        userVM.fetchUserData(forPhoneNumber: phoneNumberCode) { success in
-                            if success {
-                                print("User data fetched successfully")
-                            } else {
-                                print("Failed to fetch user data")
-                                showErrorAlert = true // Show alert on failure
-                            }
-                        }
+                       
+                        
                     }
 
                     Spacer()

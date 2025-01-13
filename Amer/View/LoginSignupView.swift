@@ -11,6 +11,7 @@ import FirebaseAuth
 struct LoginSignupView: View {
 //    @StateObject var userVM = UserViewModel()
     @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var ButtonsVM: ButtonsViewModel
 
     @State var selectedTab = 0 // State to track active tab
 
@@ -69,12 +70,12 @@ struct LoginSignupView: View {
                     // Dynamic Content
                     if selectedTab == 0 {
                         SignUp() // Sign Up View
-                            .environmentObject(ButtonsViewModel())
-                            .environmentObject(UserViewModel())
+                            .environmentObject(ButtonsVM)
+                            .environmentObject(userVM)
                     } else {
                         LogIn() // Log In View
-                            .environmentObject(ButtonsViewModel())
-                            .environmentObject(UserViewModel())
+                            .environmentObject(ButtonsVM)
+                            .environmentObject(userVM)
                     }
 
                     Spacer()

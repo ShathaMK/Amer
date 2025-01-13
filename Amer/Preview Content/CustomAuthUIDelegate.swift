@@ -47,10 +47,19 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // Save device token to CloudKit for the assistant
         let tokenString = deviceToken.map { String(format: "%02x", $0) }.joined()
         print("Device token received: \(tokenString)")
-        // Assuming you have a method to save the device token in a `User` record
-        saveDeviceTokenToCloudKit(deviceToken: tokenString, phoneNumber: "549646311")
+        
+        // Save the device token in UserDefaults
+       UserDefaults.standard.set(tokenString, forKey: "deviceToken")
+       
+       // Assuming you have an instance of UserViewModel
+       let userVM = UserViewModel()
+       userVM.saveDeviceTokenToCloudKit(deviceToken: tokenString)
 
     }
+    
+    
+    
+    
     
     func application(_ application: UIApplication,
         didReceiveRemoteNotification notification: [AnyHashable : Any],
@@ -61,6 +70,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
       }
       // This notification is not auth related; it should be handled separately.
     }
+    
+    
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         if Auth.auth().canHandle(url) {
@@ -73,6 +84,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
          print("Failed to register for remote notifications: \(error)")
      }
+    
+    
+    
+    
     
     // MARK: - Foreground Notification Handling
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -96,33 +111,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler()
     }
     
-    func saveDeviceTokenToCloudKit(deviceToken: String, phoneNumber: String) {
-        let database = CKContainer.default().publicCloudDatabase
-        
-        // Query the user by phone number
-        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
-        let query = CKQuery(recordType: "User", predicate: predicate)
-        
-        database.perform(query, inZoneWith: nil) { records, error in
-            if let records = records, let userRecord = records.first {
-                userRecord["deviceToken"] = deviceToken
-                
-                // Save the updated record
-                database.save(userRecord) { _, saveError in
-                    if let saveError = saveError {
-                        print("Error saving device token: \(saveError)")
-                    } else {
-                        print("Device token successfully saved!")
-                    }
-                }
-            } else if let error = error {
-                print("Error fetching user record: \(error)")
-            }
-        }
-    }
-
-
-
+    
+ 
 
 
     

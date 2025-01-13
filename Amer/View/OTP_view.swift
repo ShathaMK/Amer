@@ -9,13 +9,13 @@ import SwiftUI
 import FirebaseAuth
 
 struct OTP_view: View {
-    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
+//    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
 //    @StateObject var buttonsVM = ButtonsViewModel()
     
     @EnvironmentObject var buttonsVM: ButtonsViewModel
-//    @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var userVM: UserViewModel
     
-    @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
+    @State var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
     @FocusState private var focusedIndex: Int? // Tracks which text field is focused
     @State private var isAuthenticated: Bool = false
     @State private var isLoading: Bool = false // Tracks OTP submission
@@ -40,7 +40,7 @@ struct OTP_view: View {
                     .frame(height: userVM.scaledFont(baseSize: 24))
 
                 // Description
-                Text("OTP will be sent to this number \(userVM.phoneNumber)")
+                Text("OTP will be sent to this number \(userVM.selectedCountry?.code ?? "")\(userVM.phoneNumber)")
                     .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16)))
                     .foregroundStyle(Color.gray)
                     .multilineTextAlignment(.center)
@@ -90,7 +90,8 @@ struct OTP_view: View {
                 
                 
                 //MARK: - Resend Button
-                Button {
+                
+                Button (action: {
                     userVM.triggerHapticFeedback()
                     if userVM.timeRemaining == 0 {
                         userVM.sendVerificationCode { success in
@@ -101,7 +102,7 @@ struct OTP_view: View {
                             }
                         }
                     }
-                } label: {
+                }){
                     Text(userVM.timeRemaining > 0
                          ? "Resend OTP in \(userVM.timeRemaining)s"
                          : "Resend OTP")
@@ -109,6 +110,7 @@ struct OTP_view: View {
                         .foregroundColor(userVM.timeRemaining > 0 ? .gray : Color("DarkGreen"))
                 }
                 .disabled(userVM.timeRemaining > 0)
+                
 
                 
                 Spacer()
@@ -123,16 +125,18 @@ struct OTP_view: View {
                 
                 
 
-                //MARK: - Submit Button
+                //MARK: - Verify Button
                 Button(action: {
                     userVM.triggerHapticFeedback()
                     isLoading = true
+                    
                     userVM.verifyCode(otp: otp) { success in
                         isLoading = false
                         if success {
                             isAuthenticated = true
                         }
                     }
+                    
                     
                 }) {
                     if isLoading {
@@ -143,20 +147,26 @@ struct OTP_view: View {
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                             .padding()
                             .foregroundColor(.white)
-                            .background(Color("DarkBlue"))
-                            .cornerRadius(8)
+                            
                     }
                 }
                 .buttonStyle(BlueButton())
                 .shadow(radius: 7, x: 0, y: 5)
                 .padding()
                 .fullScreenCover(isPresented: $isAuthenticated) {
+                    // i should add the other view here for assistant
                     RemoteView()
-                        
+                        .environmentObject(buttonsVM)
+                        .environmentObject(userVM)
                 }
                 .disabled(isLoading || otp.joined().count < 6)
+                
+                
+                
+                
+                
             }
-            .navigationBarBackButtonHidden(true)
+//            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -201,3 +211,4 @@ struct OTP_view: View {
         .environmentObject(ButtonsViewModel())
         .environmentObject(UserViewModel())
 }
+

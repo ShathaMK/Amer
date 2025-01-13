@@ -30,23 +30,23 @@ struct Onboarding_3: View {
                 Text("Your Wish is Our Command")
                     .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 40)))
                     .multilineTextAlignment(.center)
-                    .padding(.top, userVM.scaledFont(baseSize: 60))
+                    .padding(.top, 60)
 
                 // Adding the GIFImage in the center
                 GIFImage(name: "handshake")
                     .frame(width: 340, height: 292)
                     .shadow(radius: 3, x: 13, y: 0)
-                    .padding(.bottom, userVM.scaledFont(baseSize: 40))
-                    .padding(.top, userVM.scaledFont(baseSize: -30))
-                    .padding(.leading, userVM.scaledFont(baseSize: 70))
+                    .padding(.bottom, 40)
+                    .padding(.top, -30)
+                    .padding(.leading, 70)
 
                 Text("Just press the button, and help will rush to you !")
                     .font(Font.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 22)))
-                    .padding(.horizontal, userVM.scaledFont(baseSize: 30))
+                    .padding(.horizontal, 30)
                     .multilineTextAlignment(.center) // Center alignment
 
                 Spacer()
-                    .frame(height: userVM.scaledFont(baseSize: 50))
+                    .frame(height: 50)
 
                 Button("Start Now") {
                     hasSeenOnboarding = true
@@ -54,11 +54,7 @@ struct Onboarding_3: View {
                     userVM.triggerHapticFeedback() // Trigger haptic feedback on tap
                 }
                 .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: userVM.scaledFont(baseSize: 40))
-                .background(Color("ColorGreen"))
-                .cornerRadius(10)
+                .buttonStyle(LightGreenButton())
                 .shadow(radius: 7, x: 0, y: 5)
                 .padding()
                 .fullScreenCover(isPresented: $bool2) {
@@ -66,7 +62,7 @@ struct Onboarding_3: View {
                 }
 
                 Spacer()
-                    .frame(height: userVM.scaledFont(baseSize: 100))
+                    .frame(height: 100)
             }
         }
     }
@@ -74,4 +70,6 @@ struct Onboarding_3: View {
 
 #Preview {
     Onboarding_3()
+        .environmentObject(ButtonsViewModel())
+        .environmentObject(UserViewModel())
 }

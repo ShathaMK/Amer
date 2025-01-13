@@ -89,40 +89,100 @@ class UserViewModel: ObservableObject {
     
 
     
+    
+    
+    
+    
+    
+    
+    
+    // =======================================================
+    // MARK: - OTP process
+    // =======================================================
+    
+    
+    // MARK: - Send OTP
+    
+    
+    @Published var verificationCode: String = ""
+    @Published var verificationID: String?
+    @Published var isVerificationSent: Bool = false
+    @Published var isAuthenticated: Bool = false
+    
+    
+    
+    func sendVerificationCode(completion: @escaping (Bool) -> Void) {
+            let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
+            PhoneAuthProvider.provider()
+                .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
+                    DispatchQueue.main.async {
+                        if let error = error {
+                            self?.errorMessage = "Error: \(error.localizedDescription)"
+                            completion(false) // Signal failure
+                            return
+                        }
+                        self?.verificationID = verificationID
+                        self?.isVerificationSent = true
+                        self?.errorMessage = nil
+                        completion(true) // Signal success
+                    }
+                }
+        }
+        
+        
+        //MARK: -  Function to verify OTP
+            func verifyCode(otp: [String], completion: @escaping (Bool) -> Void) {
+                let otpString = otp.joined() // Combine the array into a single string
+                
+                guard let verificationID = self.verificationID else {
+                    self.errorMessage = "Verification ID is missing."
+                    completion(false)
+                    return
+                }
+
+                let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: otpString)
+
+                Auth.auth().signIn(with: credential) { [weak self] _, error in
+                    if let error = error {
+                        DispatchQueue.main.async {
+                            self?.errorMessage = "Error: \(error.localizedDescription)"
+                        }
+                        completion(false)
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        self?.isAuthenticated = true
+                        self?.errorMessage = nil
+                        completion(true)
+                    }
+                }
+            }
+    
+    
+    
+    // =======================================================
+    // MARK: - END OTP process
+    // =======================================================
+    
+    
+    
+    
+    
+    
+    
     // =======================================================
     // MARK: - sign up process evaluation
     // =======================================================
     
     // MARK: - checkUserExists
     
-//    func checkUserExists(completion: @escaping (Bool, Error?) -> Void) {
-//        let phoneNumberCode = selectedCountry!.code + phoneNumber
-//        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
-//        let query = CKQuery(recordType: "User", predicate: predicate)
-//        
-//        print(phoneNumberCode)
-//        
-//        database.perform(query, inZoneWith: nil) { records, error in
-//            DispatchQueue.main.async {
-//                if let error = error {
-//                    completion(false, error)
-//                } else if let records = records, !records.isEmpty {
-//                    completion(true, nil)
-//                } else {
-//                    completion(false, nil)
-//                }
-//            }
-//        }
-//    }
-
-    
     func checkUserExists(completion: @escaping (Bool, Error?) -> Void) {
-        let fullPhoneNumber = constructFullPhoneNumber(phoneNumber)
-        print("DEBUG: Checking user existence for phone number: \(fullPhoneNumber)")
-        
-        let predicate = NSPredicate(format: "phoneNumber == %@", fullPhoneNumber)
+        let phoneNumberCode = selectedCountry!.code + phoneNumber
+        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
         let query = CKQuery(recordType: "User", predicate: predicate)
-        
+
+        print(phoneNumberCode)
+
         database.perform(query, inZoneWith: nil) { records, error in
             DispatchQueue.main.async {
                 if let error = error {
@@ -135,21 +195,51 @@ class UserViewModel: ObservableObject {
             }
         }
     }
+
+    
+    
     
     
     // MARK: -  saving the user information in sign up process
     
-    func saveUserToCloud(completion: @escaping (Result<Void, Error>) -> Void) {
+    
+//    func saveUserToCloudKit(userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+//        let record = CKRecord(recordType: "User")
+//        record["userId"] = userId
+//        record["name"] = self.name
+//        record["phoneNumber"] = self.phoneNumber
+//        record["role"] = self.selectedRole
+//
+//        let database = CKContainer.default().publicCloudDatabase
+//        database.save(record) { _, error in
+//            if let error = error {
+//                completion(.failure(error))
+//            } else {
+//                completion(.success(()))
+//            }
+//        }
+//    }
+    
+    func saveUserToCloud( completion: @escaping (Result<Void, Error>) -> Void) {
         let phoneNumberCode = selectedCountry!.code + phoneNumber
+        let id = UUID().uuidString
+        
             guard !name.isEmpty, !phoneNumber.isEmpty, !selectedRole.isEmpty else {
                 completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "All fields are required."])))
                 return
             }
 
             let record = CKRecord(recordType: "User")
+            record["id"] = id as CKRecordValue
             record["name"] = name as CKRecordValue
             record["phoneNumber"] = phoneNumberCode as CKRecordValue
             record["role"] = selectedRole as CKRecordValue
+        
+            // Check if there's a device token available (from Firebase/APNs)
+            if let deviceToken = UserDefaults.standard.string(forKey: "deviceToken") {
+                record["deviceToken"] = deviceToken as CKRecordValue
+                print("Token \(deviceToken)")
+            }
 
             let database = CKContainer.default().publicCloudDatabase
             database.save(record) { _, error in
@@ -157,6 +247,7 @@ class UserViewModel: ObservableObject {
                     if let error = error {
                         completion(.failure(error))
                     } else {
+                        print("User record saved")
                         completion(.success(()))
                     }
                 }
@@ -171,6 +262,77 @@ class UserViewModel: ObservableObject {
     
     
     
+    func saveDeviceTokenToCloudKit(deviceToken: String) {
+        let database = CKContainer.default().publicCloudDatabase
+        let phoneNumberCode = selectedCountry?.code ?? defaultCountry.code + phoneNumber
+
+        // Query the user by phone number
+        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
+        let query = CKQuery(recordType: "User", predicate: predicate)
+        
+        database.perform(query, inZoneWith: nil) { records, error in
+            DispatchQueue.main.async {
+                if let records = records, let userRecord = records.first {
+                    userRecord["deviceToken"] = deviceToken
+                    
+                    // Save the updated record
+                    database.save(userRecord) { _, saveError in
+                        if let saveError = saveError {
+                            print("Error saving device token: \(saveError)")
+                        } else {
+                            print("Device token successfully saved!")
+                        }
+                    }
+                } else if let error = error {
+                    print("Error fetching user record: \(error)")
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
+        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
+        let query = CKQuery(recordType: "User", predicate: predicate)
+
+        database.perform(query, inZoneWith: nil) { [weak self] records, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
+                    print("Error fetching user data: \(error.localizedDescription)")
+                    completion(false)
+                    return
+                }
+                
+                guard let record = records?.first else {
+                    self?.errorMessage = "User not found."
+                    print("No user data found for phone number: \(phoneNumber)")
+                    completion(false)
+                    return
+                }
+                
+                // Update UserViewModel fields
+                self?.name = record["name"] as? String ?? "Unknown"
+                self?.phoneNumber = record["phoneNumber"] as? String ?? "Unknown"
+                self?.selectedRole = record["role"] as? String ?? "Seeker"
+                
+                print("User data fetched successfully: \(self?.name ?? "")")
+                completion(true)
+            }
+        }
+    }
+    
+    
+    func populateUserData(user: User) {
+        self.name = user.name
+        self.phoneNumber = user.phoneNumber
+        self.selectedRole = user.role
+    }
+    
+    
     
     // =======================================================
     // MARK: - User data mining
@@ -179,91 +341,7 @@ class UserViewModel: ObservableObject {
     private func constructFullPhoneNumber(_ phoneNumber: String) -> String {
         return (selectedCountry?.code ?? defaultCountry.code) + phoneNumber
     }
-    
-    
-    private func fetchUserRecord(phoneNumber: String, completion: @escaping (CKRecord?, Error?) -> Void) {
-        print("DEBUG: Fetching record for phone number: \(phoneNumber)")
-        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
-        let query = CKQuery(recordType: "User", predicate: predicate)
-        
-        database.perform(query, inZoneWith: nil) { records, error in
-            if let error = error {
-                print("DEBUG: Error during query: \(error.localizedDescription)")
-            }
-            if let records = records, !records.isEmpty {
-                print("DEBUG: Found \(records.count) record(s)")
-            } else {
-                print("DEBUG: No records found for \(phoneNumber)")
-            }
-            completion(records?.first, error)
-        }
-    }
-    
-    
-    func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
-        let fullPhoneNumber = constructFullPhoneNumber(phoneNumber)
-        print("Fetching user data for exact phone number: \(phoneNumber) or \(fullPhoneNumber)")
-
-        fetchUserRecord(phoneNumber: fullPhoneNumber) { [weak self] record, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
-                    print("Error fetching user data: \(error.localizedDescription)")
-                    completion(false)
-                    return
-                }
-                
-                guard let record = record else {
-                    self?.errorMessage = "User not found."
-                    print("No user data found for phone number: \(phoneNumber) or \(fullPhoneNumber)")
-                    completion(false)
-                    return
-                }
-                
-                // Populate ViewModel with fetched data
-                self?.populateUserData(from: record)
-                print("User data fetched successfully for \(fullPhoneNumber)")
-                completion(true)
-            }
-        }
-    }
-    
-    
-    func fetchLoggedInUserData(completion: @escaping (Bool) -> Void) {
-        let fullPhoneNumber = constructFullPhoneNumber(phoneNumber)
-        
-        guard !phoneNumber.isEmpty else {
-            errorMessage = "Phone number is missing."
-            print("Error: Phone number is missing.")
-            completion(false)
-            return
-        }
-        
-        print("Fetching user data for phone number: \(fullPhoneNumber)")
-
-        fetchUserRecord(phoneNumber: fullPhoneNumber) { [weak self] record, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
-                    print("Error fetching user data: \(error.localizedDescription)")
-                    completion(false)
-                    return
-                }
-                
-                guard let record = record else {
-                    self?.errorMessage = "User not found."
-                    print("No user data found for phone number: \(fullPhoneNumber)")
-                    completion(false)
-                    return
-                }
-                
-                // Populate ViewModel with fetched data
-                self?.populateUserData(from: record)
-                print("User data fetched successfully for \(fullPhoneNumber)")
-                completion(true)
-            }
-        }
-    }
+   
     
     
     
@@ -274,9 +352,9 @@ class UserViewModel: ObservableObject {
 //         var nonsence = selectedCountry!.code + phoneNumber
 //         print(nonsence + "this is what was bothring me ")
 //    }
-//    
-//    
-//    
+//
+//
+//
 //    func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
 //        let phoneNumberCode = selectedCountry!.code + phoneNumber
 //        print("Fetching user data for exact phone number: \(phoneNumber) or \(phoneNumberCode)")
@@ -289,14 +367,14 @@ class UserViewModel: ObservableObject {
 //                    completion(false)
 //                    return
 //                }
-//                
+//
 //                guard let record = record else {
 //                    self?.errorMessage = "User not found."
 //                    print("No user data found for phone number: \(phoneNumber) or \(phoneNumberCode) ")
 //                    completion(false)
 //                    return
 //                }
-//                
+//
 //                // Populate ViewModel with fetched data
 //                self?.populateUserData(from: record)
 //                print("User data fetched successfully for \(phoneNumber)")
@@ -309,15 +387,15 @@ class UserViewModel: ObservableObject {
 //    func fetchLoggedInUserData(completion: @escaping (Bool) -> Void) {
 //        // Combine country code and phone number
 //        let phoneNumberCode = selectedCountry!.code + phoneNumber
-//        
+//
 //        guard !phoneNumber.isEmpty else {
 //            errorMessage = "Phone number is missing."
 //            print("Error: Phone number is missing.")
 //            completion(false)
 //            return
 //        }
-//        
-//    
+//
+//
 //        print("Fetching user data for phone number: \(phoneNumberCode)")
 //
 //        fetchUserRecord(phoneNumber: phoneNumberCode) { [weak self] record, error in
@@ -328,14 +406,14 @@ class UserViewModel: ObservableObject {
 //                    completion(false)
 //                    return
 //                }
-//                
+//
 //                guard let record = record else {
 //                    self?.errorMessage = "User not found."
 //                    print("No user data found for phone number: \(phoneNumberCode)")
 //                    completion(false)
 //                    return
 //                }
-//                
+//
 //                // Populate ViewModel with fetched data
 //                self?.populateUserData(from: record)
 //                print("User data fetched successfully for \(phoneNumberCode)")
@@ -350,23 +428,23 @@ class UserViewModel: ObservableObject {
 //        // Create a predicate to match the exact phone number
 //        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumberCode)
 //        let query = CKQuery(recordType: "User", predicate: predicate)
-//        
+//
 //        database.perform(query, inZoneWith: nil) { records, error in
 //            completion(records?.first, error)
 //        }
 //    }
 //
 //    // MARK: - Helper Method to Populate ViewModel with User Data
-    private func populateUserData(from record: CKRecord) {
-        self.name = record["name"] as? String ?? "Unknown"
-        self.phoneNumber = record["phoneNumber"] as? String ?? "Unknown"
-        self.selectedRole = record["role"] as? String ?? " "
-        self.fontSize = record["fontSize"] as? Double ?? 20.0
-        self.isHapticsEnabled = record["isHapticsEnabled"] as? Bool ?? true
-        
-        print("User data fetched successfully")
-        print("Name: \(name), Phone: \(phoneNumber), Role: \(selectedRole)")
-    }
+//    private func populateUserData(from record: CKRecord) {
+//        self.name = record["name"] as? String ?? "Unknown"
+//        self.phoneNumber = record["phoneNumber"] as? String ?? "Unknown"
+//        self.selectedRole = record["role"] as? String ?? " "
+//        self.fontSize = record["fontSize"] as? Double ?? 20.0
+//        self.isHapticsEnabled = record["isHapticsEnabled"] as? Bool ?? true
+//
+//        print("User data fetched successfully")
+//        print("Name: \(name), Phone: \(phoneNumber), Role: \(selectedRole)")
+//    }
     
     
     
@@ -464,60 +542,7 @@ class UserViewModel: ObservableObject {
     
     // MARK: - saving the edits of the information of the user
     
-    func editUser(oldUserInfo: User , with newUserInfo: User){
-        // fetch the CKrecord corresponding to the oldUserInfo
-        let recordID = oldUserInfo.id
-        database.fetch(withRecordID : recordID){ record , error in
-            if let error = error {
-                print ("Error fetching user to edit : \(error.localizedDescription)")
-                return
-            }
-            
-            guard let recordToUpdate = record else { return }
-            
-            // Update the record fields
-            
-            recordToUpdate["name"] = newUserInfo.name
-            recordToUpdate["phoneNumber"] = newUserInfo.phoneNumber
-            recordToUpdate["role"] = newUserInfo.role
-            
-            //Save the updated record to CloudKit
-            self.database.save(recordToUpdate){ savedRecord , saveError in
-                if let saveError = saveError
-                {
-                    print("Error saving updated user Info : \(saveError.localizedDescription)")
-                    return
-                    
-                }
-                
-                // update local data model
-                
-                if let savedRecord = savedRecord {
-                    let updatedUserInfo = User(record: savedRecord)
-                    
-                    // find the index of the old user info and update it
-                    if let index = self.users.firstIndex(where: {$0.id == oldUserInfo.id}){
-                        
-                        self.users[index] = updatedUserInfo
-                        DispatchQueue.main.async {
-                            self.objectWillChange.send()
-                            
-                        }
-                    }
-                    
-                }
-                
-            }
-        }
-        
-    }
     
-    // Clear Input Fields
-    private func clearInputs() {
-        name = ""
-        phoneNumber = ""
-        selectedCountry = defaultCountry
-    }
 
     
     
@@ -606,73 +631,7 @@ class UserViewModel: ObservableObject {
     
     
     
-    // MARK: - Send OTP
-    
-    
-    @Published var verificationCode: String = ""
-    
-    @Published var verificationID: String?
-    @Published var isVerificationSent: Bool = false
-    @Published var isAuthenticated: Bool = false
-    
-    
-    
-    //MARK: - Function to send the OTP
-    
-
-    func sendVerificationCode(completion: @escaping (Bool) -> Void) {
-        let phoneNumberWithCountryCode = selectedCountry!.code + phoneNumber // Adjust as needed
-        PhoneAuthProvider.provider()
-            .verifyPhoneNumber(phoneNumberWithCountryCode, uiDelegate: nil) { [weak self] verificationID, error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        self?.errorMessage = "Error: \(error.localizedDescription)"
-                        completion(false) // Signal failure
-                        return
-                    }
-                    self?.verificationID = verificationID
-                    self?.isVerificationSent = true
-                    self?.errorMessage = nil
-                    completion(true) // Signal success
-                }
-            }
-    }
-    
-    
-    //MARK: -  Function to verify OTP
-        func verifyCode(otp: [String], completion: @escaping (Bool) -> Void) {
-            let otpString = otp.joined() // Combine the array into a single string
-            
-            guard let verificationID = self.verificationID else {
-                self.errorMessage = "Verification ID is missing."
-                completion(false)
-                return
-            }
-
-            let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: otpString)
-
-            Auth.auth().signIn(with: credential) { [weak self] _, error in
-                if let error = error {
-                    DispatchQueue.main.async {
-                        self?.errorMessage = "Error: \(error.localizedDescription)"
-                    }
-                    completion(false)
-                    return
-                }
-                DispatchQueue.main.async {
-                    self?.isAuthenticated = true
-                    self?.errorMessage = nil
-                    completion(true)
-                }
-            }
-        }
-    
-    
- 
    
-    
-    
-    
     
     
     

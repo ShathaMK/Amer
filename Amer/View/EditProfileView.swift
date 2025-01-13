@@ -151,24 +151,8 @@ struct EditProfileView: View {
                         VStack (spacing: 8) {
                             // MARK: - Save Button
                             Button("Save") {
-                                guard
-                                    !userVM.name.isEmpty,
-                                    !userVM.phoneNumber.isEmpty
-                                else {
-                                    print("User details can't be empty")
-                                    return
-                                }
+
                                 
-                                let newUserInfo = User(
-                                    id: EditUserInfo?.id ?? CKRecord.ID(),
-                                    name: userVM.name,
-                                    phoneNumber: userVM.phoneNumber,
-                                    role: userVM.selectedRole
-                                )
-                                
-                                if let EditUserInfo = EditUserInfo {
-                                    userVM.editUser(oldUserInfo: EditUserInfo, with: newUserInfo)
-                                }
                             }
                             .buttonStyle(GreenButton())
                             
@@ -181,13 +165,36 @@ struct EditProfileView: View {
                         }
                         .padding()
                     } // end vstack
-                    .padding(.bottom, userVM.keyboardHeight) // Adjust padding based on keyboard height
+//                    .padding(.bottom, userVM.keyboardHeight) // Adjust padding based on keyboard height
                 } // end scroll view
                 .frame(maxWidth: .infinity)
                 .frame(height: 670)
                 .background(Color("VLightBlue"))
                 .cornerRadius(52)
                 .padding(.top, 80)
+                
+                
+                // Role-based Image
+                if userVM.selectedRole == "Assistant" {
+                    Image("User_Assistant")
+                        .resizable()
+                        .frame(width: 110, height: 110)
+                        .padding(.bottom, 600)
+                } else if userVM.selectedRole == "Reciver" {
+                    Image("User_Reciver")
+                        .resizable()
+                        .frame(width: 110, height: 110)
+                        .padding(.bottom, 600)
+                } else {
+                    Image(systemName: "person.crop.circle") // Default profile image
+                        .resizable()
+                        .foregroundStyle(Color.gray)
+                        .frame(width: 110, height: 110)
+                        .padding(.bottom, 600)
+                }
+                
+                
+                
             } // end zstack
             .onTapGesture {
                 userVM.hideKeyboard()

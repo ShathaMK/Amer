@@ -9,11 +9,13 @@ import SwiftUI
 
 @main
 struct AmerApp: App {
-//    @StateObject private var ButtonsVM = ButtonsViewModel()
+    @StateObject private var ButtonsVM = ButtonsViewModel()
 //    @StateObject private var userVM = UserViewModel()
 //    @StateObject private var memberVM = MembersViewModel()
 //    @StateObject private var noteVM = NotificationViewModel()
 
+    @StateObject private var userVM = UserViewModel()
+    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
@@ -21,13 +23,13 @@ struct AmerApp: App {
         WindowGroup {
             if hasSeenOnboarding {
                 LoginSignupView()
-                    .environmentObject(ButtonsViewModel())
-                    .environmentObject(UserViewModel())
+                    .environmentObject(ButtonsVM)
+                    .environmentObject(userVM)
                     .environmentObject(MembersViewModel())
             } else {
                 Onboarding_1()
-                    .environmentObject(ButtonsViewModel())
-                    .environmentObject(UserViewModel())
+                    .environmentObject(ButtonsVM)
+                    .environmentObject(userVM)
                     .environmentObject(MembersViewModel())
             }
         }
