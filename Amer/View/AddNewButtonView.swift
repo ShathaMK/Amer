@@ -106,13 +106,16 @@ struct AddNewButtonView: View {
             ZStack {
                 Color("Background").ignoresSafeArea()
                 VStack {
+                    
                     Spacer()
                     
                     Text("New Button")
                         .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 40))) // Dynamic font scaling
                         .foregroundStyle(Color("FontColor"))
                     
-                    VStack(spacing: 16) {
+                    Spacer()
+                    
+                    VStack() {
                         ZStack {
                             Rectangle()
                                 .frame(width: 106, height: 106)
@@ -124,31 +127,46 @@ struct AddNewButtonView: View {
                                 .font(.system(size: userVM.scaledFont(baseSize: 54))) // Dynamic font scaling
                         }
                         
+                        Spacer()
+                            .frame(height: 32)
+                        
                         Text("\(buttonsVM.currentLabel)")
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
                             .foregroundStyle(Color("FontColor"))
                     }
-                    .padding()
+//                    .padding()
+                    Spacer()
+                        .frame(height: 32)
                     
                     VStack {
                         Text("Button Label")
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
                             .foregroundStyle(Color("FontColor"))
-                            .padding(.trailing, 180)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
                         
-                        ZStack {
-                            TextField("Enter Button Label", text: $buttonsVM.currentLabel)
-                                .padding()
-                                .frame(width: 290, height: 45)
-                        }
-                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
+                        Spacer()
+                            .frame(height: 16)
+                        
+                        TextField("Enter Button Label", text: $buttonsVM.currentLabel)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                            .frame(height: 45)
+                            .padding(.horizontal, 20)
                     }
+                    
+                    Spacer()
+                        .frame(height: 32)
                     
                     VStack {
                         Text("Icon")
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
                             .foregroundStyle(Color("FontColor"))
-                            .padding(.trailing, 250)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                        
+                        Spacer()
+                            .frame(height: 16)
                         
                         ZStack {
                             Image("Emoji")
@@ -158,8 +176,9 @@ struct AddNewButtonView: View {
                             
                             EmojiTextFieldWrapper(text: $buttonsVM.selectedIcon)
                                 .padding()
-                                .frame(width: 290, height: 45)
-                                .cornerRadius(4)
+                                .frame(height: 45)
+                                .background(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                                .padding(.horizontal, 20)
                                 .onChange(of: emojiText) {
                                     // Limit the length of the text to maxLength
                                     if emojiText.count > maxLength {
@@ -167,18 +186,26 @@ struct AddNewButtonView: View {
                                     }
                                 }
                         }
-                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
+//                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray))
                     }
-                    .padding()
+//                    .padding()
+                    
+                    Spacer()
+                        .frame(height: 32)
                     
                     HStack {
                         ColorPicker("Button Color", selection: $buttonsVM.selectedColor)
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
                             .foregroundStyle(Color("FontColor"))
-                            .padding(.trailing, 36)
-                            .padding(.leading, 41)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
                     }
-                    .padding()
+//                    .padding()
+                    
+                    Spacer()
+                        .frame(height: 60)
+                    
+                    //MARK: - the ADD button
                     
                     Button(action: {
                         userVM.triggerHapticFeedback() // Trigger haptic feedback
@@ -212,34 +239,33 @@ struct AddNewButtonView: View {
                     }) {
                         Text("Add")
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color("DarkBlue"))
-                            .cornerRadius(8)
-                            .padding(.horizontal, 20)
                     }
+                    .buttonStyle(BlueButton())
+                    .shadow(radius: 7, x: 0, y: 5)
+                    .padding(.horizontal, 20)
                     .navigationDestination(isPresented: $isNavigating) {
                         RemoteView()
+                            .environmentObject(buttonsVM)
 //                        RemoteView(buttonsVM: buttonsVM)
                     }
                     
-                    NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)) {
+                    //MARK: - the cancel button
+                    
+                    NavigationLink(destination: RemoteView()) {
                         Text("Cancel")
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20))) // Dynamic font scaling
-                            .foregroundColor(Color("DarkBlue"))
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color("LightBlue"))
-                            .cornerRadius(8)
-                            .padding(.horizontal, 20)
                     }
+                    .buttonStyle(cancelGrayBlue())
+                    .shadow(radius: 7, x: 0, y: 5)
+                    .padding(.horizontal, 20)
                     
-                    Spacer()
+//                    Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .onAppear {
             if buttonToEdit == nil {

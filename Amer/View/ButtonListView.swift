@@ -172,9 +172,12 @@ struct ButtonView: View {
                 secondaryButton: .cancel()
             )
         }
+//        .navigationBarBackButtonHidden(true)
         .navigationDestination(isPresented: $navigateToEdit) {
 //            AddNewButtonView( buttonToEdit: button)
-            AddNewButtonView(buttonsVM: _buttonsVM, buttonToEdit: button)
+            AddNewButtonView(buttonToEdit: button)
+                .environmentObject(buttonsVM)
+                .navigationBarBackButtonHidden(true)
         }
     }
 }

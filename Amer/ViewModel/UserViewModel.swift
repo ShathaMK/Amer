@@ -222,7 +222,7 @@ class UserViewModel: ObservableObject {
     
     func saveUserToCloud( completion: @escaping (Result<Void, Error>) -> Void) {
         let phoneNumberCode = selectedCountry!.code + phoneNumber
-        let id = UUID().uuidString
+//        let id = UUID().uuidString
         
             guard !name.isEmpty, !phoneNumber.isEmpty, !selectedRole.isEmpty else {
                 completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "All fields are required."])))
@@ -230,7 +230,7 @@ class UserViewModel: ObservableObject {
             }
 
             let record = CKRecord(recordType: "User")
-            record["id"] = id as CKRecordValue
+//            record["id"] = id as CKRecordValue
             record["name"] = name as CKRecordValue
             record["phoneNumber"] = phoneNumberCode as CKRecordValue
             record["role"] = selectedRole as CKRecordValue
