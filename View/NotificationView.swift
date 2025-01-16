@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct NotificationView: View {
-//    @StateObject var userVM = UserViewModel() // For dynamic scaling and haptics
-    @EnvironmentObject var memberVM: MembersViewModel
-    @EnvironmentObject var userVM : UserViewModel
+    @StateObject var userVM = UserViewModel() // For dynamic scaling and haptics
+//    @EnvironmentObject var memberVM = MembersViewModel
+//    @EnvironmentObject var userVM = UserViewModel
     @State var inputText: String = "" // State variable to hold the text
 
     var body: some View {
@@ -123,7 +123,4 @@ struct NotificationItemView: View {
 // MARK: - Preview
 #Preview {
     NotificationView()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
-        .environmentObject(MembersViewModel())
 }

@@ -30,6 +30,8 @@ import Foundation
 import CloudKit
 import SwiftUICore
 
+
+
 struct User: Identifiable {
     
     var id : CKRecord.ID
@@ -51,6 +53,8 @@ struct User: Identifiable {
            self.phoneNumber = record["phoneNumber"] as? String ?? ""
            self.role = record["role"] as? String ?? ""
        }
+    
+    
 }
 
 struct Country: Codable {
@@ -62,8 +66,15 @@ struct Country: Codable {
 
 
 // MARK: - Member Model
+
 struct Member: Identifiable {
-    let id = UUID()
-    let name: String
-    let phone: String
+    var id = UUID()
+    var name: String
+    var phone: String
+}
+
+struct Contact: Identifiable {
+    var id = UUID()
+    var name: String
+    var phoneNumber: String
 }

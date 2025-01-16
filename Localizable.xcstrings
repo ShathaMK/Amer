@@ -5,6 +5,7 @@
 
     },
     " Enter Button Label" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15,6 +16,7 @@
       }
     },
     "%@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -97,6 +99,7 @@
       }
     },
     "2 Min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -117,6 +120,7 @@
       }
     },
     "5 Min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -154,6 +158,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إضافة"
+          }
+        }
+      }
+    },
+    "Add Members" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة أعضاء"
           }
         }
       }
@@ -270,7 +284,14 @@
       }
     },
     "Close" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إغلاق"
+          }
+        }
+      }
     },
     "cnacleGreen" : {
 
@@ -388,6 +409,16 @@
         }
       }
     },
+    "Enter Button Label" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل اسم الزر "
+          }
+        }
+      }
+    },
     "Enter OTP" : {
       "localizations" : {
         "ar" : {
@@ -418,6 +449,9 @@
         }
       }
     },
+    "Error" : {
+
+    },
     "Font Size" : {
       "localizations" : {
         "ar" : {
@@ -429,7 +463,14 @@
       }
     },
     "Font Size: %lld" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حجم الخط  %lld"
+          }
+        }
+      }
     },
     "Get real-time updates and notifications that matter." : {
       "localizations" : {
@@ -442,11 +483,22 @@
       }
     },
     "Getting Started !" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "ابدأ من هنا "
+          }
+        }
+      }
+    },
+    "Getting Started!" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أبدأ من هنا"
           }
         }
       }
@@ -565,6 +617,7 @@
       }
     },
     "Mom Monira wants the  \nwheelchair" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -575,6 +628,7 @@
       }
     },
     "Mom Monira wants to \n shower" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -585,6 +639,7 @@
       }
     },
     "Mom Monira wants to eat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -595,6 +650,7 @@
       }
     },
     "Mom Monira wants Water" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -645,6 +701,7 @@
       }
     },
     "Now" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -654,8 +711,46 @@
         }
       }
     },
+    "OK" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنًا"
+          }
+        }
+      }
+    },
+    "OTP Verification" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز التحقق "
+          }
+        }
+      }
+    },
     "OTP will be sent to this number %@" : {
-
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز التحقق تم إرساله إلى هذا الرقم %@"
+          }
+        }
+      }
+    },
+    "OTP will be sent to this number %@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "OTP will be sent to this number %1$@%2$@"
+          }
+        }
+      }
     },
     "OTP will be sent to this number 501234567 " : {
       "extractionState" : "stale",
@@ -700,13 +795,34 @@
       }
     },
     "Requests" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الدعوات"
+          }
+        }
+      }
     },
     "Resend OTP" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرسل رمز التحقق مره أخرى"
+          }
+        }
+      }
     },
     "Resend OTP in %llds" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرسل رمز التحقق بعد %lld"
+          }
+        }
+      }
     },
     "Role" : {
       "localizations" : {
@@ -719,10 +835,24 @@
       }
     },
     "Save" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حفظ"
+          }
+        }
+      }
     },
     "Search" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث"
+          }
+        }
+      }
     },
     "Search countries" : {
       "localizations" : {
@@ -746,7 +876,14 @@
       }
     },
     "Select Country" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر دولة"
+          }
+        }
+      }
     },
     "Send" : {
       "localizations" : {
@@ -757,9 +894,6 @@
           }
         }
       }
-    },
-    "Send Invitation" : {
-
     },
     "Sign Up" : {
       "localizations" : {
@@ -813,7 +947,14 @@
       }
     },
     "Verify" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحقق"
+          }
+        }
+      }
     },
     "Your Wish is Our Command" : {
       "localizations" : {

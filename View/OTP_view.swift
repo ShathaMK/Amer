@@ -9,13 +9,13 @@ import SwiftUI
 import FirebaseAuth
 
 struct OTP_view: View {
-//    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
-//    @StateObject var buttonsVM = ButtonsViewModel()
+    @StateObject var userVM = UserViewModel() // For font scaling, haptics, and OTP management
+    @StateObject var buttonsVM = ButtonsViewModel()
     
-    @EnvironmentObject var buttonsVM: ButtonsViewModel
-    @EnvironmentObject var userVM: UserViewModel
+//    @EnvironmentObject var buttonsVM = ButtonsViewModel
+//    @EnvironmentObject var userVM = UserViewModel
     
-    @State var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
+    @State private var otp: [String] = Array(repeating: "", count: 6) // 6-digit OTP
     @FocusState private var focusedIndex: Int? // Tracks which text field is focused
     @State private var isAuthenticated: Bool = false
     @State private var isLoading: Bool = false // Tracks OTP submission
@@ -34,26 +34,21 @@ struct OTP_view: View {
                 Image("sms")
                     .resizable()
                     .frame(width: 142.85, height: 169.31)
-                    .padding(.leading, 50)
 
                 Spacer()
                     .frame(height: userVM.scaledFont(baseSize: 24))
 
                 // Description
-                Text("OTP will be sent to this number \(userVM.selectedCountry?.code ?? "")\(userVM.phoneNumber)")
+                Text("OTP will be sent to this number \(userVM.phoneNumber)")
                     .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 16)))
                     .foregroundStyle(Color.gray)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 
-                
-                
                 Spacer()
                     .frame(height: userVM.scaledFont(baseSize: 32))
 
-                
-                
-                //MARK: - OTP Input Fields
+                // OTP Input Fields
                 HStack(spacing: 10) {
                     ForEach(0..<6, id: \.self) { index in
                         TextField("", text: Binding(
@@ -77,21 +72,18 @@ struct OTP_view: View {
                                 .stroke(focusedIndex == index ? Color("ColorBlue") : Color.gray.opacity(0.5), lineWidth: 2)
                         )
                         .focused($focusedIndex, equals: index)
-                        
+                        .onTapGesture {
+                            userVM.hideKeyboard()
+                            userVM.triggerHapticFeedback()
+                        }
                     }
-                }
-                .onTapGesture {
-                    userVM.hideKeyboard()
                 }
 
                 Spacer()
                     .frame(height: userVM.scaledFont(baseSize: 24))
 
-                
-                
-                //MARK: - Resend Button
-                
-                Button (action: {
+                // Resend Button
+                Button {
                     userVM.triggerHapticFeedback()
                     if userVM.timeRemaining == 0 {
                         userVM.sendVerificationCode { success in
@@ -102,7 +94,7 @@ struct OTP_view: View {
                             }
                         }
                     }
-                }){
+                } label: {
                     Text(userVM.timeRemaining > 0
                          ? "Resend OTP in \(userVM.timeRemaining)s"
                          : "Resend OTP")
@@ -110,34 +102,25 @@ struct OTP_view: View {
                         .foregroundColor(userVM.timeRemaining > 0 ? .gray : Color("DarkGreen"))
                 }
                 .disabled(userVM.timeRemaining > 0)
-                
 
-                
                 Spacer()
-                
-                
 
                 if let errorMessage = userVM.errorMessage {
                     Text(errorMessage)
                         .foregroundColor(.red)
                         .padding()
                 }
-                
-                
 
-                //MARK: - Verify Button
+                // Submit Button
                 Button(action: {
                     userVM.triggerHapticFeedback()
                     isLoading = true
-                    
                     userVM.verifyCode(otp: otp) { success in
                         isLoading = false
                         if success {
                             isAuthenticated = true
                         }
                     }
-                    
-                    
                 }) {
                     if isLoading {
                         ProgressView()
@@ -147,25 +130,20 @@ struct OTP_view: View {
                             .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
                             .padding()
                             .foregroundColor(.white)
-                            
+                            .background(Color("DarkBlue"))
+                            .cornerRadius(8)
                     }
                 }
                 .buttonStyle(BlueButton())
                 .shadow(radius: 7, x: 0, y: 5)
                 .padding()
                 .fullScreenCover(isPresented: $isAuthenticated) {
-                    // i should add the other view here for assistant
                     RemoteView()
                         .environmentObject(buttonsVM)
-                        .environmentObject(userVM)
                 }
                 .disabled(isLoading || otp.joined().count < 6)
-                
-                
-               
-                
             }
-//            .navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -189,25 +167,11 @@ struct OTP_view: View {
             focusedIndex = 0
             userVM.startResendTimer()
         }
-        .onTapGesture {
-            userVM.hideKeyboard()
-        }
-        
-        
-        
     }
 }
 
-//struct OTPView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        OTP_view()
-//            .environmentObject(UserViewModel()) 
-//    }
-//}
-
-#Preview {
-    OTP_view()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
+struct OTPView_Previews: PreviewProvider {
+    static var previews: some View {
+        OTP_view()
+    }
 }
-

@@ -17,6 +17,9 @@ class ButtonsViewModel: ObservableObject{
 
     @Published var selectedButton: Buttons? // optional to track selected button
     
+    @Published var errorMessage: String?
+    
+    private let database = CKContainer.default().publicCloudDatabase
     
     // Add Button to CloudKit
     func addButton(newButton: Buttons) {
@@ -42,10 +45,41 @@ class ButtonsViewModel: ObservableObject{
                 self.buttons.append(savedButton) // Add to local data source
                 DispatchQueue.main.async {
                     self.objectWillChange.send() // Notify view to update
+                    self.objectWillChange.send() // Notify view to update
                 }
             }
         }
     }
+    
+//    func addButton(newButton: Buttons) {
+//        let newRecord = CKRecord(recordType: "Buttons")
+//        
+//        newRecord["label"] = newButton.label
+//        newRecord["icon"] = newButton.icon
+//        newRecord["color"] = newButton.color.toHexString() // Ensure this method works correctly
+//        newRecord["isDisabled"] = newButton.isDisabled
+//
+//        // Link the button to the current user
+//        if let userId = userVM.currentUserId {
+//            newRecord["userId"] = CKRecord.Reference(recordID: userId, action: .none)
+//        }
+//
+//        database.save(newRecord) { record, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    print("Error saving button: \(error.localizedDescription)")
+//                    self.errorMessage = "Failed to save button."
+//                } else if let savedRecord = record {
+//                    let savedButton = Buttons(record: savedRecord)
+//                    self.buttons.append(savedButton)
+//                    print("Button saved successfully: \(savedButton)")
+//                }
+//                self.objectWillChange.send()
+//            }
+//        }
+//    }
+    
+    
     //MVVM
 //    func addButton(newButton:Buttons){
 //        let newButton = Buttons(
@@ -201,6 +235,56 @@ class ButtonsViewModel: ObservableObject{
     }
     
     
+    
+    // MARK: - Fetch Buttons for a User
+        func fetchButtonsForUser(userId: CKRecord.Reference, completion: @escaping (Bool) -> Void) {
+            let predicate = NSPredicate(format: "userId == %@", userId)
+            let query = CKQuery(recordType: "UserButton", predicate: predicate)
+
+            database.perform(query, inZoneWith: nil) { [weak self] records, error in
+                if let error = error {
+                    print("Error fetching buttons: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self?.errorMessage = "Error fetching buttons."
+                        completion(false)
+                    }
+                    return
+                }
+
+                let fetchedButtons = records?.compactMap { record -> Buttons? in
+                    guard let buttonRecord = record["buttonId"] as? CKRecord.Reference else { return nil }
+                    let buttonId = buttonRecord.recordID
+                    return self?.fetchButtonDetails(recordID: buttonId)
+                } ?? []
+
+                DispatchQueue.main.async {
+                    self?.buttons = fetchedButtons
+                    completion(true)
+                }
+            }
+        }
+
+        // Helper to Fetch Button Details
+        private func fetchButtonDetails(recordID: CKRecord.ID) -> Buttons? {
+            var fetchedButton: Buttons?
+            let semaphore = DispatchSemaphore(value: 0)
+
+            database.fetch(withRecordID: recordID) { record, error in
+                if let record = record {
+                    fetchedButton = Buttons(
+                        id: record.recordID,
+                        label: record["label"] as? String ?? "",
+                        icon: record["icon"] as? String ?? "",
+                        color: Color(hex: record["color"] as? String ?? "#FFFFFF") ?? .clear,
+                        isDisabled: record["isDisabled"] as? Int64 == 1
+                    )
+                }
+                semaphore.signal()
+            }
+
+            semaphore.wait()
+            return fetchedButton
+        }
     
     
     

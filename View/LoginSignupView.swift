@@ -9,17 +9,14 @@ import SwiftUI
 import FirebaseAuth
 
 struct LoginSignupView: View {
-//    @StateObject var userVM = UserViewModel()
-    @EnvironmentObject var userVM: UserViewModel
-    @EnvironmentObject var ButtonsVM: ButtonsViewModel
+    @StateObject var userVM = UserViewModel()
+//    @EnvironmentObject var userVM = UserViewModel
 
     @State var selectedTab = 0 // State to track active tab
 
     var body: some View {
         if userVM.isAuthenticated {
-            RemoteView()
-                .environmentObject(ButtonsViewModel())
-                .environmentObject(UserViewModel())
+            EditProfileView()
         } else {
             NavigationView {
                 VStack {
@@ -70,12 +67,8 @@ struct LoginSignupView: View {
                     // Dynamic Content
                     if selectedTab == 0 {
                         SignUp() // Sign Up View
-                            .environmentObject(ButtonsVM)
-                            .environmentObject(userVM)
                     } else {
                         LogIn() // Log In View
-                            .environmentObject(ButtonsVM)
-                            .environmentObject(userVM)
                     }
 
                     Spacer()
@@ -89,6 +82,4 @@ struct LoginSignupView: View {
 
 #Preview {
     LoginSignupView()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
 }

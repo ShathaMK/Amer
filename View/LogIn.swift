@@ -9,8 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct LogIn: View {
-//    @StateObject var userVM = UserViewModel()
-    @EnvironmentObject var userVM : UserViewModel
+    @StateObject var userVM = UserViewModel()
     @State private var isExpanded2: Bool = false // sheet bool
     @State private var isShowingOTPView = false
     @State private var isShowingSignupView = false // Navigate to Signup View
@@ -119,10 +118,7 @@ struct LogIn: View {
             .shadow(radius: 7, x: 0, y: 5)
             .padding(.horizontal, 20)
             .fullScreenCover(isPresented: $isShowingOTPView) {
-//                OTP_view()
-//                OTP_view(userVM: userVM)
                 OTP_view()
-                    .environmentObject(userVM)
             }
             .fullScreenCover(isPresented: $isShowingSignupView) {
                 LoginSignupView(selectedTab: 0) // Navigate to Signup Tab
@@ -143,6 +139,4 @@ struct LogIn: View {
 
 #Preview {
     LogIn()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
 }

@@ -19,15 +19,9 @@ struct InitialView: View {
             if userLoggedIn{
                 
                 ButtonListView()
-                    .environmentObject(ButtonsViewModel())
-                    .environmentObject(UserViewModel())
-                    .environmentObject(MembersViewModel())
             } else {
                 
                 LoginSignupView()
-                    .environmentObject(ButtonsViewModel())
-                    .environmentObject(UserViewModel())
-                    .environmentObject(MembersViewModel())
             }
         }
         .onAppear{

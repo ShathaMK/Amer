@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct Onboarding_1: View {
-//    @StateObject var userVM = UserViewModel() // Dynamic font scaling and haptics
-    @EnvironmentObject var userVM: UserViewModel
+    @StateObject var userVM = UserViewModel() // Dynamic font scaling and haptics
+//    @EnvironmentObject var userVM = UserViewModel
     @State private var bool = false
     @State private var bool2 = false
 

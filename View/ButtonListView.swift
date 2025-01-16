@@ -1,42 +1,36 @@
 import SwiftUI
 
 struct ButtonListView: View {
-    @EnvironmentObject var buttonsVM: ButtonsViewModel
+    @EnvironmentObject var vm: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State var navigateToEdit = false
     @State var selectedButton: Buttons? // Track selected button for editing
-    @Environment(\.presentationMode) var presentationMode // To dismiss the view
-
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
                 SectionHeader(title: NSLocalizedString("Active", comment: "Active section title"), color: Color("DarkGreen"))
                 
-                ButtonGrid(buttons: buttonsVM.buttons.filter { !$0.isDisabled }) { button in
+                ButtonGrid(buttons: vm.buttons.filter { !$0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
                 .padding()
                 
                 SectionHeader(title: NSLocalizedString("Disabled", comment: "Disabled section title"), color: .red)
                 
-                ButtonGrid(buttons: buttonsVM.buttons.filter { $0.isDisabled }) { button in
+                ButtonGrid(buttons: vm.buttons.filter { $0.isDisabled }) { button in
                     handleButtonTap(button)
                 }
                 .padding()
             }
-            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
+                    NavigationLink(destination: RemoteView().navigationBarBackButtonHidden(true)) {
                         Image(systemName: "chevron.backward")
                             .resizable()
                             .frame(width: 15, height: 25.5)
-                            .foregroundStyle(Color("FontColor"))
+                            .foregroundStyle(Color("DarkBlue"))
                     }
-                    
                 }
                 ToolbarItem(placement: .principal) {
                     Text("Button List")
@@ -44,9 +38,7 @@ struct ButtonListView: View {
                         .foregroundStyle(Color("FontColor"))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: AddNewButtonView()
-                        .environmentObject(userVM)
-                        .environmentObject(buttonsVM)) {
+                    NavigationLink(destination: AddNewButtonView().navigationBarBackButtonHidden(true)) {
                         Image("AddButton")
                             .resizable()
                             .frame(width: 43, height: 43)
@@ -56,11 +48,7 @@ struct ButtonListView: View {
             }
             .navigationDestination(isPresented: $navigateToEdit) {
                 if let buttonToEdit = selectedButton {
-//                    AddNewButtonView( buttonToEdit: buttonToEdit)
-                    AddNewButtonView(buttonToEdit: buttonToEdit)
-                        .environmentObject(userVM)
-                        .environmentObject(buttonsVM)
-                    
+                    AddNewButtonView(vm: _vm, buttonToEdit: buttonToEdit)
                 }
             }
         }
@@ -120,7 +108,7 @@ struct ButtonView: View {
     let button: Buttons
     let action: (Buttons) -> Void
 
-    @EnvironmentObject var buttonsVM: ButtonsViewModel
+    @EnvironmentObject var vm: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel // For dynamic font scaling and haptics
     @State private var navigateToEdit = false
     @State private var showingAlert = false
@@ -154,7 +142,7 @@ struct ButtonView: View {
             }
             Button {
                 userVM.triggerHapticFeedback() // Trigger haptic feedback
-                buttonsVM.toggleDisableButton(button) // Toggle disable status
+                vm.toggleDisableButton(button) // Toggle disable status
                 print("Disable \(button.label)")
             } label: {
                 Label(button.isDisabled ? "Enable" : "Disable", systemImage: button.isDisabled ? "lock.open" : "lock")
@@ -172,17 +160,13 @@ struct ButtonView: View {
                 title: Text("Delete a Button"),
                 message: Text("Are you sure you want to delete this button?"),
                 primaryButton: .destructive(Text("Delete")) {
-                    buttonsVM.deleteButton(button)
+                    vm.deleteButton(button)
                 },
                 secondaryButton: .cancel()
             )
         }
-//        .navigationBarBackButtonHidden(true)
         .navigationDestination(isPresented: $navigateToEdit) {
-//            AddNewButtonView( buttonToEdit: button)
-            AddNewButtonView(buttonToEdit: button)
-                .environmentObject(buttonsVM)
-                .navigationBarBackButtonHidden(true)
+            AddNewButtonView(vm: _vm, buttonToEdit: button)
         }
     }
 }
@@ -190,8 +174,4 @@ struct ButtonView: View {
 // MARK: - Preview
 #Preview {
     ButtonListView()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
-        .environmentObject(MembersViewModel())
-    
 }

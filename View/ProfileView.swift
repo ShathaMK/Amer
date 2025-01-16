@@ -2,23 +2,16 @@
 //  ProfileView.swift
 //  Amer
 //
-//  Created by Noori on 20/12/2024.
+//  Created by Shaima Alhussain on 22/06/1446 AH.
 //
-
 
 import SwiftUI
 import UIKit
-import Firebase
-import FirebaseAuth
 
 struct ProfileView: View {
-//    @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
-    @EnvironmentObject var buttonsVM: ButtonsViewModel
-    @EnvironmentObject var userVM: UserViewModel
-    
-    
+    @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
+//    @EnvironmentObject var userVM = UserViewModel
     @Environment(\.presentationMode) var presentationMode // To dismiss the view
-    @State private var showErrorAlert = false // State to control alert visibility
 
     var body: some View {
         NavigationStack {
@@ -29,7 +22,7 @@ struct ProfileView: View {
                 
                 VStack {
                     Spacer()
-                        .frame(height: 70)
+                        .frame(height: userVM.scaledFont(baseSize: 64))
                     
                     // User Info Section
                     VStack {
@@ -42,10 +35,16 @@ struct ProfileView: View {
                             .foregroundStyle(Color("FontColor"))
                     }
                     .onAppear {
-                       
-                        
+                        let signedInPhoneNumber = userVM.phoneNumber // Use the phone number of the signed-in user
+                        userVM.fetchUserData(forPhoneNumber: signedInPhoneNumber) { success in
+                            if success {
+                                print("User data fetched successfully")
+                            } else {
+                                print("Failed to fetch user data")
+                            }
+                        }
                     }
-
+                    
                     Spacer()
                         .frame(height: userVM.scaledFont(baseSize: 50))
                     
@@ -108,9 +107,7 @@ struct ProfileView: View {
                     Spacer()
                     
                     // Members Navigation
-                    NavigationLink(destination: MembersView()
-                        .environmentObject(buttonsVM)
-                        .environmentObject(userVM)) {
+                    NavigationLink(destination: MembersView()) {
                         HStack {
                             Text("Members")
                                 .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
@@ -177,39 +174,9 @@ struct ProfileView: View {
                 }
             }
         }
-        .onAppear(){
-            // 1) Check if there's a logged-in Firebase user
-               if let currentUser = Auth.auth().currentUser {
-                   let phone = currentUser.phoneNumber ?? ""
-                   
-                   // 2) Fetch from CloudKit using that phone
-                   userVM.fetchUserData(forPhoneNumber: phone) { success in
-                       if success {
-                           // userVM.name, userVM.phoneNumber, userVM.selectedRole are now set
-                           print("Fetched user from CloudKit for phone: \(phone)")
-                       } else {
-                           // userVM.errorMessage might contain details
-                           print("Failed to fetch user or not found.")
-                       }
-                   }
-               } else {
-                   // Not logged in via Firebase
-                   print("No current user. Please log in.")
-               }
-        }
-        // Alert to show errors
-        .alert(isPresented: $showErrorAlert) {
-            Alert(
-                title: Text("Error"),
-                message: Text(userVM.errorMessage ?? "An unknown error occurred."),
-                dismissButton: .default(Text("OK"))
-            )
-        }
     }
 }
 
 #Preview {
     ProfileView()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
 }

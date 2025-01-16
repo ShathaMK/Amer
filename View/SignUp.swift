@@ -11,14 +11,12 @@ import FirebaseAuth
 import Combine
 
 struct SignUp: View {
-//    @StateObject var userVM = UserViewModel()
-    @EnvironmentObject var userVM: UserViewModel
+    @StateObject var userVM = UserViewModel()
     @State private var isExpanded: Bool = false // Dropdown state
     @State private var isExpanded2: Bool = false // Sheet state
+    
     @State private var isShowingOTPView = false
     @State private var showErrorAlert = false // To display error messages
-    
-    @State private var localPhoneNumber: String = ""
     
     var body: some View {
         VStack {
@@ -150,11 +148,9 @@ struct SignUp: View {
             
             Spacer()
             
-
             // MARK: - Send Button
             Button(action: {
                 userVM.triggerHapticFeedback() // Haptic feedback
-//                userVM.phoneNumber = localPhoneNumber
                 guard !userVM.name.isEmpty, !userVM.phoneNumber.isEmpty, !userVM.selectedRole.isEmpty else {
                     userVM.errorMessage = "Please fill in all fields before proceeding."
                     showErrorAlert = true
@@ -194,8 +190,6 @@ struct SignUp: View {
                 Text("Send")
                     .font(Font.custom("Tajawal-Medium", size: userVM.scaledFont(baseSize: 20)))
                     .foregroundColor(.white)
-            
-          
             }
             .buttonStyle(GreenButton())
             .shadow(radius: 7, x: 0, y: 5)
@@ -203,17 +197,11 @@ struct SignUp: View {
             .fullScreenCover(isPresented: $isShowingOTPView) {
                 if userVM.errorMessage == "User already exists. Redirecting to login..." {
                     LoginSignupView(selectedTab: 1)
-                        .environmentObject(userVM)
                 } else {
-//                    OTP_view()
-//                    OTP_view(userVM: userVM)
                     OTP_view()
-                        .environmentObject(userVM)
                 }
             }
-
-            
-        } // end vstack
+        }
         .onTapGesture {
             userVM.hideKeyboard()
         }
@@ -224,11 +212,9 @@ struct SignUp: View {
                 dismissButton: .default(Text("OK"))
             )
         }
-        
     }
 }
 
 #Preview {
     SignUp()
-        .environmentObject(UserViewModel())
 }

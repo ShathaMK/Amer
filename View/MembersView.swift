@@ -9,11 +9,10 @@ import SwiftUI
 
 struct MembersView: View {
 //    @StateObject var memberVM = MembersViewModel()
-//    @StateObject var userVM = UserViewModel()
+    @StateObject var userVM = UserViewModel()
     
     @EnvironmentObject var memberVM: MembersViewModel
-    @EnvironmentObject var buttonsVM: ButtonsViewModel
-    @EnvironmentObject var userVM: UserViewModel
+//    @EnvironmentObject var userVM = UserViewModel
 
     @State var showRequestsSheet = false
     
@@ -150,8 +149,6 @@ struct MembersView: View {
 
 #Preview {
     MembersView()
-        .environmentObject(ButtonsViewModel())
-        .environmentObject(UserViewModel())
-        .environmentObject(MembersViewModel())
-        
+        .environmentObject(UserViewModel()) // Inject UserViewModel
+        .environmentObject(MembersViewModel()) // Inject MembersViewModel
 }
