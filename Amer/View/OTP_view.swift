@@ -162,8 +162,7 @@ struct OTP_view: View {
                 .disabled(isLoading || otp.joined().count < 6)
                 
                 
-                
-                
+               
                 
             }
 //            .navigationBarBackButtonHidden(true)

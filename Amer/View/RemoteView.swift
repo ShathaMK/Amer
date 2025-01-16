@@ -1,6 +1,7 @@
 
 import SwiftUI
-
+import Firebase
+import FirebaseAuth
 ///import NotificationService
 
 
@@ -31,6 +32,7 @@ struct RemoteView: View {
             }
         }
     }
+    
     // @State var buttonslist:[Buttons]
     var body: some View {
         NavigationStack {
@@ -97,8 +99,7 @@ struct RemoteView: View {
                             Button(action: {
                                 print("Bell button tapped")
                                 scheduleLocalNotification()
-
-
+                                
                                 userVM.triggerHapticFeedback() // Trigger haptic feedback
 
                             }) {
@@ -158,7 +159,7 @@ struct RemoteView: View {
             .toolbar {
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: ButtonListView().navigationBarBackButtonHidden(true)) {
+                    NavigationLink(destination: ButtonListView().environmentObject(userVM).environmentObject(buttonsVM).navigationBarBackButtonHidden(true)) {
                         Image("AddButton")
                             .resizable()
                             .frame(width: 43, height: 43)
@@ -169,7 +170,7 @@ struct RemoteView: View {
                 
                 ToolbarItem(placement: .topBarLeading) {
                     
-                    NavigationLink(destination: ProfileView()) {
+                    NavigationLink(destination: ProfileView().environmentObject(userVM).environmentObject(buttonsVM) ) {
                         
                         if userVM.selectedRole == "Assistant" {
                             Image("User_Assistant")
@@ -197,6 +198,26 @@ struct RemoteView: View {
                 
             }// end toolbar
             
+        }
+        .onAppear {
+            // 1) Check if there's a logged-in Firebase user
+               if let currentUser = Auth.auth().currentUser {
+                   let phone = currentUser.phoneNumber ?? ""
+                   
+                   // 2) Fetch from CloudKit using that phone
+                   userVM.fetchUserData(forPhoneNumber: phone) { success in
+                       if success {
+                           // userVM.name, userVM.phoneNumber, userVM.selectedRole are now set
+                           print("Fetched user from CloudKit for phone: \(phone)")
+                       } else {
+                           // userVM.errorMessage might contain details
+                           print("Failed to fetch user or not found.")
+                       }
+                   }
+               } else {
+                   // Not logged in via Firebase
+                   print("No current user. Please log in.")
+               }
         }
         
         

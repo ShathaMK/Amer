@@ -50,6 +50,36 @@ class ButtonsViewModel: ObservableObject{
             }
         }
     }
+    
+//    func addButton(newButton: Buttons) {
+//        let newRecord = CKRecord(recordType: "Buttons")
+//        
+//        newRecord["label"] = newButton.label
+//        newRecord["icon"] = newButton.icon
+//        newRecord["color"] = newButton.color.toHexString() // Ensure this method works correctly
+//        newRecord["isDisabled"] = newButton.isDisabled
+//
+//        // Link the button to the current user
+//        if let userId = userVM.currentUserId {
+//            newRecord["userId"] = CKRecord.Reference(recordID: userId, action: .none)
+//        }
+//
+//        database.save(newRecord) { record, error in
+//            DispatchQueue.main.async {
+//                if let error = error {
+//                    print("Error saving button: \(error.localizedDescription)")
+//                    self.errorMessage = "Failed to save button."
+//                } else if let savedRecord = record {
+//                    let savedButton = Buttons(record: savedRecord)
+//                    self.buttons.append(savedButton)
+//                    print("Button saved successfully: \(savedButton)")
+//                }
+//                self.objectWillChange.send()
+//            }
+//        }
+//    }
+    
+    
     //MVVM
 //    func addButton(newButton:Buttons){
 //        let newButton = Buttons(

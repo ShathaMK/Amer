@@ -44,7 +44,9 @@ struct ButtonListView: View {
                         .foregroundStyle(Color("FontColor"))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: AddNewButtonView()) {
+                    NavigationLink(destination: AddNewButtonView()
+                        .environmentObject(userVM)
+                        .environmentObject(buttonsVM)) {
                         Image("AddButton")
                             .resizable()
                             .frame(width: 43, height: 43)
@@ -55,7 +57,10 @@ struct ButtonListView: View {
             .navigationDestination(isPresented: $navigateToEdit) {
                 if let buttonToEdit = selectedButton {
 //                    AddNewButtonView( buttonToEdit: buttonToEdit)
-                    AddNewButtonView(buttonsVM: _buttonsVM, buttonToEdit: buttonToEdit)
+                    AddNewButtonView(buttonToEdit: buttonToEdit)
+                        .environmentObject(userVM)
+                        .environmentObject(buttonsVM)
+                    
                 }
             }
         }

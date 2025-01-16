@@ -294,42 +294,36 @@ class UserViewModel: ObservableObject {
     
     
     
-    func fetchUserData(forPhoneNumber phoneNumber: String, completion: @escaping (Bool) -> Void) {
-        let predicate = NSPredicate(format: "phoneNumber == %@", phoneNumber)
+    func fetchUserData(forPhoneNumber phone: String, completion: @escaping (Bool) -> Void) {
+        let predicate = NSPredicate(format: "phoneNumber == %@", phone)
         let query = CKQuery(recordType: "User", predicate: predicate)
-
+        
         database.perform(query, inZoneWith: nil) { [weak self] records, error in
             DispatchQueue.main.async {
                 if let error = error {
                     self?.errorMessage = "Error fetching user data: \(error.localizedDescription)"
-                    print("Error fetching user data: \(error.localizedDescription)")
                     completion(false)
                     return
                 }
                 
                 guard let record = records?.first else {
-                    self?.errorMessage = "User not found."
-                    print("No user data found for phone number: \(phoneNumber)")
+                    self?.errorMessage = "No user found for phone number: \(phone)"
                     completion(false)
                     return
                 }
                 
-                // Update UserViewModel fields
-                self?.name = record["name"] as? String ?? "Unknown"
-                self?.phoneNumber = record["phoneNumber"] as? String ?? "Unknown"
-                self?.selectedRole = record["role"] as? String ?? "Seeker"
+                // Set local fields
+                self?.name = record["name"] as? String ?? ""
+                self?.phoneNumber = record["phoneNumber"] as? String ?? ""
+                self?.selectedRole = record["role"] as? String ?? ""
                 
-                print("User data fetched successfully: \(self?.name ?? "")")
+                print(self!.name )
+                print(self!.phoneNumber )
+                print(self!.selectedRole )
+                
                 completion(true)
             }
         }
-    }
-    
-    
-    func populateUserData(user: User) {
-        self.name = user.name
-        self.phoneNumber = user.phoneNumber
-        self.selectedRole = user.role
     }
     
     

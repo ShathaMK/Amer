@@ -12,6 +12,7 @@ struct MembersView: View {
 //    @StateObject var userVM = UserViewModel()
     
     @EnvironmentObject var memberVM: MembersViewModel
+    @EnvironmentObject var buttonsVM: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel
 
     @State var showRequestsSheet = false
@@ -151,5 +152,6 @@ struct MembersView: View {
     MembersView()
         .environmentObject(ButtonsViewModel())
         .environmentObject(UserViewModel())
+        .environmentObject(MembersViewModel())
         
 }

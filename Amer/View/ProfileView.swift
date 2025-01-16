@@ -1,10 +1,22 @@
+//
+//  ProfileView.swift
+//  Amer
+//
+//  Created by Noori on 20/12/2024.
+//
+
+
 import SwiftUI
 import UIKit
+import Firebase
+import FirebaseAuth
 
 struct ProfileView: View {
 //    @StateObject var userVM = UserViewModel() // For dynamic font scaling and haptics
     @EnvironmentObject var buttonsVM: ButtonsViewModel
     @EnvironmentObject var userVM: UserViewModel
+    
+    
     @Environment(\.presentationMode) var presentationMode // To dismiss the view
     @State private var showErrorAlert = false // State to control alert visibility
 
@@ -96,7 +108,9 @@ struct ProfileView: View {
                     Spacer()
                     
                     // Members Navigation
-                    NavigationLink(destination: MembersView()) {
+                    NavigationLink(destination: MembersView()
+                        .environmentObject(buttonsVM)
+                        .environmentObject(userVM)) {
                         HStack {
                             Text("Members")
                                 .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 20)))
@@ -162,6 +176,26 @@ struct ProfileView: View {
                         .font(.custom("Tajawal-Bold", size: userVM.scaledFont(baseSize: 30)))
                 }
             }
+        }
+        .onAppear(){
+            // 1) Check if there's a logged-in Firebase user
+               if let currentUser = Auth.auth().currentUser {
+                   let phone = currentUser.phoneNumber ?? ""
+                   
+                   // 2) Fetch from CloudKit using that phone
+                   userVM.fetchUserData(forPhoneNumber: phone) { success in
+                       if success {
+                           // userVM.name, userVM.phoneNumber, userVM.selectedRole are now set
+                           print("Fetched user from CloudKit for phone: \(phone)")
+                       } else {
+                           // userVM.errorMessage might contain details
+                           print("Failed to fetch user or not found.")
+                       }
+                   }
+               } else {
+                   // Not logged in via Firebase
+                   print("No current user. Please log in.")
+               }
         }
         // Alert to show errors
         .alert(isPresented: $showErrorAlert) {
