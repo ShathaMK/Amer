@@ -88,6 +88,9 @@
     "🔔" : {
 
     },
+    "🚑" : {
+
+    },
     "1/3" : {
       "localizations" : {
         "ar" : {
@@ -388,6 +391,9 @@
           }
         }
       }
+    },
+    "Emergency" : {
+
     },
     "Empower their independence with tools that adapt to them." : {
       "localizations" : {
